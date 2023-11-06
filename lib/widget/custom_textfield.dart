@@ -23,7 +23,6 @@ class CustomTextField extends StatelessWidget {
   const CustomTextField({
     super.key,
     this.iconData,
-
     this.controller,
     this.textInputFormatter,
     this.suffixStyle,
@@ -36,7 +35,8 @@ class CustomTextField extends StatelessWidget {
     this.maxLines = 1,
     this.keyboardType,
     this.validator,
-    this.width, this.onChanged,
+    this.width,
+    this.onChanged,
   });
 
   @override
@@ -62,10 +62,10 @@ class CustomTextField extends StatelessWidget {
           suffixStyle: suffixStyle,
           prefixIcon: iconData != null ? Icon(iconData) : null,
           contentPadding:
-          const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+              const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           enabledBorder: OutlineInputBorder(
             borderSide: const BorderSide(
-              width: 0.2,
+              width: 0.5,
               color: Colors.black,
             ),
             borderRadius: BorderRadius.circular(5),

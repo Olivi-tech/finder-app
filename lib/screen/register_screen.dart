@@ -87,9 +87,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   controller: addressController,
                 ),
                 CustomButton(
+                  btnColor: Colors.grey.shade200,
+                  textColor: Colors.black,
                   text: 'Register',
                   onPressed: () {},
-                  width: MediaQuery.sizeOf(context).width,
+                  width: MediaQuery.sizeOf(context).width, 
                 )
               ],
             ),

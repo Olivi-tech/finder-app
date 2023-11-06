@@ -21,16 +21,16 @@ class DropDownWidget extends StatelessWidget {
       child: Center(
         child: DropdownMenu<String>(
           controller: controller,
-          width: MediaQuery.sizeOf(context).width * .90,
+          width: MediaQuery.sizeOf(context).width * .91,
           inputDecorationTheme: const InputDecorationTheme(
               fillColor: Colors.white,
               border: OutlineInputBorder(
                   borderSide: BorderSide(
-                color: Colors.grey,
+                color: Colors.black,
               )),
               enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(6)),
-                  borderSide: BorderSide(color: Colors.grey, width: .5)),
+                  borderSide: BorderSide( color: Colors.black, width: .5)),
               filled: true),
           initialSelection: itemList.first,
           onSelected: onChanged,

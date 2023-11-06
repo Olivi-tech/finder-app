@@ -4,9 +4,10 @@ class CustomButton extends StatelessWidget {
   final String text;
   final double width;
   final VoidCallback? onPressed;
-
+ final Color btnColor ;
+ final Color textColor ;
   const CustomButton(
-      {super.key, required this.text, this.onPressed, required this.width});
+      {super.key, required this.text, this.onPressed, required this.width, required this.btnColor, required this.textColor});
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +27,10 @@ class CustomButton extends StatelessWidget {
                 spreadRadius: 0,
               )
             ],
-            borderRadius: BorderRadius.circular(25),
-            color: Colors.grey.shade200,
+            borderRadius: BorderRadius.circular(10),
+            color: btnColor
           ),
-          child: Center(child: Text(text)),
+          child: Center(child: Text(text, style: TextStyle(color: textColor),)),
         ),
       ),
     );

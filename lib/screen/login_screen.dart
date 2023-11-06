@@ -1,6 +1,8 @@
 import 'package:finder_app/constant/app_images.dart';
+import 'package:finder_app/screen/company_screens/home_screen.dart';
 import 'package:finder_app/screen/register_screen.dart';
 import 'package:flutter/material.dart';
+import '../constant/app_colors.dart';
 import '../widget/widget.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -42,6 +44,7 @@ class _LoginScreenState extends State<LoginScreen>
         bottom: TabBar(
           controller: _tabController,
           labelColor: Colors.black,
+          indicatorColor: AppColors.darkGreen,
           tabs: const [
             Tab(
               text: 'Login as Guest',
@@ -103,16 +106,36 @@ class _LoginAsGuestState extends State<LoginAsGuest> {
               fillColor: Colors.white,
               controller: passwordController,
             ),
+            SizedBox(
+              height: 20,
+            ),
             CustomButton(
+              btnColor: AppColors.darkGreen,
+              textColor: Colors.white,
               text: 'Login',
               onPressed: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const RegisterScreen(),
+                      builder: (context) => const HomePage(),
                     ));
               },
               width: size.width,
+            ),
+            Padding(
+              padding: EdgeInsets.all(20),
+              child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const RegisterScreen(),
+                        ));
+                  },
+                  child: CustomText(
+                    text: 'Not a Member? Register',
+                    size: 16,
+                  )),
             )
           ],
         ),
