@@ -19,7 +19,7 @@ class CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   int _selectedIndex = 0;
 
   Color _getIconColor(int index) {
-    return _selectedIndex == index ?  AppColors.darkGreen: Colors.grey;
+    return _selectedIndex == index ?  AppColors.green: Colors.grey;
   }
 
   @override
@@ -63,7 +63,7 @@ class CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           right: 0,
           child: TabIndicators(
             activeIdx: _selectedIndex,
-            activeColor: AppColors.darkGreen,
+            activeColor: AppColors.green,
             numTabs: 3,
             padding: 40,
             height: 5,

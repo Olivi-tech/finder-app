@@ -1,14 +1,22 @@
 import 'package:finder_app/provider/bottom_navigation_provider.dart';
-import 'package:finder_app/screen/screen.dart';
+import 'package:finder_app/routs.dart';
 import 'package:flutter/material.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() => runApp(
-      DevicePreview(
-        builder: (context) => MyApp(), 
-      ),
-    );
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(
+    DevicePreview(
+      builder: (context) => MyApp(),
+    ),
+  );
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -25,7 +33,7 @@ class MyApp extends StatelessWidget {
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: SplashScreen(),
+        onGenerateRoute: AppRouter.generateRoute,
       ),
     );
   }

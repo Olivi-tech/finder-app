@@ -1,87 +1,16 @@
-import 'package:finder_app/constant/app_images.dart';
-import 'package:finder_app/screen/company_screens/login_screen.dart';
+import 'package:finder_app/constant/constant.dart';
 import 'package:finder_app/utils/app_routs.dart';
+import 'package:finder_app/widget/widget.dart';
 import 'package:flutter/material.dart';
-import '../constant/app_colors.dart';
-import '../widget/widget.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class LoginAsCompany extends StatefulWidget {
+  const LoginAsCompany({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<LoginAsCompany> createState() => _LoginAsCompanyState();
 }
 
-class _LoginScreenState extends State<LoginScreen>
-    with TickerProviderStateMixin {
-  TextEditingController userNameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-
-  late final TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-  }
-
-  @override
-  void dispose() {
-    userNameController.dispose();
-    passwordController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.sizeOf(context);
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: size.height * .2,
-        backgroundColor: Colors.white,
-        title: Image.asset(AppImages.logo),
-        centerTitle: true,
-        bottom: TabBar(
-          controller: _tabController,
-          labelColor: Colors.black,
-          indicatorColor: AppColors.green,
-          labelStyle: TextStyle(
-            letterSpacing: 0.50,
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-          ),
-          tabs: const [
-            Tab(
-              text: 'Login as Guest',
-            ),
-            Tab(
-              text: 'Login as Company',
-            ),
-          ],
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: TabBarView(
-          controller: _tabController,
-          children: const [
-            LoginAsGest(),
-            LoginAsCompany(),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class LoginAsGest extends StatefulWidget {
-  const LoginAsGest({super.key});
-
-  @override
-  State<LoginAsGest> createState() => _LoginAsGestState();
-}
-
-class _LoginAsGestState extends State<LoginAsGest> {
+class _LoginAsCompanyState extends State<LoginAsCompany> {
   TextEditingController userNameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -137,7 +66,7 @@ class _LoginAsGestState extends State<LoginAsGest> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     FocusScope.of(context).unfocus();
-                    Navigator.pushNamed(context, AppRoutes.guesthome);
+                    Navigator.pushNamed(context, AppRoutes.homePage);
                   }
                 },
                 width: size.width,
@@ -146,7 +75,7 @@ class _LoginAsGestState extends State<LoginAsGest> {
                 padding: EdgeInsets.all(20),
                 child: GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, AppRoutes.guestRegister);
+                      Navigator.pushNamed(context, AppRoutes.register);
                     },
                     child: CustomText(
                       text: 'Not a Member? Register',

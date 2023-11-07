@@ -1,4 +1,3 @@
-import 'package:finder_app/constant/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomSearchField extends StatelessWidget {
@@ -14,10 +13,7 @@ class CustomSearchField extends StatelessWidget {
       ),
       decoration: InputDecoration(
         filled: true,
-        prefixIcon: Icon(
-          Icons.search,
-          color: AppColors.darkGreen,
-        ),
+        prefixIcon: Icon(Icons.search, color: Colors.grey),
         hintText: hintText,
         hintStyle: TextStyle(
           color: Colors.grey,

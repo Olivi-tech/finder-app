@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import '../utils/utils.dart';
 
 class CustomTextField extends StatelessWidget {
-  final String hinText;
+  final String hintText;
   final TextEditingController? controller;
   final void Function(String)? onChanged;
   final Widget? suffixIcon;
@@ -26,7 +26,7 @@ class CustomTextField extends StatelessWidget {
     this.controller,
     this.textInputFormatter,
     this.suffixStyle,
-    required this.hinText,
+    required this.hintText,
     required this.fillColor,
     this.isVisibleText = false,
     this.readOnly = false,
@@ -55,7 +55,7 @@ class CustomTextField extends StatelessWidget {
         obscureText: isVisibleText,
         obscuringCharacter: '●',
         decoration: InputDecoration(
-          hintText: hinText,
+          hintText: hintText,
           hintStyle: hintStyle,
           fillColor: fillColor,
           suffixIcon: suffixIcon,
@@ -68,21 +68,25 @@ class CustomTextField extends StatelessWidget {
               width: 0.5,
               color: Colors.black,
             ),
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadius.circular(10),
           ),
           focusedBorder: OutlineInputBorder(
             borderSide: const BorderSide(
-              width: 1,
-              color: Colors.blue,
+              width: 0.5,
+              color: Colors.black,
             ),
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadius.circular(10),
           ),
           filled: true,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadius.circular(10),
           ),
         ),
       ),
     );
   }
 }
+bool isValidEmail(String input) {
+    final emailRegex = RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
+    return emailRegex.hasMatch(input);
+  }

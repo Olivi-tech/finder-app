@@ -1,16 +1,14 @@
 import 'package:finder_app/widget/widget.dart';
 import 'package:flutter/material.dart';
 
-import '../constant/app_colors.dart';
-
 class CustomViewContainer extends StatefulWidget {
   final String labelText;
-  final Icon icon; // Add an Icon parameter
+  final String imagePath;
 
   const CustomViewContainer({
     Key? key,
     required this.labelText,
-    required this.icon, // Add the icon parameter
+    required this.imagePath,
   }) : super(key: key);
 
   @override
@@ -44,7 +42,11 @@ class CustomViewContainerState extends State<CustomViewContainer> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              widget.icon,
+              Image.asset(
+                widget.imagePath, 
+                width: 60,
+                height: 50,
+              ),
               SizedBox(
                 height: 10,
               ),

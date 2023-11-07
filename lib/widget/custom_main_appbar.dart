@@ -2,7 +2,6 @@ import 'package:finder_app/constant/constant.dart';
 import 'package:finder_app/widget/widget.dart';
 import 'package:flutter/material.dart';
 
-import '../constant/app_colors.dart';
 
 class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
   final String name;

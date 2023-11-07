@@ -1,5 +1,4 @@
 import 'package:finder_app/constant/app_colors.dart';
-import 'package:finder_app/constant/app_images.dart';
 import 'package:finder_app/widget/custom_button.dart';
 import 'package:finder_app/widget/custom_dropdown.dart';
 import 'package:finder_app/widget/custom_text.dart';
@@ -89,17 +88,17 @@ class _AddItemScreenState extends State<AddItemScreen> {
         elevation: 0.0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
-          color: AppColors.darkGreen,
+        color: Colors.black,
           onPressed: () {
             Navigator.pop(context);
           },
         ),
         title: const CustomText(
-          text: 'Upload an item post',
+          text: 'Post',
           letterSpacing: 1,
-          color: AppColors.darkGreen,
+          color: Colors.black,
           size: 16,
-          weight: FontWeight.w600,
+          weight: FontWeight.w500,
         ),
       ),
       body: SafeArea(
@@ -111,7 +110,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const CustomText(
-                  text: 'Upload a Image',
+                  text: 'Upload Image',
                   letterSpacing: 1,
                   size: 16,
                   weight: FontWeight.w600,
@@ -131,11 +130,12 @@ class _AddItemScreenState extends State<AddItemScreen> {
                       Icon(
                         Icons.image,
                         size: 24,
+                        color: Colors.grey,
                       ),
                       const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: CustomText(
-                          text: 'Upload your image here',
+                          text: 'Upload item image here',
                           weight: FontWeight.w400,
                           letterSpacing: 0.73,
                           size: 10,
@@ -144,7 +144,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                       CustomText(
                         text: "Browse",
                         size: 10,
-                        color: AppColors.darkGreen,
+                        color: AppColors.green,
                         letterSpacing: 0.73,
                         weight: FontWeight.w400,
                       )
@@ -155,13 +155,13 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   height: 10,
                 ),
                 const CustomText(
-                  text: 'Item Name',
+                  text: 'Name',
                   letterSpacing: 1,
                   size: 16,
                   weight: FontWeight.w600,
                 ),
                 CustomTextField(
-                  hinText: 'Name',
+                  hintText: 'Item Name',
                   fillColor: Colors.white,
                   controller: nameController,
                 ),
@@ -169,27 +169,36 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   height: 10,
                 ),
                 const CustomText(
-                  text: 'Item Quantity',
-                  letterSpacing: 1,
-                  size: 16,
-                  weight: FontWeight.w600,
-                ),
-                DropDownWidget(
-                    itemList: List<String>.generate(
-                        3, (index) => (index + 1).toString()),
-                    controller: itemcountController,
-                    onChanged: (value) {}),
-                const SizedBox(
-                  height: 10,
-                ),
-                const CustomText(
-                  text: 'Item Color',
+                  text: 'Quantity',
                   letterSpacing: 1,
                   size: 16,
                   weight: FontWeight.w600,
                 ),
                 CustomTextField(
-                  hinText: 'Black',
+                  hintText: '1',
+                  readOnly: true,
+                  fillColor: Colors.white,
+                  controller: itemcountController,
+                  suffixIcon: DropDownsWidget(
+                    itemList: List<String>.generate(
+                        5, (index) => (index + 1).toString()),
+                    controller: itemcountController,
+                    onChanged: (String? selectedOption) {
+                      itemcountController.text = selectedOption ?? '';
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                const CustomText(
+                  text: 'Color',
+                  letterSpacing: 1,
+                  size: 16,
+                  weight: FontWeight.w600,
+                ),
+                CustomTextField(
+                  hintText: 'Black',
                   fillColor: Colors.white,
                   controller: colorController,
                 ),
@@ -220,6 +229,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                               padding: const EdgeInsets.only(right: 8),
                               child: Icon(
                                 Icons.calendar_today,
+                                color: Colors.grey,
                                 size: 24,
                               ),
                             ),
@@ -239,7 +249,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                 selectedDate != null
                                     ? DateFormat('dd-MM-yyyy')
                                         .format(selectedDate!)
-                                    : 'Select Date',
+                                    : 'Date',
                                 style: TextStyle(fontSize: 16),
                               ),
                             ),
@@ -256,6 +266,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                               padding: const EdgeInsets.only(right: 8, left: 8),
                               child: Icon(
                                 Icons.access_time,
+                                color: Colors.grey,
                                 size: 24,
                               ),
                             ),
@@ -274,7 +285,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                               child: Text(
                                 selectedTime != null
                                     ? selectedTime!.format(context)
-                                    : 'Select Time',
+                                    : 'Time',
                                 style: TextStyle(fontSize: 16),
                               ),
                             ),
@@ -296,7 +307,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                 SizedBox(
                   height: 150,
                   child: CustomTextField(
-                    hinText: 'Add Description of item here ',
+                    hintText: 'Add Description of item here ',
                     fillColor: Colors.white,
                     controller: descriptionController,
                     maxLines: 40,
@@ -304,10 +315,13 @@ class _AddItemScreenState extends State<AddItemScreen> {
                 ),
                 CustomButton(
                   text: 'Post',
-                  btnColor: AppColors.darkGreen,
+                  btnColor: AppColors.green,
                   textColor: Colors.white,
                   onPressed: () {},
                   width: size.width,
+                ),
+                 const SizedBox(
+                  height: 100,
                 ),
               ],
             ),

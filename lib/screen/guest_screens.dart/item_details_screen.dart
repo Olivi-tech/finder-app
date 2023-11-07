@@ -1,14 +1,14 @@
-import 'package:finder_app/widget/custom_text.dart';
+import 'package:finder_app/constant/constant.dart';
 import 'package:finder_app/widget/widget.dart';
 import 'package:flutter/material.dart';
 
-class ItemDetailsPage extends StatelessWidget {
+class GuestItemDetailsPage extends StatelessWidget {
   final String containerText;
   final String locationText;
   final String timeText;
   final String imagePath;
 
-  const ItemDetailsPage({
+  const GuestItemDetailsPage({
     Key? key,
     required this.containerText,
     required this.timeText,
@@ -18,6 +18,7 @@ class ItemDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.sizeOf(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -25,7 +26,7 @@ class ItemDetailsPage extends StatelessWidget {
         elevation: 0.0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
-         color: Colors.black,
+          color: Colors.black,
           onPressed: () {
             Navigator.pop(context);
           },
@@ -37,14 +38,6 @@ class ItemDetailsPage extends StatelessWidget {
           size: 16,
           weight: FontWeight.w600,
         ),
-        actions: [
-          const Icon(
-            Icons.delete,
-            color: Colors.red,
-            size: 28,
-          ),
-          const SizedBox(width: 20),
-        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -160,6 +153,16 @@ class ItemDetailsPage extends StatelessWidget {
                     'We found an iPhone 11. It appears to be in good condition and is locked, so We cant access any contact information to return it to its owner.',
               ),
               const SizedBox(height: 10),
+              CustomButton(
+                text: 'Verify its Your',
+                btnColor: AppColors.green,
+                textColor: Colors.white,
+                onPressed: () {},
+                width: size.width,
+              ),
+              const SizedBox(
+                height: 100,
+              ),
             ],
           ),
         ),

@@ -1,7 +1,7 @@
 import 'package:finder_app/constant/app_images.dart';
 import 'package:finder_app/provider/bottom_navigation_provider.dart';
-import 'package:finder_app/screen/company_screens/add_item_screen.dart';
-import 'package:finder_app/screen/company_screens/item_details_screen.dart';
+import 'package:finder_app/screen/company_screens/item_add_screen.dart';
+import 'package:finder_app/utils/app_routs.dart';
 import 'package:finder_app/widget/custom_Image_container.dart';
 import 'package:finder_app/widget/custom_bottom_navigationbar.dart';
 import 'package:finder_app/widget/custom_container.dart';
@@ -62,7 +62,7 @@ class HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarCustom(
-        backgroundColor: AppColors.darkGreen,
+        backgroundColor: AppColors.green,
         location: 'Pakistan',
         name: 'Base Camp Resort',
       ),
@@ -83,8 +83,9 @@ class HomeScreenState extends State<HomeScreen> {
                 child: CustomText(
                   text: 'Categories',
                   color: Colors.black,
+                  letterSpacing: 1,
+                  size: 16,
                   weight: FontWeight.w500,
-                  size: 18,
                 ),
               ),
               SizedBox(
@@ -96,20 +97,20 @@ class HomeScreenState extends State<HomeScreen> {
                   scrollDirection: Axis.horizontal,
                   itemCount: 6,
                   itemBuilder: (context, index) {
-                    final icons = [
-                      Icons.phone_iphone,
-                      Icons.key,
-                      Icons.shopping_bag,
-                      Icons.laptop,
-                      Icons.wallet,
-                      Icons.camera,
+                    final images = [
+                      AppImages.phoneicon,
+                      AppImages.keyicon,
+                      AppImages.walleticon,
+                      AppImages.laptopicon,
+                      AppImages.bagicon,
+                      AppImages.camicon
                     ];
                     final labels = [
                       'Phone',
                       'Key',
-                      'Bag',
-                      'Laptop',
                       'Wallet',
+                      'Laptop',
+                      'Bag',
                       'Camera'
                     ];
 
@@ -117,11 +118,7 @@ class HomeScreenState extends State<HomeScreen> {
                       padding: EdgeInsets.all(8),
                       child: CustomViewContainer(
                         labelText: labels[index],
-                        icon: Icon(
-                          icons[index],
-                          color: AppColors.darkGreen,
-                          size: 36,
-                        ),
+                        imagePath: images[index],
                       ),
                     );
                   },
@@ -137,8 +134,9 @@ class HomeScreenState extends State<HomeScreen> {
                 child: CustomText(
                   text: 'Recent Posts',
                   color: Colors.black,
+                  letterSpacing: 1,
+                  size: 16,
                   weight: FontWeight.w500,
-                  size: 18,
                 ),
               ),
               SizedBox(
@@ -150,16 +148,7 @@ class HomeScreenState extends State<HomeScreen> {
                   locationText: 'Base Camp Resort',
                   timeText: '15 mints ago',
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ItemDetailsPage(
-                            containerText: 'Iphone 11',
-                            timeText: '15 mints ago',
-                            imagePath: AppImages.phoneImge,
-                            locationText: 'Base Camp Resort, lahore',
-                          ),
-                        ));
+                    Navigator.pushNamed(context, AppRoutes.itemDetails);
                   }),
               SizedBox(
                 height: 100,
