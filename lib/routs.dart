@@ -26,7 +26,7 @@ class AppRouter {
       case AppRoutes.guesthome:
         return const GuestHomeScreen();
       case AppRoutes.homePage:
-        return HomeScreen();
+        return HomePage();
       case AppRoutes.itemAdd:
         return const AddItemScreen();
       case AppRoutes.guestContact:
