@@ -1,4 +1,5 @@
 import 'package:finder_app/constant/constant.dart';
+import 'package:finder_app/db_servies/db_servies.dart';
 import 'package:finder_app/utils/app_routs.dart';
 import 'package:finder_app/widget/widget.dart';
 import 'package:flutter/material.dart';
@@ -11,12 +12,12 @@ class LoginAsCompany extends StatefulWidget {
 }
 
 class _LoginAsCompanyState extends State<LoginAsCompany> {
-  TextEditingController userNameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   @override
   void dispose() {
-    userNameController.dispose();
+    emailController.dispose();
     passwordController.dispose();
     super.dispose();
   }
@@ -35,7 +36,7 @@ class _LoginAsCompanyState extends State<LoginAsCompany> {
               CustomTextField(
                 hintText: 'Email',
                 fillColor: Colors.white,
-                controller: userNameController,
+                controller: emailController,
                 validator: (input) {
                   if (input == null || input.isEmpty) {
                     return 'Please enter an email address';
@@ -63,10 +64,18 @@ class _LoginAsCompanyState extends State<LoginAsCompany> {
                 btnColor: AppColors.green,
                 textColor: Colors.white,
                 text: 'Login',
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     FocusScope.of(context).unfocus();
-                    Navigator.pushNamed(context, AppRoutes.homePage);
+                    try {
+                      await DbService_auth.loginCompany(
+                        context,
+                        emailController.text,
+                        passwordController.text,
+                      );
+                    } catch (e) {
+                      print('Login failed: $e');
+                    }
                   }
                 },
                 width: size.width,

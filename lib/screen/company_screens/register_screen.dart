@@ -1,7 +1,6 @@
 import 'package:finder_app/constant/app_colors.dart';
 import 'package:finder_app/constant/app_images.dart';
 import 'package:finder_app/db_servies/db_servies.dart';
-import 'package:finder_app/screen/company_screens/home_screen.dart';
 import 'package:finder_app/widget/custom_button.dart';
 import 'package:finder_app/widget/custom_dropdown.dart';
 import 'package:finder_app/widget/custom_text.dart';
@@ -166,7 +165,8 @@ class _RegisterCompanyScreenState extends State<RegisterCompanyScreen> {
                       if (_formKey.currentState!.validate()) {
                         FocusScope.of(context).unfocus();
                         try {
-                          await DbService.registerCompany(
+                          await DbService_auth.registerCompany(
+                            context,
                             nameController.text,
                             userNameController.text,
                             passwordController.text,
@@ -175,15 +175,7 @@ class _RegisterCompanyScreenState extends State<RegisterCompanyScreen> {
                             addressController.text,
                             phoneNoController.text,
                           );
-
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const HomePage(),
-                            ),
-                          );
                         } catch (e) {
-                          // Handle registration error here
                           print('Registration failed: $e');
                         }
                       }

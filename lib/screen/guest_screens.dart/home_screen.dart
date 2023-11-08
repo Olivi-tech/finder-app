@@ -1,6 +1,5 @@
 import 'package:finder_app/constant/constant.dart';
 import 'package:finder_app/utils/app_routs.dart';
-import 'package:finder_app/widget/custom_Image_container.dart';
 import 'package:finder_app/widget/widget.dart';
 import 'package:flutter/material.dart';
 
@@ -44,10 +43,6 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
             ),
           ],
         ),
-        actions: [
-          // const Icon( Icons.delete, color: Colors.red, size: 28, ),
-          const SizedBox(width: 20),
-        ],
       ),
       body: SingleChildScrollView(
         child: Padding(

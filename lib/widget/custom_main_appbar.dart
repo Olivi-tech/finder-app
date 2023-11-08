@@ -14,7 +14,7 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
     this.backgroundColor,
     required this.name,
     required this.location,
-    this.customAppBarHeight = kToolbarHeight + 100,
+    this.customAppBarHeight = kToolbarHeight + 60,
   }) : super(key: key);
 
   @override
