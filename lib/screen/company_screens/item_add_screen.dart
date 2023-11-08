@@ -101,6 +101,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
+    String formattedTime;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -310,7 +311,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                               ),
                               alignment: Alignment.center,
                               child: Text(
-                                selectedTime != null
+                                formattedTime = selectedTime != null
                                     ? selectedTime!.format(context)
                                     : 'Time',
                                 style: TextStyle(fontSize: 16),
@@ -348,16 +349,15 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   btnColor: AppColors.green,
                   textColor: Colors.white,
                   onPressed: () {
-                     // DateTime dateTime = DateTime( selectedDate!.year, selectedDate!.month, selectedDate!.day, selectedTime!.hour, selectedTime!.minute,  );
                     try {
-                       DbService.submitData(
+                      DbService.submitData(
                         context,
                         nameController.text,
                         descriptionController.text,
                         colorController.text,
                         int.parse(itemcountController.text),
                         selectedDate as DateTime,
-                        selectedTime as TimeOfDay,
+                        formattedTime,
                         image,
                       );
                     } catch (e) {

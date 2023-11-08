@@ -1,6 +1,6 @@
 import 'dart:developer';
+import 'dart:io';
 import 'package:finder_app/db_servies/exceptions_handle.dart';
-import 'package:finder_app/screen/company_screens/company_screens.dart';
 import 'package:finder_app/utils/app_routs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +29,9 @@ class DbService_auth {
       log('User registered and company data saved');
       Navigator.of(context).pushNamed(AppRoutes.homePage);
     } catch (error) {
-      if (error is FirebaseAuthException) {
+      if (error is HttpException ||
+          error is SocketException ||
+          error is FormatException) {
         ErrorHandling.handleErrors(error: error);
       } else {
         rethrow;

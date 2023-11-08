@@ -1,6 +1,6 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:finder_app/db_servies/exceptions_handle.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
@@ -12,37 +12,57 @@ class DbService {
     String color,
     int quantity,
     DateTime date,
-    TimeOfDay time,
+    String time,
     String imageUrl,
   ) async {
-    final firestore = FirebaseFirestore.instance;
+    try {
+      final firestore = FirebaseFirestore.instance;
 
-    await firestore.collection('items').add({
-      'name': name,
-      'quantity': quantity,
-      'color': color,
-      'date': date,
-      'time': time,
-      'description': description,
-      'image_url': imageUrl,
-    });
+      await firestore.collection('items').add({
+        'name': name,
+        'quantity': quantity,
+        'color': color,
+        'date': date,
+        'time': time,
+        'description': description,
+        'image_url': imageUrl,
+      });
 
-    print('Data saved to Firestore');
+      print('Data saved to Firestore');
+    } catch (error) {
+      if (error is HttpException ||
+          error is SocketException ||
+          error is FormatException) {
+        ErrorHandling.handleErrors(error: error);
+      } else {
+        rethrow;
+      }
+    }
   }
 
   static Future<String> uploadImageToFirebase(File? image) async {
-    if (image != null) {
-      final Reference storageReference = FirebaseStorage.instance
-          .ref()
-          .child('images/${DateTime.now().millisecondsSinceEpoch}.jpg');
-      final UploadTask uploadTask = storageReference.putFile(image);
+    try {
+      if (image != null) {
+        final Reference storageReference = FirebaseStorage.instance
+            .ref()
+            .child('images/${DateTime.now().millisecondsSinceEpoch}.jpg');
+        final UploadTask uploadTask = storageReference.putFile(image);
 
-      await uploadTask.whenComplete(() => print('Image uploaded'));
+        await uploadTask.whenComplete(() => print('Image uploaded'));
 
-      return await storageReference.getDownloadURL();
-    } else {
-      return "";
+        return await storageReference.getDownloadURL();
+      }
+    } catch (error) {
+      if (error is HttpException ||
+          error is SocketException ||
+          error is FormatException) {
+        ErrorHandling.handleErrors(error: error);
+      } else {
+        rethrow;
+      }
     }
+
+    return '';
   }
 
   static Future<void> submitData(
@@ -52,97 +72,29 @@ class DbService {
     String color,
     int quantity,
     DateTime date,
-    TimeOfDay time,
+    String time,
     File? image,
   ) async {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Center(child: CircularProgressIndicator());
-      },
-    );
+    try {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return Center(child: CircularProgressIndicator());
+          });
 
-    String imageUrl = await uploadImageToFirebase(image);
-    await saveDataToFirestore(
-        context, name, description, color, quantity, date, time, imageUrl);
+      String imageUrl = await uploadImageToFirebase(image);
+      await saveDataToFirestore(
+          context, name, description, color, quantity, date, time, imageUrl);
 
-    Navigator.pop(context);
-  }
-}
-
-
-
-
-/*class DbService {
-  static Future<void> saveDataToFirestore(
-    BuildContext context,
-    String name,
-    String description,
-    String color,
-    int quantity,
-    DateTime date,
-    String imageUrl,
-  ) async {
-    final firestore = FirebaseFirestore.instance;
-
-    await firestore.collection('items').add({
-      'name': name,
-      'quantity': quantity,
-      'color': color,
-      'date': date,
-      'description': description,
-      'image_url': imageUrl,
-    });
-
-    print('Data saved to Firestore');
-  }
-
-  static Future<String> uploadImageToFirebase(File? image) async {
-    if (image != null) {
-      final Reference storageReference = FirebaseStorage.instance
-          .ref()
-          .child('images/${DateTime.now().millisecondsSinceEpoch}.jpg');
-      final UploadTask uploadTask = storageReference.putFile(image);
-
-      await uploadTask.whenComplete(() => print('Image uploaded'));
-
-      return await storageReference.getDownloadURL();
-    } else {
-      return "";
+      Navigator.pop(context);
+    } catch (error) {
+      if (error is HttpException ||
+          error is SocketException ||
+          error is FormatException) {
+        ErrorHandling.handleErrors(error: error);
+      } else {
+        rethrow;
+      }
     }
   }
-
-  static Future<void> submitData(
-    BuildContext context,
-    String name,
-    String description,
-    String color,
-    int quantity,
-    DateTime date,
-    File? image,
-  ) async {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Center(child: CircularProgressIndicator());
-      },
-    );
-
-    String imageUrl = await uploadImageToFirebase(image);
-    await saveDataToFirestore(
-        context, name, description, color, quantity, date, imageUrl);
-
-    Navigator.pop(context);
-  }
-
-  static DateTime combineDateAndTime(DateTime date, TimeOfDay time) {
-    return DateTime(
-      date.year,
-      date.month,
-      date.day,
-      time.hour,
-      time.minute,
-    );
-  }
 }
-*/
