@@ -1,24 +1,22 @@
 import 'package:finder_app/constant/app_colors.dart';
 import 'package:finder_app/constant/app_images.dart';
-import 'package:finder_app/utils/app_routs.dart';
+import 'package:finder_app/db_servies/db_servies.dart';
 import 'package:finder_app/widget/custom_button.dart';
 import 'package:finder_app/widget/custom_dropdown.dart';
 import 'package:finder_app/widget/custom_text.dart';
 import 'package:finder_app/widget/custom_textfield.dart';
 import 'package:flutter/material.dart';
 
-
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class RegisterAsGuestScreen extends StatefulWidget {
+  const RegisterAsGuestScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<RegisterAsGuestScreen> createState() => _RegisterAsGuestScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _RegisterAsGuestScreenState extends State<RegisterAsGuestScreen> {
   TextEditingController nameController = TextEditingController();
-  TextEditingController categoryController = TextEditingController();
-  TextEditingController userNameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController countryController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
@@ -37,8 +35,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   void dispose() {
     nameController.dispose();
-    categoryController.dispose();
-    userNameController.dispose();
+    emailController.dispose();
     passwordController.dispose();
     countryController.dispose();
     phoneController.dispose();
@@ -83,7 +80,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   CustomTextField(
                     hintText: 'Email',
                     fillColor: Colors.white,
-                    controller: userNameController,
+                    controller: emailController,
                     validator: (input) {
                       if (input == null || input.isEmpty) {
                         return 'Please enter an email address';
@@ -99,7 +96,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     controller: passwordController,
                     validator: (input) {
                       if (input == null || input.isEmpty) {
-                        return 'Please enter Password';
+                        return 'Please enter a password';
+                      } else if (input.length < 6) {
+                        return 'Password must be at least 6 characters long';
                       }
                       return null;
                     },
@@ -150,14 +149,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     btnColor: AppColors.green,
                     textColor: Colors.white,
                     text: 'Register',
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         FocusScope.of(context).unfocus();
-                        Navigator.pushNamed(context, AppRoutes.guesthome);
+                        try {
+                          await DbService_auth.registerUser(
+                            context,
+                            nameController.text,
+                            emailController.text,
+                            passwordController.text,
+                            phoneController.text,
+                            countryController.text,
+                            addressController.text,
+                          );
+                        } catch (e) {
+                          print('Registration failed: $e');
+                        }
                       }
                     },
                     width: MediaQuery.sizeOf(context).width,
-                  )
+                  ),
                 ],
               ),
             ),

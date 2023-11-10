@@ -32,18 +32,61 @@ class _GuestContactScreenState extends State<GuestContactScreen> {
           weight: FontWeight.w600,
         ),
       ),
-      body: Column(children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 10, top: 15),
-          child: CustomText(
-            text: 'Do You Want to Contact Us about Found item?',
-            color: Colors.black,
-            letterSpacing: 1,
-            size: 16,
-            weight: FontWeight.w500,
-          ),
-        ),
-      ]),
+      body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10, top: 15, bottom: 15),
+                child: CustomText(
+                  text: 'Do You Want to Contact Us?',
+                  color: Colors.black,
+                  letterSpacing: 1,
+                  size: 16,
+                  weight: FontWeight.w500,
+                ),
+              ),
+            ),
+            Center(
+              child: SizedBox(
+                height: 500,
+                width: 180,
+                child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  itemCount: 3,
+                  itemBuilder: (context, index) {
+                    final icons = [
+                      Icons.phone,
+                      Icons.email,
+                      Icons.message,
+                      Icons.security,
+                    ];
+
+                    final labels = [
+                      'Phone',
+                      'Email',
+                      'Message',
+                      'Key',
+                    ];
+                    final colors = [
+                      Colors.green,
+                      Colors.red,
+                      Colors.blue,
+                    ];
+                    return Padding(
+                      padding: EdgeInsets.all(8),
+                      child: CustomContainer(
+                        labelText: labels[index],
+                        iconData: icons[index],
+                        color: colors[index],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ]),
     );
   }
 }

@@ -93,17 +93,19 @@ class _RegisterCompanyScreenState extends State<RegisterCompanyScreen> {
                       return null;
                     },
                   ),
-                  CustomTextField(
-                    hintText: 'Password',
-                    fillColor: Colors.white,
-                    controller: passwordController,
-                    validator: (input) {
-                      if (input == null || input.isEmpty) {
-                        return 'Please enter Password';
-                      }
-                      return null;
-                    },
-                  ),
+                   CustomTextField(
+                hintText: 'Password',
+                fillColor: Colors.white,
+                controller: passwordController,
+                validator: (input) {
+                  if (input == null || input.isEmpty) {
+                    return 'Please enter a password';
+                  } else if (input.length < 6) {
+                    return 'Password must be at least 6 characters long';
+                  }
+                  return null;
+                },
+              ),
                   CustomTextField(
                     hintText: 'Phone No',
                     fillColor: Colors.white,

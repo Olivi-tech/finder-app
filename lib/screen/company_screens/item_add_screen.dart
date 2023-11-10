@@ -1,10 +1,8 @@
 import 'dart:io';
 import 'package:finder_app/constant/app_colors.dart';
 import 'package:finder_app/db_servies/post_data.dart';
-import 'package:finder_app/widget/custom_button.dart';
-import 'package:finder_app/widget/custom_dropdown.dart';
-import 'package:finder_app/widget/custom_text.dart';
-import 'package:finder_app/widget/custom_textfield.dart';
+import 'package:finder_app/utils/app_routs.dart';
+import 'package:finder_app/widget/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
@@ -25,7 +23,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
   TimeOfDay? selectedTime;
   File? image;
   bool loading = false;
-
+  late String formattedTime;
   final picker = ImagePicker();
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = (await showDatePicker(
@@ -101,7 +99,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
-    String formattedTime;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -156,25 +154,18 @@ class _AddItemScreenState extends State<AddItemScreen> {
                             children: [
                               Icon(
                                 Icons.image,
-                                size: 24,
+                                size: 28,
                                 color: Colors.grey,
                               ),
-                              const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: CustomText(
-                                  text: 'Upload item image here',
-                                  weight: FontWeight.w400,
-                                  letterSpacing: 0.73,
-                                  size: 10,
-                                ),
+                              const SizedBox(
+                                height: 10,
                               ),
-                              CustomText(
-                                text: "Browse",
-                                size: 10,
-                                color: AppColors.green,
-                                letterSpacing: 0.73,
-                                weight: FontWeight.w400,
-                              )
+                              const CustomText(
+                                text: 'Add Image here',
+                                letterSpacing: 1,
+                                size: 12,
+                                weight: FontWeight.w300,
+                              ),
                             ],
                           ),
                   ),
@@ -192,6 +183,12 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   hintText: 'Item Name',
                   fillColor: Colors.white,
                   controller: nameController,
+                  validator: (input) {
+                    if (input == null || input.isEmpty) {
+                      return 'Please enter name';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(
                   height: 10,
@@ -215,6 +212,12 @@ class _AddItemScreenState extends State<AddItemScreen> {
                       itemcountController.text = selectedOption ?? '';
                     },
                   ),
+                  validator: (input) {
+                    if (input == null || input.isEmpty) {
+                      return 'Please enter quantity';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(
                   height: 10,
@@ -229,6 +232,12 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   hintText: 'Black',
                   fillColor: Colors.white,
                   controller: colorController,
+                  validator: (input) {
+                    if (input == null || input.isEmpty) {
+                      return 'Please enter color';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(
                   height: 10,
@@ -268,7 +277,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(5),
                                 border: Border.all(
-                                  width: 0.5,
+                                  width: 0.2,
                                   color: Colors.black,
                                 ),
                               ),
@@ -305,7 +314,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(5),
                                 border: Border.all(
-                                  width: 0.5,
+                                  width: 0.2,
                                   color: Colors.black,
                                 ),
                               ),
@@ -324,42 +333,49 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   ),
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
                 const CustomText(
-                  text: 'Description',
                   letterSpacing: 1,
                   size: 16,
                   weight: FontWeight.w600,
+                  text: 'Description',
                 ),
                 SizedBox(
                   height: 150,
                   child: CustomTextField(
-                    hintText: 'Add Description of item here ',
+                    hintText: 'Add Description',
                     fillColor: Colors.white,
                     controller: descriptionController,
                     maxLines: 40,
+                    validator: (input) {
+                      if (input == null || input.isEmpty) {
+                        return 'Please enter description';
+                      }
+                      return null;
+                    },
                   ),
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 40,
                 ),
                 CustomButton(
                   text: 'Post',
                   btnColor: AppColors.green,
                   textColor: Colors.white,
-                  onPressed: () {
+                  onPressed: () async {
                     try {
-                      DbService.submitData(
+                      await DbService.uploadDataToFirebase(
                         context,
                         nameController.text,
                         descriptionController.text,
                         colorController.text,
                         int.parse(itemcountController.text),
-                        selectedDate as DateTime,
+                        selectedDate!,
                         formattedTime,
-                        image,
+                        image!,
                       );
+                      Navigator.of(context).pushNamed(AppRoutes.homePage);
                     } catch (e) {
                       print('Registration failed: $e');
                     }

@@ -52,7 +52,9 @@ class _LoginAsCompanyState extends State<LoginAsCompany> {
                 controller: passwordController,
                 validator: (input) {
                   if (input == null || input.isEmpty) {
-                    return 'Please enter Password';
+                    return 'Please enter a password';
+                  } else if (input.length < 6) {
+                    return 'Password must be at least 6 characters long';
                   }
                   return null;
                 },

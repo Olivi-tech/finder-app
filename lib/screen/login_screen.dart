@@ -1,4 +1,5 @@
 import 'package:finder_app/constant/app_images.dart';
+import 'package:finder_app/db_servies/db_servies.dart';
 import 'package:finder_app/screen/company_screens/login_screen.dart';
 import 'package:finder_app/utils/app_routs.dart';
 import 'package:flutter/material.dart';
@@ -52,10 +53,10 @@ class _LoginScreenState extends State<LoginScreen>
           ),
           tabs: const [
             Tab(
-              text: 'Login as Guest',
+              text: 'Login as Company',
             ),
             Tab(
-              text: 'Login as Company',
+              text: 'Login as Guest',
             ),
           ],
         ),
@@ -65,8 +66,8 @@ class _LoginScreenState extends State<LoginScreen>
         child: TabBarView(
           controller: _tabController,
           children: const [
-            LoginAsGest(),
             LoginAsCompany(),
+            LoginAsGest(),
           ],
         ),
       ),
@@ -82,12 +83,12 @@ class LoginAsGest extends StatefulWidget {
 }
 
 class _LoginAsGestState extends State<LoginAsGest> {
-  TextEditingController userNameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   @override
   void dispose() {
-    userNameController.dispose();
+    emailController.dispose();
     passwordController.dispose();
     super.dispose();
   }
@@ -106,7 +107,7 @@ class _LoginAsGestState extends State<LoginAsGest> {
               CustomTextField(
                 hintText: 'Email',
                 fillColor: Colors.white,
-                controller: userNameController,
+                controller: emailController,
                 validator: (input) {
                   if (input == null || input.isEmpty) {
                     return 'Please enter an email address';
@@ -117,16 +118,19 @@ class _LoginAsGestState extends State<LoginAsGest> {
                 },
               ),
               CustomTextField(
-                hintText: 'Password',
-                fillColor: Colors.white,
-                controller: passwordController,
-                validator: (input) {
-                  if (input == null || input.isEmpty) {
-                    return 'Please enter Password';
-                  }
-                  return null;
-                },
-              ),
+  hintText: 'Password',
+  fillColor: Colors.white,
+  controller: passwordController,
+  validator: (input) {
+    if (input == null || input.isEmpty) {
+      return 'Please enter a password';
+    } else if (input.length < 6) {
+      return 'Password must be at least 6 characters long';
+    }
+    return null;
+  },
+),
+
               SizedBox(
                 height: 20,
               ),
@@ -134,10 +138,18 @@ class _LoginAsGestState extends State<LoginAsGest> {
                 btnColor: AppColors.green,
                 textColor: Colors.white,
                 text: 'Login',
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     FocusScope.of(context).unfocus();
-                    Navigator.pushNamed(context, AppRoutes.guesthome);
+                    try {
+                      await DbService_auth.loginUser(
+                        context,
+                        emailController.text,
+                        passwordController.text,
+                      );
+                    } catch (e) {
+                      print('Login failed: $e');
+                    }
                   }
                 },
                 width: size.width,

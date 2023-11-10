@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finder_app/constant/constant.dart';
+import 'package:finder_app/model/item_model.dart';
+import 'package:finder_app/screen/guest_screens.dart/guest_screens.dart';
 import 'package:finder_app/utils/app_routs.dart';
 import 'package:finder_app/widget/widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class GuestHomeScreen extends StatefulWidget {
@@ -11,6 +15,47 @@ class GuestHomeScreen extends StatefulWidget {
 }
 
 class GuestHomeScreenState extends State<GuestHomeScreen> {
+  List<ItemData> items = [];
+  String name = '';
+
+  Future<void> fetchItemData() async {
+    final QuerySnapshot itemDataSnapshot = await FirebaseFirestore.instance
+        .collection('companies')
+        .doc('items')
+        .collection('item_data')
+        .get();
+
+    final List<ItemData> fetchedItems =
+        itemDataSnapshot.docs.map((doc) => ItemData.fromDocument(doc)).toList();
+
+    setState(() {
+      items = fetchedItems;
+    });
+  }
+
+  Future<void> fetchUserData() async {
+    try {
+      String? uid = FirebaseAuth.instance.currentUser?.uid;
+      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('userData')
+          .doc(uid)
+          .get();
+
+      if (userSnapshot.exists) {
+        setState(() {
+          name = userSnapshot['name'];
+        });
+      }
+    } catch (error) {}
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchItemData();
+    fetchUserData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,28 +63,41 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
         backgroundColor: Colors.white,
         elevation: 0.0,
         leading: Padding(
-          padding: const EdgeInsets.all(5),
-          child: CircleAvatar(
-            backgroundImage: AssetImage(AppImages.boypic),
+          padding: const EdgeInsets.all(7),
+          child: Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColors.green,
+            ),
+            child: Center(
+              child: Icon(
+                Icons.person,
+                color: Colors.white,
+              ),
+            ),
           ),
         ),
         leadingWidth: 50,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        title: Row(
           children: [
-            const CustomText(
+            CustomText(
               text: 'Hi,',
               letterSpacing: 1,
-              color: Colors.black,
-              size: 12,
-              weight: FontWeight.w300,
+              color: AppColors.green,
+              size: 16,
+              weight: FontWeight.w500,
             ),
-            const CustomText(
-              text: 'Denez',
+            SizedBox(
+              width: 10,
+            ),
+            CustomText(
+              text: name,
               letterSpacing: 1,
               color: Colors.black,
-              size: 12,
-              weight: FontWeight.w600,
+              size: 16,
+              weight: FontWeight.w400,
             ),
           ],
         ),
@@ -63,30 +121,44 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
               SizedBox(
                 height: 10,
               ),
-              PostContainer(
-                imagePath: AppImages.phoneImge,
-                containerText: 'Iphone 11',
-                timeText: '15 mints ago',
-                onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.guestItemDetails);
-                },
-                describtionText:
-                    'We found an iPhone 11. It appears to be in good condition and is locked, so We cant access any contact information to return it to its owner.',
-                ontapcontact: () {
-                  Navigator.pushNamed(context, AppRoutes.guestContact);
-                },
-              ),
               SizedBox(
-                height: 10,
-              ),
-              PostContainer(
-                imagePath: AppImages.walletpic,
-                containerText: 'Wallet',
-                timeText: '1 hr ago',
-                onTap: () {},
-                describtionText:
-                    'We found an Wallet. It appears to be in good condition and not have ID cards, so We cant access any contact information to return it to its owner.',
-                ontapcontact: () {},
+                height: 600,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    final item = items[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: PostContainer(
+                        imagePath: item.imageUrl,
+                        containerText: item.name,
+                        timeText: item.time,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => GuestItemDetailsPage(
+                                itemId: item.itemId,
+                                image_Url: item.imageUrl,
+                                name: item.name,
+                                description: item.description,
+                                color: item.color,
+                                quantity: item.quantity,
+                                //date: item.date,
+                                time: item.time,
+                              ),
+                            ),
+                          );
+                        },
+                        describtionText: item.description,
+                        ontapcontact: () {
+                          Navigator.pushNamed(context, AppRoutes.guestContact);
+                        },
+                      ),
+                    );
+                  },
+                ),
               ),
             ],
           ),

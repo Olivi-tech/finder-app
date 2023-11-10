@@ -29,11 +29,25 @@ class MyApp extends StatelessWidget {
           },
         ),
       ],
-      child: const MaterialApp(
+      child: MaterialApp(
+        builder: (context, child) {
+          return ScrollConfiguration(
+            behavior: ScrollBehaviorController(),
+            child: child!,
+          );
+        },
         debugShowCheckedModeBanner: false,
         home: SplashScreen(),
         onGenerateRoute: AppRouter.generateRoute,
       ),
     );
+  }
+}
+
+class ScrollBehaviorController extends ScrollBehavior {
+  @override
+  Widget buildOverscrollIndicator(
+      BuildContext context, Widget child, ScrollableDetails details) {
+    return child;
   }
 }

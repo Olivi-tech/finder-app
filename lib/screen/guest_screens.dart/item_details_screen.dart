@@ -3,17 +3,24 @@ import 'package:finder_app/widget/widget.dart';
 import 'package:flutter/material.dart';
 
 class GuestItemDetailsPage extends StatelessWidget {
-  final String containerText;
-  final String locationText;
-  final String timeText;
-  final String imagePath;
+  final String itemId;
+  final String image_Url;
+  final String name;
+  final String description;
+  final String color;
+  final int quantity;
+  // final String date;
+  final String time;
 
   const GuestItemDetailsPage({
     Key? key,
-    required this.containerText,
-    required this.timeText,
-    required this.imagePath,
-    required this.locationText,
+    required this.itemId,
+    required this.image_Url,
+    required this.name,
+    required this.description,
+    required this.color,
+    required this.quantity,
+    required this.time,
   }) : super(key: key);
 
   @override
@@ -50,7 +57,7 @@ class GuestItemDetailsPage extends StatelessWidget {
                 height: 250,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage(imagePath),
+                    image: NetworkImage(image_Url),
                     fit: BoxFit.cover,
                   ),
                   borderRadius: BorderRadius.circular(10),
@@ -64,33 +71,12 @@ class GuestItemDetailsPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomText(
-                      text: containerText,
+                      text: name,
                       letterSpacing: 1,
                       size: 16,
                       weight: FontWeight.w600,
                     ),
                     const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.location_on,
-                          size: 14,
-                        ),
-                        const SizedBox(width: 4),
-                        CustomText(
-                          text: locationText,
-                        ),
-                        const SizedBox(width: 16),
-                        Icon(
-                          Icons.access_time,
-                          size: 14,
-                        ),
-                        const SizedBox(width: 4),
-                        CustomText(
-                          text: timeText,
-                        ),
-                      ],
-                    ),
                     const SizedBox(height: 15),
                   ],
                 ),
@@ -113,9 +99,7 @@ class GuestItemDetailsPage extends StatelessWidget {
                 weight: FontWeight.w600,
               ),
               const SizedBox(height: 10),
-              CustomText(
-                text: '1',
-              ),
+              CustomText(text: quantity.toString()),
               const SizedBox(height: 10),
               const CustomText(
                 text: 'Date & Time',
@@ -127,16 +111,16 @@ class GuestItemDetailsPage extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CustomText(
-                    text: '27-11-2023',
-                  ),
+                  // CustomText(
+                  //text: '27-11-2023',
+                  //  ),
                   const SizedBox(width: 10),
                   CustomText(
                     text: '|',
                   ),
                   const SizedBox(width: 10),
                   CustomText(
-                    text: '6:30 Pm',
+                    text: time,
                   ),
                 ],
               ),
@@ -148,10 +132,7 @@ class GuestItemDetailsPage extends StatelessWidget {
                 weight: FontWeight.w600,
               ),
               const SizedBox(height: 10),
-              CustomText(
-                text:
-                    'We found an iPhone 11. It appears to be in good condition and is locked, so We cant access any contact information to return it to its owner.',
-              ),
+              CustomText(text: description),
               const SizedBox(height: 10),
               CustomButton(
                 text: 'Verify its Your',
