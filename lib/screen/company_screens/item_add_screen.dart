@@ -105,18 +105,11 @@ class _AddItemScreenState extends State<AddItemScreen> {
         backgroundColor: Colors.white,
         centerTitle: true,
         elevation: 0.0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          color: Colors.black,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
         title: const CustomText(
-          text: 'Post',
+          text: ' Post Details',
           letterSpacing: 1,
           color: Colors.black,
-          size: 16,
+          size: 18,
           weight: FontWeight.w500,
         ),
       ),

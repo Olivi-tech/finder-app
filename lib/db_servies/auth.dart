@@ -135,7 +135,7 @@ class DbService_auth {
       });
 
       log('User registered');
-     Navigator.of(context).pushReplacementNamed(AppRoutes.homePage);
+       Navigator.of(context).pushReplacementNamed(AppRoutes.guesthome);
     } catch (error) {
       if (error is FirebaseAuthException) {
         if (error.code == 'email-already-in-use') {
@@ -169,7 +169,7 @@ class DbService_auth {
       );
 
       log('User logged in');
-      Navigator.of(context).pushReplacementNamed(AppRoutes.homePage);
+      Navigator.of(context).pushReplacementNamed(AppRoutes.guesthome);
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'wrong-password') {
