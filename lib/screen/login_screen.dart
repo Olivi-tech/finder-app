@@ -42,6 +42,7 @@ class _LoginScreenState extends State<LoginScreen>
         backgroundColor: Colors.white,
         title: Image.asset(AppImages.logo),
         centerTitle: true,
+         elevation: 0,
         bottom: TabBar(
           controller: _tabController,
           labelColor: Colors.black,
@@ -118,19 +119,18 @@ class _LoginAsGestState extends State<LoginAsGest> {
                 },
               ),
               CustomTextField(
-  hintText: 'Password',
-  fillColor: Colors.white,
-  controller: passwordController,
-  validator: (input) {
-    if (input == null || input.isEmpty) {
-      return 'Please enter a password';
-    } else if (input.length < 6) {
-      return 'Password must be at least 6 characters long';
-    }
-    return null;
-  },
-),
-
+                hintText: 'Password',
+                fillColor: Colors.white,
+                controller: passwordController,
+                validator: (input) {
+                  if (input == null || input.isEmpty) {
+                    return 'Please enter a password';
+                  } else if (input.length < 6) {
+                    return 'Password must be at least 6 characters long';
+                  }
+                  return null;
+                },
+              ),
               SizedBox(
                 height: 20,
               ),
