@@ -95,7 +95,7 @@ class ItemDetailsPage extends StatelessWidget {
                   size: 16,
                   weight: FontWeight.w600,
                   color: Colors.black,
-                  text: 'Quantity',
+                  text: ' Quantity',
                 ),
                 SizedBox(height: 10),
                 CustomText(

@@ -34,9 +34,9 @@ class _AddItemScreenState extends State<AddItemScreen> {
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
-            primaryColor: AppColors.darkGreen,
-            hintColor: AppColors.darkGreen,
-            colorScheme: ColorScheme.light(primary: AppColors.darkGreen),
+            colorScheme: ColorScheme.light(
+              primary: AppColors.green,
+            ),
             buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
           ),
           child: child!,
@@ -58,9 +58,9 @@ class _AddItemScreenState extends State<AddItemScreen> {
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
-            primaryColor: AppColors.darkGreen,
-            hintColor: AppColors.darkGreen,
-            colorScheme: ColorScheme.light(primary: AppColors.darkGreen),
+            colorScheme: ColorScheme.light(
+              primary: Colors.blue,
+            ),
             buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
           ),
           child: child!,
@@ -147,17 +147,18 @@ class _AddItemScreenState extends State<AddItemScreen> {
                             children: [
                               Icon(
                                 Icons.image,
-                                size: 28,
+                                size: 48,
                                 color: Colors.grey,
                               ),
                               const SizedBox(
-                                height: 10,
+                                height: 5,
                               ),
                               const CustomText(
-                                text: 'Add Image here',
+                                text: 'Browse',
                                 letterSpacing: 1,
                                 size: 12,
-                                weight: FontWeight.w300,
+                                color: Colors.blue,
+                                weight: FontWeight.w600,
                               ),
                             ],
                           ),
@@ -174,7 +175,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                 ),
                 CustomTextField(
                   hintText: 'Item Name',
-                  fillColor: Colors.white,
+                  obscureText: false,
                   controller: nameController,
                   validator: (input) {
                     if (input == null || input.isEmpty) {
@@ -195,7 +196,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                 CustomTextField(
                   hintText: '1',
                   readOnly: true,
-                  fillColor: Colors.white,
+                  obscureText: false,
                   controller: itemcountController,
                   suffixIcon: DropDownsWidget(
                     itemList: List<String>.generate(
@@ -223,7 +224,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                 ),
                 CustomTextField(
                   hintText: 'Black',
-                  fillColor: Colors.white,
+                  obscureText: false,
                   controller: colorController,
                   validator: (input) {
                     if (input == null || input.isEmpty) {
@@ -338,7 +339,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   height: 150,
                   child: CustomTextField(
                     hintText: 'Add Description',
-                    fillColor: Colors.white,
+                    obscureText: false,
                     controller: descriptionController,
                     maxLines: 40,
                     validator: (input) {
@@ -368,9 +369,20 @@ class _AddItemScreenState extends State<AddItemScreen> {
                         formattedTime,
                         image!,
                       );
-                      Navigator.of(context).pushNamed(AppRoutes.homePage);
                     } catch (e) {
-                      print('Registration failed: $e');
+                      Navigator.of(context).pop();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: Colors.red,
+                          content: Text(
+                            'Failed please add data correctly: $e',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+
+                      print('failed: $e');
                     }
                   },
                   width: size.width,

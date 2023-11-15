@@ -9,4 +9,6 @@ class AppRoutes {
   static const guestItemDetails = "/GuestItemDetails";
   static const guesthome = '/guesthome';
   static const guestRegister = '/guestRegister';
+  
+  static const loadpage = '/loadpage';
 }

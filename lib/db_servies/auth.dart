@@ -14,10 +14,9 @@ class DbService_auth {
     String name,
     String email,
     String password,
-    String country,
-    String city,
-    String address,
     String phoneNo,
+    String country,
+    String address,
   ) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
@@ -33,7 +32,6 @@ class DbService_auth {
       final companyData = CompanyData(
         name: name,
         country: country,
-        city: city,
         address: address,
         phoneNo: phoneNo,
       );
@@ -44,7 +42,6 @@ class DbService_auth {
           .set({
         'name': companyData.name,
         'country': companyData.country,
-        'city': companyData.city,
         'address': companyData.address,
         'phoneNo': companyData.phoneNo,
       });
@@ -135,7 +132,7 @@ class DbService_auth {
       });
 
       log('User registered');
-       Navigator.of(context).pushReplacementNamed(AppRoutes.guesthome);
+      Navigator.of(context).pushReplacementNamed(AppRoutes.guesthome);
     } catch (error) {
       if (error is FirebaseAuthException) {
         if (error.code == 'email-already-in-use') {

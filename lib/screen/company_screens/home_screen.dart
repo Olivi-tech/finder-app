@@ -104,6 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: AppColors.green,
         location: companyAddress,
         name: companyName,
+        imagepath: AppImages.logo,
       ),
       body: SingleChildScrollView(
         child: Padding(

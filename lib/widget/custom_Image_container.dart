@@ -71,6 +71,7 @@ class ImageContainer extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.location_on,
+                      color: Colors.red,
                       size: 16,
                     ),
                     const SizedBox(width: 8),
@@ -93,6 +94,7 @@ class ImageContainer extends StatelessWidget {
                   children: [
                     const Icon(
                       Icons.access_time,
+                      color: Colors.blue,
                       size: 14,
                     ),
                     const SizedBox(width: 8),

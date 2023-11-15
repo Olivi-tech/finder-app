@@ -1,8 +1,10 @@
 import 'package:finder_app/constant/app_images.dart';
 import 'package:finder_app/db_servies/db_servies.dart';
+import 'package:finder_app/provider/provider.dart';
 import 'package:finder_app/screen/company_screens/login_screen.dart';
 import 'package:finder_app/utils/app_routs.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../constant/app_colors.dart';
 import '../widget/widget.dart';
 
@@ -42,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen>
         backgroundColor: Colors.white,
         title: Image.asset(AppImages.logo),
         centerTitle: true,
-         elevation: 0,
+        elevation: 0,
         bottom: TabBar(
           controller: _tabController,
           labelColor: Colors.black,
@@ -107,7 +109,7 @@ class _LoginAsGestState extends State<LoginAsGest> {
             children: [
               CustomTextField(
                 hintText: 'Email',
-                fillColor: Colors.white,
+                obscureText: false,
                 controller: emailController,
                 validator: (input) {
                   if (input == null || input.isEmpty) {
@@ -118,19 +120,34 @@ class _LoginAsGestState extends State<LoginAsGest> {
                   return null;
                 },
               ),
-              CustomTextField(
-                hintText: 'Password',
-                fillColor: Colors.white,
-                controller: passwordController,
-                validator: (input) {
-                  if (input == null || input.isEmpty) {
-                    return 'Please enter a password';
-                  } else if (input.length < 6) {
-                    return 'Password must be at least 6 characters long';
-                  }
-                  return null;
-                },
-              ),
+              Consumer<PasswordIconToggleProvider>(
+                    builder: (context, value, child) => CustomTextField(
+                      validator: (input) {
+                        if (input == null || input.isEmpty) {
+                          return 'Please enter a password';
+                        } else if (input.length < 6) {
+                          return 'Password must be at least 6 characters long';
+                        }
+                        return null;
+                      },
+                      obscureText: value.isVisible ? false : true,
+                      controller: passwordController,
+                      hintText: 'Password',
+                      suffixIcon: InkWell(
+                        onTap: () {
+                          Provider.of<PasswordIconToggleProvider>(context,
+                                  listen: false)
+                              .setIsVisible = !value.isVisible;
+                        },
+                        child: Icon(
+                          value.isVisible
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
+                          color: AppColors.grey,
+                        ),
+                      ),
+                    ),
+                  ),
               SizedBox(
                 height: 20,
               ),
@@ -160,11 +177,23 @@ class _LoginAsGestState extends State<LoginAsGest> {
                     onTap: () {
                       Navigator.pushNamed(context, AppRoutes.guestRegister);
                     },
-                    child: CustomText(
-                      text: 'Not a Member? Register',
-                      letterSpacing: 0.50,
-                      size: 16,
-                      weight: FontWeight.w300,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CustomText(
+                          text: 'Not a Member?',
+                          letterSpacing: 0.50,
+                          size: 16,
+                          weight: FontWeight.w300,
+                        ),
+                        CustomText(
+                          text: ' Register Now',
+                          letterSpacing: 0.50,
+                          size: 16,
+                          color: Colors.blue,
+                          weight: FontWeight.w600,
+                        ),
+                      ],
                     )),
               )
             ],

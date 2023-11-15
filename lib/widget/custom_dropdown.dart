@@ -23,7 +23,7 @@ class DropDownWidget extends StatelessWidget {
           controller: controller,
           width: MediaQuery.sizeOf(context).width * .91,
           inputDecorationTheme: const InputDecorationTheme(
-              fillColor: Colors.white,
+            
               border: OutlineInputBorder(
                   borderSide: BorderSide(
                 color: Colors.black,

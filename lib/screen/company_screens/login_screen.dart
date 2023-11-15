@@ -1,8 +1,10 @@
 import 'package:finder_app/constant/constant.dart';
 import 'package:finder_app/db_servies/db_servies.dart';
+import 'package:finder_app/provider/provider.dart';
 import 'package:finder_app/utils/app_routs.dart';
 import 'package:finder_app/widget/widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginAsCompany extends StatefulWidget {
   const LoginAsCompany({super.key});
@@ -35,7 +37,7 @@ class _LoginAsCompanyState extends State<LoginAsCompany> {
             children: [
               CustomTextField(
                 hintText: 'Email',
-                fillColor: Colors.white,
+                  obscureText: false,
                 controller: emailController,
                 validator: (input) {
                   if (input == null || input.isEmpty) {
@@ -46,19 +48,34 @@ class _LoginAsCompanyState extends State<LoginAsCompany> {
                   return null;
                 },
               ),
-              CustomTextField(
-                hintText: 'Password',
-                fillColor: Colors.white,
-                controller: passwordController,
-                validator: (input) {
-                  if (input == null || input.isEmpty) {
-                    return 'Please enter a password';
-                  } else if (input.length < 6) {
-                    return 'Password must be at least 6 characters long';
-                  }
-                  return null;
-                },
-              ),
+               Consumer<PasswordIconToggleProvider>(
+                    builder: (context, value, child) => CustomTextField(
+                      validator: (input) {
+                        if (input == null || input.isEmpty) {
+                          return 'Please enter a password';
+                        } else if (input.length < 6) {
+                          return 'Password must be at least 6 characters long';
+                        }
+                        return null;
+                      },
+                      obscureText: value.isVisible ? false : true,
+                      controller: passwordController,
+                      hintText: 'Password',
+                      suffixIcon: InkWell(
+                        onTap: () {
+                          Provider.of<PasswordIconToggleProvider>(context,
+                                  listen: false)
+                              .setIsVisible = !value.isVisible;
+                        },
+                        child: Icon(
+                          value.isVisible
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
+                          color: AppColors.grey,
+                        ),
+                      ),
+                    ),
+                  ),
               SizedBox(
                 height: 20,
               ),
@@ -85,15 +102,28 @@ class _LoginAsCompanyState extends State<LoginAsCompany> {
               Padding(
                 padding: EdgeInsets.all(20),
                 child: GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, AppRoutes.register);
-                    },
-                    child: CustomText(
-                      text: 'Not a Member? Register',
-                      letterSpacing: 0.50,
-                      size: 16,
-                      weight: FontWeight.w300,
-                    )),
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRoutes.register);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomText(
+                        text: 'Donot have account?',
+                        letterSpacing: 0.50,
+                        size: 16,
+                        weight: FontWeight.w300,
+                      ),
+                      CustomText(
+                        text: ' Register Now',
+                        letterSpacing: 0.50,
+                        size: 16,
+                        color: Colors.blue,
+                        weight: FontWeight.w600,
+                      ),
+                    ],
+                  ),
+                ),
               )
             ],
           ),

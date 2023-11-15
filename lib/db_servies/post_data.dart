@@ -1,8 +1,9 @@
 import 'dart:io';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:finder_app/screen/company_screens/company_screens.dart';
+import 'package:finder_app/utils/app_routs.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DbService {
@@ -18,10 +19,36 @@ class DbService {
     File image,
   ) async {
     try {
+      bool _isLoading = true;
+
       showDialog(
         context: context,
         builder: (context) {
-          return Center(child: CircularProgressIndicator());
+          return AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _isLoading
+                    ? const CupertinoActivityIndicator(
+                        color: Colors.green,
+                        radius: 25,
+                      )
+                    : const Icon(
+                        Icons.check_circle,
+                        color: Colors.blue,
+                        size: 50,
+                      ),
+                const SizedBox(height: 20),
+                Text(
+                  _isLoading ? 'Uploading data...' : 'Done',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
+          );
         },
       );
 
@@ -45,15 +72,16 @@ class DbService {
         'time': time,
         'image_url': imageUrl,
       };
-      _firestore
+      await _firestore
           .collection('companies')
           .doc('items')
           .collection('item_data')
           .add(itemData);
 
+      _isLoading = false;
+
       Navigator.pop(context);
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomeScreen()));
+      Navigator.pushNamed(context, AppRoutes.homePage);
     } catch (error) {
       print('Error: $error');
     }

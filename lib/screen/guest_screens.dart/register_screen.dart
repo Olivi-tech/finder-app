@@ -1,11 +1,15 @@
 import 'package:finder_app/constant/app_colors.dart';
 import 'package:finder_app/constant/app_images.dart';
 import 'package:finder_app/db_servies/db_servies.dart';
+import 'package:finder_app/provider/provider.dart';
+import 'package:finder_app/screen/login_screen.dart';
 import 'package:finder_app/widget/custom_button.dart';
-import 'package:finder_app/widget/custom_dropdown.dart';
 import 'package:finder_app/widget/custom_text.dart';
 import 'package:finder_app/widget/custom_textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:provider/provider.dart';
 
 class RegisterAsGuestScreen extends StatefulWidget {
   const RegisterAsGuestScreen({super.key});
@@ -22,16 +26,8 @@ class _RegisterAsGuestScreenState extends State<RegisterAsGuestScreen> {
   TextEditingController phoneController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  List<String> countries = [
-    'Pakistan',
-    'United States',
-    'India',
-    'Canada',
-    'Australia',
-    'United Kingdom',
-    'Germany',
-    'France',
-  ];
+
+  FocusNode focusNode = FocusNode();
   @override
   void dispose() {
     nameController.dispose();
@@ -67,8 +63,8 @@ class _RegisterAsGuestScreenState extends State<RegisterAsGuestScreen> {
                     ),
                   ),
                   CustomTextField(
+                     obscureText: false,
                     hintText: 'Name',
-                    fillColor: Colors.white,
                     controller: nameController,
                     validator: (input) {
                       if (input == null || input.isEmpty) {
@@ -78,8 +74,9 @@ class _RegisterAsGuestScreenState extends State<RegisterAsGuestScreen> {
                     },
                   ),
                   CustomTextField(
+                     obscureText: false,
+                    keyboardType: TextInputType.emailAddress,
                     hintText: 'Email',
-                    fillColor: Colors.white,
                     controller: emailController,
                     validator: (input) {
                       if (input == null || input.isEmpty) {
@@ -90,31 +87,72 @@ class _RegisterAsGuestScreenState extends State<RegisterAsGuestScreen> {
                       return null;
                     },
                   ),
-                  CustomTextField(
-                    hintText: 'Password',
-                    fillColor: Colors.white,
-                    controller: passwordController,
-                    validator: (input) {
-                      if (input == null || input.isEmpty) {
-                        return 'Please enter a password';
-                      } else if (input.length < 6) {
-                        return 'Password must be at least 6 characters long';
-                      }
-                      return null;
-                    },
+                  Consumer<PasswordIconToggleProvider>(
+                    builder: (context, value, child) => CustomTextField(
+                      validator: (input) {
+                        if (input == null || input.isEmpty) {
+                          return 'Please enter a password';
+                        } else if (input.length < 6) {
+                          return 'Password must be at least 6 characters long';
+                        }
+                        return null;
+                      },
+                      obscureText: value.isVisible ? false : true,
+                      controller: passwordController,
+                      hintText: 'Password',
+                      suffixIcon: InkWell(
+                        onTap: () {
+                          Provider.of<PasswordIconToggleProvider>(context,
+                                  listen: false)
+                              .setIsVisible = !value.isVisible;
+                        },
+                        child: Icon(
+                          value.isVisible
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
+                          color: AppColors.grey,
+                        ),
+                      ),
+                    ),
                   ),
-                  CustomTextField(
-                    hintText: 'Phone',
-                    fillColor: Colors.white,
+                  SizedBox(
+                    height: 10,
+                  ),
+                  IntlPhoneField(
+                    disableLengthCheck: true,
                     controller: phoneController,
-                    validator: (input) {
-                      if (input == null || input.isEmpty) {
-                        return 'Please enter phone';
-                      }
-                      return null;
+                    keyboardType: TextInputType.phone,
+                    focusNode: focusNode,
+                    decoration: InputDecoration(
+                      fillColor: Colors.transparent,
+                      hintText: 'Phone No',
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 10),
+                      border: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          width: 0.7,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(width: 0.7, color: AppColors.grey),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    languageCode: "en",
+                    onChanged: (phone) {
+                      print(phone.completeNumber);
                     },
+                    onCountryChanged: (country) {
+                      countryController.text = country.name;
+                    },
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
                   ),
                   CustomTextField(
+                     obscureText: false,
                     hintText: 'Country',
                     readOnly: true,
                     validator: (input) {
@@ -123,20 +161,20 @@ class _RegisterAsGuestScreenState extends State<RegisterAsGuestScreen> {
                       }
                       return null;
                     },
-                    fillColor: Colors.white,
                     controller: countryController,
-                    suffixIcon: DropDownsWidget(
+                    /* suffixIcon: DropDownsWidget(
                       itemList: countries,
                       controller: countryController,
                       onChanged: (String? selectedOption) {
                         countryController.text = selectedOption ?? '';
                       },
-                    ),
+                    ),*/
                   ),
                   CustomTextField(
+                     obscureText: false,
                     hintText: 'Address',
-                    fillColor: Colors.white,
                     controller: addressController,
+                maxLines: 4,
                     validator: (input) {
                       if (input == null || input.isEmpty) {
                         return 'Please enter Address';
@@ -169,6 +207,34 @@ class _RegisterAsGuestScreenState extends State<RegisterAsGuestScreen> {
                     },
                     width: MediaQuery.sizeOf(context).width,
                   ),
+                  Padding(
+                    padding: EdgeInsets.all(20),
+                    child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginScreen()));
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomText(
+                              text: 'Already member?',
+                              letterSpacing: 0.50,
+                              size: 16,
+                              weight: FontWeight.w300,
+                            ),
+                            CustomText(
+                              text: ' Sign in',
+                              letterSpacing: 0.50,
+                              size: 16,
+                              color: Colors.blue,
+                              weight: FontWeight.w600,
+                            ),
+                          ],
+                        )),
+                  )
                 ],
               ),
             ),
@@ -210,7 +276,7 @@ class _RegisterAsGuestScreenState extends State<RegisterAsGuestScreen> {
 /** CustomTextField(
                     hintText: 'Category',
                     readOnly: true,
-                    fillColor: Colors.white,
+                  
                     validator: (input) {
                       if (input == null || input.isEmpty) {
                         return 'Please enter Company Category';

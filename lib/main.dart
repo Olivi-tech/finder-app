@@ -1,4 +1,4 @@
-import 'package:finder_app/provider/bottom_navigation_provider.dart';
+import 'package:finder_app/provider/provider.dart';
 import 'package:finder_app/routs.dart';
 import 'package:finder_app/screen/screen.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +26,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<BottomNavigationProvider>(
           create: (context) {
             return BottomNavigationProvider();
+          },
+        ),
+        ChangeNotifierProvider<PasswordIconToggleProvider>(
+          create: (context) {
+            return PasswordIconToggleProvider();
           },
         ),
       ],
