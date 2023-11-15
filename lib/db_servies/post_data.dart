@@ -25,28 +25,33 @@ class DbService {
         context: context,
         builder: (context) {
           return AlertDialog(
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _isLoading
-                    ? const CupertinoActivityIndicator(
-                        color: Colors.green,
-                        radius: 25,
-                      )
-                    : const Icon(
-                        Icons.check_circle,
-                        color: Colors.blue,
-                        size: 50,
-                      ),
-                const SizedBox(height: 20),
-                Text(
-                  _isLoading ? 'Uploading data...' : 'Done',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black,
+            content: Container(
+              height: 150,
+              width: 150,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _isLoading
+                      ? const CupertinoActivityIndicator(
+                          color: Colors.green,
+                          radius: 25,
+                        )
+                      : const Icon(
+                          Icons.check_circle,
+                          color: Colors.blue,
+                          size: 50,
+                        ),
+                  const SizedBox(height: 20),
+                  Text(
+                    _isLoading ? 'Uploading data...' : 'Done',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },

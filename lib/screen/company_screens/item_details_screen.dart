@@ -92,10 +92,10 @@ class ItemDetailsPage extends StatelessWidget {
                 SizedBox(height: 10),
                 const CustomText(
                   letterSpacing: 1,
-                  size: 16,
+                  size: 18,
                   weight: FontWeight.w600,
                   color: Colors.black,
-                  text: ' Quantity',
+                  text: 'Quantity',
                 ),
                 SizedBox(height: 10),
                 CustomText(

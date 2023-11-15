@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:finder_app/constant/app_colors.dart';
 import 'package:finder_app/db_servies/post_data.dart';
-import 'package:finder_app/utils/app_routs.dart';
 import 'package:finder_app/widget/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -368,6 +367,17 @@ class _AddItemScreenState extends State<AddItemScreen> {
                         selectedDate!,
                         formattedTime,
                         image!,
+                      );
+                      Navigator.of(context).pop();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: Colors.green,
+                          content: Text(
+                            'Uploaded data Sucessfully',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          duration: Duration(seconds: 2),
+                        ),
                       );
                     } catch (e) {
                       Navigator.of(context).pop();
