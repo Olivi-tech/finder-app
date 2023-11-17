@@ -34,12 +34,12 @@ class DbService {
                 children: [
                   _isLoading
                       ? const CupertinoActivityIndicator(
-                          color: Colors.green,
+                          color: Colors.blue,
                           radius: 25,
                         )
                       : const Icon(
                           Icons.check_circle,
-                          color: Colors.blue,
+                          color: Colors.green,
                           size: 50,
                         ),
                   const SizedBox(height: 20),

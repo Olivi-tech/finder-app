@@ -1,4 +1,5 @@
 import 'package:finder_app/constant/constant.dart';
+import 'package:finder_app/screen/guest_screens.dart/guest_screens.dart';
 import 'package:finder_app/widget/widget.dart';
 import 'package:flutter/material.dart';
 
@@ -25,7 +26,7 @@ class GuestItemDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.sizeOf(context);
+  
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -133,13 +134,35 @@ class GuestItemDetailsPage extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               CustomText(text: description),
-              const SizedBox(height: 10),
-              CustomButton(
-                text: 'Verify its Your',
-                btnColor: AppColors.green,
-                textColor: Colors.white,
-                onPressed: () {},
-                width: size.width,
+              const SizedBox(height: 30),
+              Center(
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => GuestContactScreen()));
+                  },
+                  child: Container(
+                    height: 40,
+                    width: 150,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: AppColors.green,
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Verify its your',
+                        style: TextStyle(
+                          color: Colors.white,
+                          letterSpacing: 0.50,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ),
               const SizedBox(
                 height: 100,

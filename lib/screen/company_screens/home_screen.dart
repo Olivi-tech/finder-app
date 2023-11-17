@@ -57,22 +57,8 @@ class _HomeScreenState extends State<HomeScreen> {
   List<ItemData> items = [];
   String companyName = '';
   String companyAddress = '';
-
-  Future<void> fetchLatestItemdata() async {
-    final QuerySnapshot itemDataSnapshot = await FirebaseFirestore.instance
-        .collection('companies')
-        .doc('items')
-        .collection('item_data')
-        .get();
-
-    final List<ItemData> fetchedItems =
-        itemDataSnapshot.docs.map((doc) => ItemData.fromDocument(doc)).toList();
-
-    setState(() {
-      items = fetchedItems;
-    });
-  }
-
+  late List<ItemData> filteredItems = [];
+  TextEditingController searchController = TextEditingController();
   Future<void> fetchCompanyData() async {
     try {
       String? uid = FirebaseAuth.instance.currentUser?.uid;
@@ -90,11 +76,37 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (error) {}
   }
 
+  Future<void> fetchLatestItemdata() async {
+    final QuerySnapshot itemDataSnapshot = await FirebaseFirestore.instance
+        .collection('companies')
+        .doc('items')
+        .collection('item_data')
+        .get();
+
+    final List<ItemData> fetchedItems = itemDataSnapshot.docs.map((doc) {
+      return ItemData.fromDocument(doc.id, doc);
+    }).toList();
+
+    setState(() {
+      items = fetchedItems;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     fetchLatestItemdata();
     fetchCompanyData();
+    filteredItems = items;
+  }
+
+  void _filterItems(String query) {
+    setState(() {
+      filteredItems = items
+          .where(
+              (item) => item.name.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    });
   }
 
   @override
@@ -114,7 +126,13 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Padding(
                 padding: EdgeInsets.all(5.0),
-                child: CustomSearchField(hintText: 'Search items'),
+                child: CustomSearchField(
+                  controller: searchController,
+                  hintText: 'Search items',
+                  onChanged: (query) {
+                    _filterItems(query);
+                  },
+                ),
               ),
               SizedBox(
                 height: 10,
@@ -190,9 +208,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   shrinkWrap: true,
-                  itemCount: items.length,
+                  itemCount: searchController.text.isEmpty
+                      ? items.length
+                      : filteredItems.length,
                   itemBuilder: (context, index) {
-                    final item = items[index];
+                    final item = searchController.text.isEmpty
+                        ? items[index]
+                        : filteredItems[index];
+
                     return Padding(
                       padding: const EdgeInsets.all(5),
                       child: ImageContainer(
@@ -205,14 +228,15 @@ class _HomeScreenState extends State<HomeScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => ItemDetailsPage(
-                                  itemId: item.itemId,
-                                  image_Url: item.imageUrl,
-                                  name: item.name,
-                                  description: item.description,
-                                  color: item.color,
-                                  quantity: item.quantity,
-                                  //date: item.date,
-                                  time: item.time),
+                                itemId: item.itemId,
+                                image_Url: item.imageUrl,
+                                name: item.name,
+                                description: item.description,
+                                color: item.color,
+                                quantity: item.quantity,
+                                //date: item.date,
+                                time: item.time, documentId: item.documentId,
+                              ),
                             ),
                           );
                         },
@@ -230,6 +254,7 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class ItemData {
+  final String documentId;
   final String itemId;
   final String name;
   final String description;
@@ -240,6 +265,7 @@ class ItemData {
   final String imageUrl;
 
   ItemData({
+    required this.documentId,
     required this.itemId,
     required this.name,
     required this.description,
@@ -250,9 +276,10 @@ class ItemData {
     required this.imageUrl,
   });
 
-  factory ItemData.fromDocument(DocumentSnapshot doc) {
+  factory ItemData.fromDocument(String documentId, DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     return ItemData(
+      documentId: documentId,
       itemId: data['itemId'],
       name: data['name'],
       description: data['description'],
@@ -264,3 +291,26 @@ class ItemData {
     );
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+ */

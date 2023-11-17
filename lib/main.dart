@@ -8,6 +8,7 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
             return BottomNavigationProvider();
           },
         ),
+     
         ChangeNotifierProvider<PasswordIconToggleProvider>(
           create: (context) {
             return PasswordIconToggleProvider();

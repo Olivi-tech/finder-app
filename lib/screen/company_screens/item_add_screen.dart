@@ -371,7 +371,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                       Navigator.of(context).pop();
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          backgroundColor: Colors.green,
+                          backgroundColor: AppColors.green,
                           content: Text(
                             'Uploaded data Sucessfully',
                             style: TextStyle(color: Colors.white),
@@ -391,7 +391,6 @@ class _AddItemScreenState extends State<AddItemScreen> {
                           duration: Duration(seconds: 2),
                         ),
                       );
-
                       print('failed: $e');
                     }
                   },

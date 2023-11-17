@@ -2,12 +2,19 @@ import 'package:flutter/material.dart';
 
 class CustomSearchField extends StatelessWidget {
   final String hintText;
-
-  const CustomSearchField({Key? key, required this.hintText}) : super(key: key);
+  final ValueChanged<String>? onChanged;
+  final TextEditingController controller; 
+  const CustomSearchField({
+    Key? key,
+    required this.hintText,
+    this.onChanged,
+    required this.controller,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: controller, 
       style: TextStyle(
         color: Colors.black,
       ),
@@ -31,9 +38,7 @@ class CustomSearchField extends StatelessWidget {
           borderSide: BorderSide(color: Colors.transparent),
         ),
       ),
-      onChanged: (value) {
-        // Update search query
-      },
+      onChanged: onChanged,
     );
   }
 }

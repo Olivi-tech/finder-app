@@ -1,46 +1,77 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class CustomButton extends StatelessWidget {
+class CustomButton extends StatefulWidget {
   final String text;
   final double width;
-  final VoidCallback? onPressed;
+  final Future<void> Function()? onPressed;
   final Color btnColor;
   final Color textColor;
-  const CustomButton(
-      {super.key,
-      required this.text,
-      this.onPressed,
-      required this.width,
-      required this.btnColor,
-      required this.textColor});
+
+  const CustomButton({
+    Key? key,
+    required this.text,
+    this.onPressed,
+    required this.width,
+    required this.btnColor,
+    required this.textColor,
+  }) : super(key: key);
+
+  @override
+  _CustomButtonState createState() => _CustomButtonState();
+}
+
+class _CustomButtonState extends State<CustomButton> {
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
       child: InkWell(
-        onTap: onPressed,
+        onTap: () async {
+          if (!isLoading) {
+            setState(() {
+              isLoading = true;
+            });
+            if (widget.onPressed != null) {
+              await widget.onPressed!();
+            }
+            setState(() {
+              isLoading = false;
+            });
+          }
+        },
         child: Container(
           height: 40,
-          width: width,
-          decoration: BoxDecoration(boxShadow: const [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 0,
-              offset: Offset(2, 2),
-              spreadRadius: 0,
-            )
-          ], borderRadius: BorderRadius.circular(10), color: btnColor),
+          width: widget.width,
+          decoration: BoxDecoration(
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 0,
+                offset: Offset(2, 2),
+                spreadRadius: 0,
+              )
+            ],
+            borderRadius: BorderRadius.circular(10),
+            color: widget.btnColor,
+          ),
           child: Center(
-              child: Text(
-            text,
-            style: TextStyle(
-              color: textColor,
-              letterSpacing: 0.50,
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-            ),
-          )),
+            child: isLoading
+                ? CupertinoActivityIndicator(
+                    color: Colors.blue,
+                  )
+                : Text(
+                    widget.text,
+                    style: TextStyle(
+                      color: widget.textColor,
+                      letterSpacing: 0.50,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+          ),
         ),
       ),
     );

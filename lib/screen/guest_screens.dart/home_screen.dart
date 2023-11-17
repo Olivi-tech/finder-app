@@ -17,6 +17,7 @@ class GuestHomeScreen extends StatefulWidget {
 class GuestHomeScreenState extends State<GuestHomeScreen> {
   List<ItemData> items = [];
   String name = '';
+  String companyName = '';
 
   Future<void> fetchItemData() async {
     final QuerySnapshot itemDataSnapshot = await FirebaseFirestore.instance
@@ -31,6 +32,22 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
     setState(() {
       items = fetchedItems;
     });
+  }
+
+  Future<void> fetchCompanyData() async {
+    try {
+      String? uid = FirebaseAuth.instance.currentUser?.uid;
+      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('companies')
+          .doc(uid)
+          .get();
+
+      if (userSnapshot.exists) {
+        setState(() {
+          companyName = userSnapshot['name'];
+        });
+      }
+    } catch (error) {}
   }
 
   Future<void> fetchUserData() async {
@@ -110,12 +127,27 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 10, top: 15),
-                child: CustomText(
-                  text: 'Recent Posts',
-                  color: Colors.black,
-                  letterSpacing: 1,
-                  size: 16,
-                  weight: FontWeight.w500,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomText(
+                      text: 'Recent Posts $companyName',
+                      color: Colors.black,
+                      letterSpacing: 1,
+                      size: 20,
+                      weight: FontWeight.w500,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    CustomText(
+                      text:
+                          'We would like to inform you about some lost items that have been found. You can check them out here',
+                      color: Colors.black,
+                      size: 16,
+                      weight: FontWeight.w300,
+                    ),
+                  ],
                 ),
               ),
               SizedBox(
