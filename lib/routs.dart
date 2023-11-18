@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:finder_app/screen/company_screens/settings_screen.dart';
 import 'package:finder_app/screen/screen.dart';
 import 'package:finder_app/utils/app_routs.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ class AppRouter {
       case AppRoutes.splash:
         return const SplashScreen();
       case AppRoutes.login:
-        return const LoginAsCompany();
+        return const LoginScreen();
       case AppRoutes.register:
         return const RegisterCompanyScreen();
       case AppRoutes.guestRegister:
@@ -26,12 +27,12 @@ class AppRouter {
         return const GuestHomeScreen();
       case AppRoutes.homePage:
         return HomePage();
-       
+      case AppRoutes.settingPage:
+        return SettingsScreen();
       case AppRoutes.itemAdd:
         return const AddItemScreen();
       case AppRoutes.guestContact:
         return const GuestContactScreen();
-
       default:
         AppRoutes.splash;
         return const SplashScreen();

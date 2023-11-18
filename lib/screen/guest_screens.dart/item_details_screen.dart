@@ -1,5 +1,5 @@
 import 'package:finder_app/constant/constant.dart';
-import 'package:finder_app/screen/guest_screens.dart/guest_screens.dart';
+import 'package:finder_app/utils/app_routs.dart';
 import 'package:finder_app/widget/widget.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +26,6 @@ class GuestItemDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -115,11 +114,11 @@ class GuestItemDetailsPage extends StatelessWidget {
                   // CustomText(
                   //text: '27-11-2023',
                   //  ),
-                  const SizedBox(width: 10),
-                  CustomText(
-                    text: '|',
-                  ),
-                  const SizedBox(width: 10),
+                  //const SizedBox(width: 10),
+                  //  CustomText(
+                  //   text: '|',
+                  // ),
+                  // const SizedBox(width: 10),
                   CustomText(
                     text: time,
                   ),
@@ -138,10 +137,7 @@ class GuestItemDetailsPage extends StatelessWidget {
               Center(
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => GuestContactScreen()));
+                    Navigator.pushNamed(context, AppRoutes.guestContact);
                   },
                   child: Container(
                     height: 40,
@@ -152,11 +148,11 @@ class GuestItemDetailsPage extends StatelessWidget {
                     ),
                     child: Center(
                       child: Text(
-                        'Verify its your',
+                        'Contact & Verify ',
                         style: TextStyle(
                           color: Colors.white,
                           letterSpacing: 0.50,
-                          fontSize: 18,
+                          fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),
                       ),

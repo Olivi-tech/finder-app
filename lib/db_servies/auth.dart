@@ -31,9 +31,11 @@ class DbService_auth {
 
       final companyData = CompanyData(
         name: name,
+        email: email,
+        password: password,
+        phoneNo: phoneNo,
         country: country,
         address: address,
-        phoneNo: phoneNo,
       );
 
       await FirebaseFirestore.instance
@@ -41,9 +43,11 @@ class DbService_auth {
           .doc(user?.uid)
           .set({
         'name': companyData.name,
+        'email': companyData.email,
+        'password': companyData.password,
+        'phoneNo': companyData.phoneNo,
         'country': companyData.country,
         'address': companyData.address,
-        'phoneNo': companyData.phoneNo,
       });
 
       log('User registered and company data saved');
@@ -83,12 +87,9 @@ class DbService_auth {
       user = userCredential.user;
       Navigator.of(context).pushReplacementNamed(AppRoutes.homePage);
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'wrong-password') {
-        _showAlertDialog(context, 'Invalid Password',
-            'The password you provided is wrong. ');
-      } else if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
-        _showAlertDialog(
-            context, 'Invalid Email ', 'No user found for that email.');
+      if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
+        _showAlertDialog(context, 'Invalid Credentials',
+            'No user found for that email & password.');
       }
     } catch (e) {
       print(e);
@@ -106,6 +107,14 @@ class DbService_auth {
     String address,
   ) async {
     try {
+      if (await isEmailUsedForCompany(email)) {
+        _showAlertDialog(
+          context,
+          'Email Already Used',
+          'The email is already registered as a company. Please use a different email.',
+        );
+        ;
+      }
       User? user;
       UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
@@ -116,6 +125,8 @@ class DbService_auth {
       await userCredential.user?.updateDisplayName(name);
       final userData = UserData(
         name: name,
+        email: email,
+        password: password,
         phoneNo: phoneNo,
         country: country,
         address: address,
@@ -126,6 +137,8 @@ class DbService_auth {
           .doc(user?.uid)
           .set({
         'name': userData.name,
+        'email': userData.email,
+        'password': userData.password,
         'country': userData.country,
         'address': userData.address,
         'phoneNo': userData.phoneNo,
@@ -160,6 +173,14 @@ class DbService_auth {
     User? user;
 
     try {
+      if (await isEmailUsedForCompany(email)) {
+        _showAlertDialog(
+          context,
+          'Email Already Used',
+          'The email is already registered as a company. Please use a different email.',
+        );
+        ;
+      }
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
@@ -169,17 +190,27 @@ class DbService_auth {
       Navigator.of(context).pushReplacementNamed(AppRoutes.guesthome);
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'wrong-password') {
-        _showAlertDialog(context, 'Invalid Password',
-            'The password you provided is wrong. ');
-      } else if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
-        _showAlertDialog(
-            context, 'Invalid Email ', 'No user found for that email.');
+      if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
+        _showAlertDialog(context, 'Invalid Credentials',
+            'No user found for that email & password.');
       }
     } catch (e) {
       print(e);
     }
     return user;
+  }
+
+  static Future<bool> isEmailUsedForCompany(String email) async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('companies')
+          .where('email', isEqualTo: email)
+          .get();
+
+      return querySnapshot.docs.isNotEmpty;
+    } catch (error) {
+      return false;
+    }
   }
 
   static void _showAlertDialog(

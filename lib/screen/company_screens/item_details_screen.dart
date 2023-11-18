@@ -81,7 +81,7 @@ class ItemDetailsPage extends StatelessWidget {
                       ),
                       TextButton(
                         onPressed: () {
-                          _deleteItem(itemId, context);
+                          _deleteItem(documentId, context);
                           Navigator.of(context).pop();
                           Navigator.of(context).pop();
                         },

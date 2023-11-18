@@ -121,33 +121,33 @@ class _LoginAsGestState extends State<LoginAsGest> {
                 },
               ),
               Consumer<PasswordIconToggleProvider>(
-                    builder: (context, value, child) => CustomTextField(
-                      validator: (input) {
-                        if (input == null || input.isEmpty) {
-                          return 'Please enter a password';
-                        } else if (input.length < 6) {
-                          return 'Password must be at least 6 characters long';
-                        }
-                        return null;
-                      },
-                      obscureText: value.isVisible ? false : true,
-                      controller: passwordController,
-                      hintText: 'Password',
-                      suffixIcon: InkWell(
-                        onTap: () {
-                          Provider.of<PasswordIconToggleProvider>(context,
-                                  listen: false)
-                              .setIsVisible = !value.isVisible;
-                        },
-                        child: Icon(
-                          value.isVisible
-                              ? Icons.visibility_outlined
-                              : Icons.visibility_off_outlined,
-                          color: AppColors.grey,
-                        ),
-                      ),
+                builder: (context, value, child) => CustomTextField(
+                  validator: (input) {
+                    if (input == null || input.isEmpty) {
+                      return 'Please enter a password';
+                    } else if (input.length < 6) {
+                      return 'Password must be at least 6 characters long';
+                    }
+                    return null;
+                  },
+                  obscureText: value.isVisible ? false : true,
+                  controller: passwordController,
+                  hintText: 'Password',
+                  suffixIcon: InkWell(
+                    onTap: () {
+                      Provider.of<PasswordIconToggleProvider>(context,
+                              listen: false)
+                          .setIsVisible = !value.isVisible;
+                    },
+                    child: Icon(
+                      value.isVisible
+                          ? Icons.visibility_outlined
+                          : Icons.visibility_off_outlined,
+                      color: AppColors.grey,
                     ),
                   ),
+                ),
+              ),
               SizedBox(
                 height: 20,
               ),
@@ -175,7 +175,9 @@ class _LoginAsGestState extends State<LoginAsGest> {
                 padding: EdgeInsets.all(20),
                 child: GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, AppRoutes.guestRegister);
+                      Navigator.pushReplacementNamed(
+                          context, AppRoutes.guestRegister);
+                    
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,

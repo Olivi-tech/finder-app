@@ -2,7 +2,7 @@ import 'package:finder_app/constant/app_colors.dart';
 import 'package:finder_app/constant/app_images.dart';
 import 'package:finder_app/db_servies/db_servies.dart';
 import 'package:finder_app/provider/provider.dart';
-import 'package:finder_app/screen/login_screen.dart';
+import 'package:finder_app/utils/app_routs.dart';
 import 'package:finder_app/widget/custom_button.dart';
 import 'package:finder_app/widget/custom_text.dart';
 import 'package:finder_app/widget/custom_textfield.dart';
@@ -120,7 +120,7 @@ class _RegisterCompanyScreenState extends State<RegisterCompanyScreen> {
                     height: 10,
                   ),
                   IntlPhoneField(
-                    disableLengthCheck: true,
+                    disableLengthCheck: false,
                     controller: phoneNoController,
                     keyboardType: TextInputType.phone,
                     focusNode: focusNode,
@@ -202,10 +202,8 @@ class _RegisterCompanyScreenState extends State<RegisterCompanyScreen> {
                     padding: EdgeInsets.all(20),
                     child: GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => LoginScreen()));
+                          Navigator.pushReplacementNamed(
+                              context, AppRoutes.login);
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,

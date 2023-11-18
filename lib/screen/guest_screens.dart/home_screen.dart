@@ -5,7 +5,9 @@ import 'package:finder_app/screen/guest_screens.dart/guest_screens.dart';
 import 'package:finder_app/utils/app_routs.dart';
 import 'package:finder_app/widget/widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 
 class GuestHomeScreen extends StatefulWidget {
   const GuestHomeScreen({super.key});
@@ -17,7 +19,6 @@ class GuestHomeScreen extends StatefulWidget {
 class GuestHomeScreenState extends State<GuestHomeScreen> {
   List<ItemData> items = [];
   String name = '';
-  String companyName = '';
 
   Future<void> fetchItemData() async {
     final QuerySnapshot itemDataSnapshot = await FirebaseFirestore.instance
@@ -32,22 +33,6 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
     setState(() {
       items = fetchedItems;
     });
-  }
-
-  Future<void> fetchCompanyData() async {
-    try {
-      String? uid = FirebaseAuth.instance.currentUser?.uid;
-      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
-          .collection('companies')
-          .doc(uid)
-          .get();
-
-      if (userSnapshot.exists) {
-        setState(() {
-          companyName = userSnapshot['name'];
-        });
-      }
-    } catch (error) {}
   }
 
   Future<void> fetchUserData() async {
@@ -66,13 +51,28 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
     } catch (error) {}
   }
 
+  String selectedCategory = '';
+
+  List<ItemData> getFilteredItems(String category) {
+    return items
+        .where((item) =>
+            item.name.toLowerCase().startsWith(category.toLowerCase()))
+        .toList();
+  }
+
   @override
   void initState() {
     super.initState();
     fetchItemData();
-    fetchUserData();
   }
 
+  void showAllItems() {
+    setState(() {
+      selectedCategory = '';
+    });
+  }
+
+  bool isLoggingOut = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,34 +118,87 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
             ),
           ],
         ),
+        actions: [
+          GestureDetector(
+            onTap: () async {
+              try {
+                setState(() {
+                  isLoggingOut = true;
+                });
+
+                await FirebaseAuth.instance.signOut();
+
+                Navigator.pushReplacementNamed(context, AppRoutes.login);
+              } catch (e) {
+                print("Error during logout: $e");
+              } finally {
+                setState(() {
+                  isLoggingOut = false;
+                });
+              }
+            },
+            child: isLoggingOut
+                ? CupertinoActivityIndicator(
+                    color: Colors.red,
+                  )
+                : Icon(
+                    Icons.logout,
+                    color: AppColors.green,
+                  ),
+          ),
+          SizedBox(
+            width: 10,
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10),
+          padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SizedBox(
+                height: 10,
+              ),
               Padding(
-                padding: const EdgeInsets.only(left: 10, top: 15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                padding: const EdgeInsets.only(left: 10, bottom: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomText(
-                      text: 'Recent Posts $companyName',
+                      text: 'Categories',
                       color: Colors.black,
                       letterSpacing: 1,
                       size: 20,
                       weight: FontWeight.w500,
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    CustomText(
-                      text:
-                          'We would like to inform you about some lost items that have been found. You can check them out here',
-                      color: Colors.black,
-                      size: 16,
-                      weight: FontWeight.w300,
+                    GestureDetector(
+                      onTap: showAllItems,
+                      child: Container(
+                        height: 30,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.blue,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            const Icon(
+                              Icons.filter,
+                              size: 14,
+                              color: Colors.white,
+                            ),
+                            CustomText(
+                              text: 'Show All',
+                              size: 14,
+                              weight: FontWeight.w500,
+                              letterSpacing: 0.50,
+                              color: Colors.white,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -154,43 +207,158 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
                 height: 10,
               ),
               SizedBox(
-                height: 600,
+                height: 90,
                 child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: items.length,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 6,
                   itemBuilder: (context, index) {
-                    final item = items[index];
+                    final images = [
+                      AppImages.phoneicon,
+                      AppImages.keyicon,
+                      AppImages.walleticon,
+                      AppImages.laptopicon,
+                      AppImages.bagicon,
+                      AppImages.camicon
+                    ];
+                    final labels = [
+                      'Phone',
+                      'Key',
+                      'Wallet',
+                      'Laptop',
+                      'Bag',
+                      'Camera'
+                    ];
+
                     return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: PostContainer(
-                        imagePath: item.imageUrl,
-                        containerText: item.name,
-                        timeText: item.time,
+                      padding: EdgeInsets.only(right: 8, bottom: 8, left: 4),
+                      child: GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => GuestItemDetailsPage(
-                                itemId: item.itemId,
-                                image_Url: item.imageUrl,
-                                name: item.name,
-                                description: item.description,
-                                color: item.color,
-                                quantity: item.quantity,
-                                //date: item.date,
-                                time: item.time,
-                              ),
-                            ),
-                          );
+                          setState(() {
+                            selectedCategory = labels[index];
+                          });
                         },
-                        describtionText: item.description,
-                        ontapcontact: () {
-                          Navigator.pushNamed(context, AppRoutes.guestContact);
-                        },
+                        child: CustomViewContainer(
+                          labelText: labels[index],
+                          imagePath: images[index],
+                        ),
                       ),
                     );
                   },
                 ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 10,
+                ),
+                child: CustomText(
+                  text: 'Recent Posts',
+                  color: Colors.black,
+                  letterSpacing: 1,
+                  size: 20,
+                  weight: FontWeight.w500,
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 10,
+                ),
+                child: CustomText(
+                  text:
+                      'We would like to inform you about some lost items that have been found. You can check them out here',
+                  color: Colors.black,
+                  size: 16,
+                  weight: FontWeight.w300,
+                ),
+              ),
+              SizedBox(
+                height: 550,
+                child: selectedCategory.isEmpty
+                    ? ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        itemCount: items.length,
+                        itemBuilder: (context, index) {
+                          final item = items[index];
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: PostContainer(
+                              imagePath: item.imageUrl,
+                              containerText: item.name,
+                              timeText: item.time,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  PageTransition(
+                                    type: PageTransitionType.rightToLeft,
+                                    child: GuestItemDetailsPage(
+                                      itemId: item.itemId,
+                                      image_Url: item.imageUrl,
+                                      name: item.name,
+                                      description: item.description,
+                                      color: item.color,
+                                      quantity: item.quantity,
+                                      time: item.time,
+                                    ),
+                                  ),
+                                );
+                              },
+                              describtionText: item.description,
+                              ontapcontact: () {
+                                Navigator.pushNamed(
+                                    context, AppRoutes.guestContact);
+                              },
+                            ),
+                          );
+                        },
+                      )
+                    : getFilteredItems(selectedCategory).isEmpty
+                        ? Center(child: Text('No result found'))
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            itemCount:
+                                getFilteredItems(selectedCategory).length,
+                            itemBuilder: (context, index) {
+                              final item =
+                                  getFilteredItems(selectedCategory)[index];
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: PostContainer(
+                                  imagePath: item.imageUrl,
+                                  containerText: item.name,
+                                  timeText: item.time,
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      PageTransition(
+                                        type: PageTransitionType.rightToLeft,
+                                        child: GuestItemDetailsPage(
+                                          itemId: item.itemId,
+                                          image_Url: item.imageUrl,
+                                          name: item.name,
+                                          description: item.description,
+                                          color: item.color,
+                                          quantity: item.quantity,
+                                          time: item.time,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  describtionText: item.description,
+                                  ontapcontact: () {
+                                    Navigator.pushNamed(
+                                        context, AppRoutes.guestContact);
+                                  },
+                                ),
+                              );
+                            },
+                          ),
               ),
             ],
           ),

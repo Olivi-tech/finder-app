@@ -16,7 +16,7 @@ class CustomBottomNavigationBar extends StatefulWidget {
 }
 
 class CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
-  int _selectedIndex = 1;
+  int _selectedIndex = 0;
 
   Color _getIconColor(int index) {
     return _selectedIndex == index ? AppColors.green : Colors.grey;
@@ -52,7 +52,7 @@ class CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
               ),
               _bottomNavigationView(
                 index: 2,
-                icon: Icons.chat,
+                icon: Icons.settings,
               ),
             ],
           ),

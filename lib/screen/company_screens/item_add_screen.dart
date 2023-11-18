@@ -105,7 +105,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
         centerTitle: true,
         elevation: 0.0,
         title: const CustomText(
-          text: ' Post Details',
+          text: ' Post ',
           letterSpacing: 1,
           color: Colors.black,
           size: 18,

@@ -13,7 +13,7 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
     this.backgroundColor,
     required this.name,
     required this.location,
-    this.customAppBarHeight = kToolbarHeight + 60,
+    this.customAppBarHeight = kToolbarHeight + 30,
     required this.imagepath,
   }) : super(key: key);
 
@@ -59,23 +59,16 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       actions: [
-        Container(
-          width: 50,
-          height: 50,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.white,
-          ),
-          child: Center(
-            child: Container(
-              width: 28,
-              height: 28,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage(imagepath),
-                ),
+        Center(
+          child: Container(
+            width: 58,
+            height: 58,
+            decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.circular(10.0),
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: AssetImage(imagepath),
               ),
             ),
           ),

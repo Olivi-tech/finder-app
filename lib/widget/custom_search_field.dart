@@ -1,9 +1,10 @@
+import 'package:finder_app/constant/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomSearchField extends StatelessWidget {
   final String hintText;
   final ValueChanged<String>? onChanged;
-  final TextEditingController controller; 
+  final TextEditingController controller;
   const CustomSearchField({
     Key? key,
     required this.hintText,
@@ -14,28 +15,31 @@ class CustomSearchField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      controller: controller, 
+      controller: controller,
       style: TextStyle(
         color: Colors.black,
       ),
       decoration: InputDecoration(
         filled: true,
-        prefixIcon: Icon(Icons.search, color: Colors.grey),
+        fillColor: Colors.transparent,
+        suffixIcon: Icon(Icons.search, color: Colors.grey),
         hintText: hintText,
         hintStyle: TextStyle(
           color: Colors.grey,
         ),
-        border: const OutlineInputBorder(
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        border: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
-          borderSide: BorderSide(color: Colors.transparent),
+          borderSide: BorderSide(color: AppColors.grey, width: 0.7),
         ),
-        focusedBorder: const OutlineInputBorder(
+        focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
-          borderSide: BorderSide(color: Colors.transparent),
+          borderSide: BorderSide(color: AppColors.grey, width: 0.7),
         ),
-        enabledBorder: const OutlineInputBorder(
+        enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
-          borderSide: BorderSide(color: Colors.transparent),
+          borderSide: BorderSide(color: AppColors.grey, width: 0.7),
         ),
       ),
       onChanged: onChanged,

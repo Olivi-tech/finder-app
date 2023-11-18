@@ -20,7 +20,7 @@ class CustomViewContainerState extends State<CustomViewContainer> {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Padding(
-        padding: const EdgeInsets.only(left: 5, right: 5),
+        padding: const EdgeInsets.only(left: 2, right: 2),
         child: Container(
           width: 70,
           padding: const EdgeInsets.symmetric(vertical: 6),

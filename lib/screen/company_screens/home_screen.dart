@@ -3,9 +3,11 @@ import 'package:finder_app/constant/constant.dart';
 import 'package:finder_app/provider/bottom_navigation_provider.dart';
 import 'package:finder_app/screen/company_screens/company_screens.dart';
 import 'package:finder_app/screen/company_screens/item_details_screen.dart';
+import 'package:finder_app/screen/company_screens/settings_screen.dart';
 import 'package:finder_app/widget/widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -39,7 +41,7 @@ class HomePageState extends State<HomePage> {
         builder: (context, index, child) => <Widget>[
           HomeScreen(),
           const AddItemScreen(),
-          HomeScreen(),
+          SettingsScreen(),
         ][index.selectedIndex],
       ),
     );
@@ -116,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: AppColors.green,
         location: companyAddress,
         name: companyName,
-        imagepath: AppImages.logo,
+        imagepath: AppImages.companylogo,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -125,68 +127,25 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.all(5.0),
-                child: CustomSearchField(
-                  controller: searchController,
-                  hintText: 'Search items',
-                  onChanged: (query) {
-                    _filterItems(query);
-                  },
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 14,
-                ),
+                padding: const EdgeInsets.only(left: 14, top: 10, bottom: 10),
                 child: CustomText(
-                  text: 'Categories',
+                  text: 'Search Posts',
                   color: Colors.black,
                   letterSpacing: 1,
                   size: 16,
                   weight: FontWeight.w500,
                 ),
               ),
-              SizedBox(
-                height: 10,
-              ),
-              SizedBox(
-                height: 90,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 6,
-                  itemBuilder: (context, index) {
-                    final images = [
-                      AppImages.phoneicon,
-                      AppImages.keyicon,
-                      AppImages.walleticon,
-                      AppImages.laptopicon,
-                      AppImages.bagicon,
-                      AppImages.camicon
-                    ];
-                    final labels = [
-                      'Phone',
-                      'Key',
-                      'Wallet',
-                      'Laptop',
-                      'Bag',
-                      'Camera'
-                    ];
-
-                    return Padding(
-                      padding: EdgeInsets.all(8),
-                      child: CustomViewContainer(
-                        labelText: labels[index],
-                        imagePath: images[index],
-                      ),
-                    );
+              Padding(
+                padding:
+                    EdgeInsets.only(left: 14, top: 10, bottom: 20, right: 14),
+                child: CustomSearchField(
+                  controller: searchController,
+                  hintText: 'Search',
+                  onChanged: (query) {
+                    _filterItems(query);
                   },
                 ),
-              ),
-              SizedBox(
-                height: 10,
               ),
               Padding(
                 padding: const EdgeInsets.only(
@@ -204,9 +163,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 10,
               ),
               SizedBox(
-                height: 320,
+                height: 520,
+                width: 330,
                 child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
+                  scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemCount: searchController.text.isEmpty
                       ? items.length
@@ -226,16 +186,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => ItemDetailsPage(
+                            PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              child: ItemDetailsPage(
                                 itemId: item.itemId,
                                 image_Url: item.imageUrl,
                                 name: item.name,
                                 description: item.description,
                                 color: item.color,
                                 quantity: item.quantity,
-                                //date: item.date,
-                                time: item.time, documentId: item.documentId,
+                                time: item.time,
+                                documentId: item.documentId,
                               ),
                             ),
                           );
