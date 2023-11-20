@@ -1,9 +1,10 @@
-import 'package:finder_app/constant/app_images.dart';
-import 'package:finder_app/screen/company_screens/login_screen.dart';
+import 'package:finder_app/constant/constant.dart';
+import 'package:finder_app/db_servies/db_servies.dart';
+import 'package:finder_app/provider/provider.dart';
 import 'package:finder_app/utils/app_routs.dart';
+import 'package:finder_app/widget/widget.dart';
 import 'package:flutter/material.dart';
-import '../constant/app_colors.dart';
-import '../widget/widget.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -12,82 +13,13 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen>
-    with TickerProviderStateMixin {
-  TextEditingController userNameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-
-  late final TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-  }
-
-  @override
-  void dispose() {
-    userNameController.dispose();
-    passwordController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.sizeOf(context);
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: size.height * .2,
-        backgroundColor: Colors.white,
-        title: Image.asset(AppImages.logo),
-        centerTitle: true,
-        bottom: TabBar(
-          controller: _tabController,
-          labelColor: Colors.black,
-          indicatorColor: AppColors.green,
-          labelStyle: TextStyle(
-            letterSpacing: 0.50,
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-          ),
-          tabs: const [
-            Tab(
-              text: 'Login as Guest',
-            ),
-            Tab(
-              text: 'Login as Company',
-            ),
-          ],
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: TabBarView(
-          controller: _tabController,
-          children: const [
-            LoginAsGest(),
-            LoginAsCompany(),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class LoginAsGest extends StatefulWidget {
-  const LoginAsGest({super.key});
-
-  @override
-  State<LoginAsGest> createState() => _LoginAsGestState();
-}
-
-class _LoginAsGestState extends State<LoginAsGest> {
-  TextEditingController userNameController = TextEditingController();
+class _LoginScreenState extends State<LoginScreen> {
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   @override
   void dispose() {
-    userNameController.dispose();
+    emailController.dispose();
     passwordController.dispose();
     super.dispose();
   }
@@ -95,67 +27,160 @@ class _LoginAsGestState extends State<LoginAsGest> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CustomTextField(
-                hintText: 'Email',
-                fillColor: Colors.white,
-                controller: userNameController,
-                validator: (input) {
-                  if (input == null || input.isEmpty) {
-                    return 'Please enter an email address';
-                  } else if (!isValidEmail(input)) {
-                    return 'Invalid email address';
-                  }
-                  return null;
-                },
-              ),
-              CustomTextField(
-                hintText: 'Password',
-                fillColor: Colors.white,
-                controller: passwordController,
-                validator: (input) {
-                  if (input == null || input.isEmpty) {
-                    return 'Please enter Password';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              CustomButton(
-                btnColor: AppColors.green,
-                textColor: Colors.white,
-                text: 'Login',
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    FocusScope.of(context).unfocus();
-                    Navigator.pushNamed(context, AppRoutes.guesthome);
-                  }
-                },
-                width: size.width,
-              ),
-              Padding(
-                padding: EdgeInsets.all(20),
-                child: GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, AppRoutes.guestRegister);
+    return SafeArea(
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.all(20),
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Image.asset(
+                    AppImages.logo,
+                  ),
+                  SizedBox(
+                    height: 80,
+                  ),
+                  Row(
+                    children: [
+                      Image.asset(
+                        AppImages.waveHey,
+                        height: 20,
+                        width: 20,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      CustomText(
+                        text: 'Hey,',
+                        size: 16,
+                        weight: FontWeight.w600,
+                        letterSpacing: 0.50,
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  CustomText(
+                    text:
+                        'Welcome to Finder App, your trusted companion in locating lost items.',
+                    size: 16,
+                    weight: FontWeight.w300,
+                    letterSpacing: 0.50,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  CustomText(
+                    text: 'Login',
+                    size: 18,
+                    color: Colors.blue,
+                    weight: FontWeight.w600,
+                    letterSpacing: 0.50,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  CustomTextField(
+                    hintText: 'Email',
+                    obscureText: false,
+                    controller: emailController,
+                    validator: (input) {
+                      if (input == null || input.isEmpty) {
+                        return 'Please enter an email address';
+                      } else if (!isValidEmail(input)) {
+                        return 'Invalid email address';
+                      }
+                      return null;
                     },
-                    child: CustomText(
-                      text: 'Not a Member? Register',
-                      letterSpacing: 0.50,
-                      size: 16,
-                      weight: FontWeight.w300,
-                    )),
-              )
-            ],
+                  ),
+                  Consumer<PasswordIconToggleProvider>(
+                    builder: (context, value, child) => CustomTextField(
+                      validator: (input) {
+                        if (input == null || input.isEmpty) {
+                          return 'Please enter a password';
+                        } else if (input.length < 6) {
+                          return 'Password must be at least 6 characters long';
+                        }
+                        return null;
+                      },
+                      obscureText: value.isVisible ? false : true,
+                      controller: passwordController,
+                      hintText: 'Password',
+                      suffixIcon: InkWell(
+                        onTap: () {
+                          Provider.of<PasswordIconToggleProvider>(context,
+                                  listen: false)
+                              .setIsVisible = !value.isVisible;
+                        },
+                        child: Icon(
+                          value.isVisible
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
+                          color: AppColors.grey,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  CustomButton(
+                    btnColor: AppColors.green,
+                    textColor: Colors.white,
+                    text: 'Login',
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        FocusScope.of(context).unfocus();
+                        try {
+                          await DbService_auth.login(
+                            context,
+                            emailController.text,
+                            passwordController.text,
+                          );
+                        } catch (e) {
+                          print('Login failed: $e');
+                        }
+                      }
+                    },
+                    width: size.width,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(20),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, AppRoutes.register);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CustomText(
+                            text: 'Donot have account?',
+                            letterSpacing: 0.50,
+                            size: 16,
+                            weight: FontWeight.w300,
+                          ),
+                          CustomText(
+                            text: ' Register Now',
+                            letterSpacing: 0.50,
+                            size: 16,
+                            color: Colors.blue,
+                            weight: FontWeight.w600,
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
           ),
         ),
       ),

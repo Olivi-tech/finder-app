@@ -37,14 +37,17 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_launcher_icons: ^0.13.1
   provider: ^6.0.5
-  intl: ^0.18.0
+  intl: ^0.18.1
   firebase_core: ^2.15.0
   firebase_auth: ^4.7.2
   cloud_firestore: ^4.8.4
   firebase_storage: ^11.2.5
   image_picker: ^0.8.4
-  firebase_database: ^10.2.4
-
+  firebase_database: ^10.2.4 
+  intl_phone_field: ^3.2.0
+  flutter_svg: ^2.0.9
+  page_transition: ^2.0.9
+  shared_preferences: ^2.2.2
 
 
 dev_dependencies:
@@ -77,6 +80,7 @@ flutter:
   assets:
     - assets/image/
     - assets/icon/
+  
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

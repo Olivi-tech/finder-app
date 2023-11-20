@@ -44,38 +44,38 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAPdTCUMNJQjOQReDmZ8nufcWlwDDvwH0U',
-    appId: '1:951250663677:web:973387cda16d8b64196694',
-    messagingSenderId: '951250663677',
-    projectId: 'finder-13fb7',
-    authDomain: 'finder-13fb7.firebaseapp.com',
-    storageBucket: 'finder-13fb7.appspot.com',
-    measurementId: 'G-27EHQ3QVF8',
+    apiKey: 'AIzaSyBb2fSdCdD0N-9b8z2ycy5KbYuDcA7LoV0',
+    appId: '1:5032981378:web:f203abda473a300a29959b',
+    messagingSenderId: '5032981378',
+    projectId: 'finder-app-dbcb8',
+    authDomain: 'finder-app-dbcb8.firebaseapp.com',
+    storageBucket: 'finder-app-dbcb8.appspot.com',
+    measurementId: 'G-SG6P7CKL8G',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAT8ucHoTEkiLgZsewTgJ-Vv4657fPrqww',
-    appId: '1:951250663677:android:5c167e523dd1c92e196694',
-    messagingSenderId: '951250663677',
-    projectId: 'finder-13fb7',
-    storageBucket: 'finder-13fb7.appspot.com',
+    apiKey: 'AIzaSyC02p8bxVUy_3r63zKYcMP4fBAtH-3EBsA',
+    appId: '1:5032981378:android:e17b34af7f79730029959b',
+    messagingSenderId: '5032981378',
+    projectId: 'finder-app-dbcb8',
+    storageBucket: 'finder-app-dbcb8.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyD7N5fFipTj2iG-uTa22Pt5GELS0MCYzJs',
-    appId: '1:951250663677:ios:891e318aaef33da2196694',
-    messagingSenderId: '951250663677',
-    projectId: 'finder-13fb7',
-    storageBucket: 'finder-13fb7.appspot.com',
+    apiKey: 'AIzaSyDdBjAFbqHTa0PyB9M-PjSkcLxz13Ucc0I',
+    appId: '1:5032981378:ios:d633c00d9abe733c29959b',
+    messagingSenderId: '5032981378',
+    projectId: 'finder-app-dbcb8',
+    storageBucket: 'finder-app-dbcb8.appspot.com',
     iosBundleId: 'com.finder.finderApp',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyD7N5fFipTj2iG-uTa22Pt5GELS0MCYzJs',
-    appId: '1:951250663677:ios:1d978abfa6846e1c196694',
-    messagingSenderId: '951250663677',
-    projectId: 'finder-13fb7',
-    storageBucket: 'finder-13fb7.appspot.com',
+    apiKey: 'AIzaSyDdBjAFbqHTa0PyB9M-PjSkcLxz13Ucc0I',
+    appId: '1:5032981378:ios:2cc3c578bb40776829959b',
+    messagingSenderId: '5032981378',
+    projectId: 'finder-app-dbcb8',
+    storageBucket: 'finder-app-dbcb8.appspot.com',
     iosBundleId: 'com.finder.finderApp.RunnerTests',
   );
 }

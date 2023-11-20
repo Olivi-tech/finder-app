@@ -1,4 +1,3 @@
-import 'package:finder_app/constant/constant.dart';
 import 'package:finder_app/widget/widget.dart';
 import 'package:flutter/material.dart';
 
@@ -23,8 +22,8 @@ class ImageContainer extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(5),
         child: Container(
-          height: 250,
-          width: 190,
+          height: 150,
+          width: 300,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
@@ -37,70 +36,87 @@ class ImageContainer extends StatelessWidget {
               ),
             ],
           ),
-          child: Column(
+          child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: ClipRRect(
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10),
+                    bottomLeft: Radius.circular(10),
                   ),
-                  child: Image.asset(imagePath,
-                      fit: BoxFit.cover, width: 190, height: 100),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8, left: 8, bottom: 10),
-                child: Text(
-                  containerText,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.50,
-                    color: Colors.black,
+                  child: Image.network(
+                    imagePath,
+                    fit: BoxFit.cover,
+                    width: 50,
+                    height: 150,
                   ),
                 ),
               ),
-              const SizedBox(height: 5),
-              Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Row(
+              SizedBox(
+                width: 20,
+              ),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(
-                      Icons.location_on,
-                      size: 16,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      locationText,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w300,
-                        letterSpacing: 0.50,
-                        color: Colors.black,
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          top: 8, left: 5, bottom: 10, right: 18),
+                      child: Text(
+                        containerText,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.50,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 5),
-              Padding(
-                padding: const EdgeInsets.only(left: 10.0, bottom: 10),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.access_time,
-                      size: 14,
+                    const SizedBox(height: 5),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.location_on,
+                          color: Colors.red,
+                          size: 16,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          locationText,
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontSize: 14,
+                            overflow: TextOverflow.ellipsis,
+                            fontWeight: FontWeight.w300,
+                            letterSpacing: 0.50,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 8),
-                    Text(
-                      timeText,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w300,
-                        letterSpacing: 0.50,
-                        color: Colors.black,
+                    const SizedBox(height: 5),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.access_time,
+                            color: Colors.blue,
+                            size: 14,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            timeText,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w300,
+                              letterSpacing: 0.50,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -120,14 +136,15 @@ class PostContainer extends StatelessWidget {
   final String describtionText;
   final String timeText;
   final VoidCallback onTap;
-  final  VoidCallback ontapcontact ; 
+  final VoidCallback ontapcontact;
   const PostContainer({
     Key? key,
     required this.imagePath,
     required this.containerText,
     required this.timeText,
     required this.onTap,
-    required this.describtionText, required this.ontapcontact,
+    required this.describtionText,
+    required this.ontapcontact,
   });
   @override
   Widget build(BuildContext context) {
@@ -156,7 +173,7 @@ class PostContainer extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(imagePath,
+                  child: Image.network(imagePath,
                       fit: BoxFit.cover, width: 190, height: 150),
                 ),
               ),
@@ -164,6 +181,7 @@ class PostContainer extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 5),
@@ -174,7 +192,7 @@ class PostContainer extends StatelessWidget {
                     letterSpacing: 0.50,
                     color: Colors.black,
                   ),
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 10),
                   Container(
                     height: 50,
                     width: 200,
@@ -208,7 +226,7 @@ class PostContainer extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 10),
-                  GestureDetector(
+                  /*GestureDetector(
                     onTap: ontapcontact,
                     child: Container(
                       height: 30,
@@ -235,7 +253,7 @@ class PostContainer extends StatelessWidget {
                         ],
                       ),
                     ),
-                  ),
+                  ),*/
                 ],
               ),
             ),

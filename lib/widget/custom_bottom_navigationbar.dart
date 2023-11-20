@@ -19,7 +19,7 @@ class CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   int _selectedIndex = 0;
 
   Color _getIconColor(int index) {
-    return _selectedIndex == index ?  AppColors.green: Colors.grey;
+    return _selectedIndex == index ? AppColors.green : Colors.grey;
   }
 
   @override
@@ -46,13 +46,13 @@ class CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                 index: 0,
                 icon: Icons.home,
               ),
-               _bottomNavigationView(
+              _bottomNavigationView(
                 index: 1,
                 icon: Icons.add,
-              ), 
+              ),
               _bottomNavigationView(
                 index: 2,
-                icon: Icons.chat,
+                icon: Icons.settings,
               ),
             ],
           ),

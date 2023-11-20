@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'package:finder_app/constant/app_images.dart';
 import 'package:finder_app/screen/screen.dart';
 import 'package:finder_app/utils/app_routs.dart';
 import 'package:flutter/material.dart';
@@ -18,34 +17,19 @@ class AppRouter {
       case AppRoutes.splash:
         return const SplashScreen();
       case AppRoutes.login:
-        return const LoginAsCompany();
+        return const LoginScreen();
       case AppRoutes.register:
-        return const RegisterCompanyScreen();
-      case AppRoutes.guestRegister:
         return const RegisterScreen();
       case AppRoutes.guesthome:
         return const GuestHomeScreen();
+
       case AppRoutes.homePage:
         return HomePage();
+      case AppRoutes.settingPage:
+        return SettingsScreen();
       case AppRoutes.itemAdd:
         return const AddItemScreen();
-      case AppRoutes.guestContact:
-        return const GuestContactScreen();
-      case AppRoutes.guestItemDetails:
-        return const GuestItemDetailsPage(
-          containerText: 'Iphone 11',
-          timeText: '15 mints ago',
-          imagePath: AppImages.phoneImge,
-          locationText: 'Base Camp Resort, lahore',
-        );
-      case AppRoutes.itemDetails:
-        return const ItemDetailsPage(
-          containerText: 'Iphone 11',
-          timeText: '15 mints ago',
-          imagePath: AppImages.phoneImge,
-          locationText: 'Base Camp Resort, lahore',
-        );
-
+    
       default:
         AppRoutes.splash;
         return const SplashScreen();

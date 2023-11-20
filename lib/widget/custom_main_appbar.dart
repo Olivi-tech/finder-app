@@ -1,20 +1,20 @@
-import 'package:finder_app/constant/constant.dart';
 import 'package:finder_app/widget/widget.dart';
 import 'package:flutter/material.dart';
-
 
 class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
   final String name;
   final String location;
   final Color? backgroundColor;
-  final double customAppBarHeight; 
+  final double customAppBarHeight;
+  final String imagepath;
 
-  const AppBarCustom({
+  AppBarCustom({
     Key? key,
     this.backgroundColor,
     required this.name,
     required this.location,
-    this.customAppBarHeight = kToolbarHeight + 60,
+    this.customAppBarHeight = kToolbarHeight + 30,
+    required this.imagepath,
   }) : super(key: key);
 
   @override
@@ -42,7 +42,7 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
               children: [
                 Icon(
                   Icons.location_on,
-                   color: Colors.white,
+                  color: Colors.red,
                   size: 16,
                 ),
                 SizedBox(
@@ -58,10 +58,20 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
           ],
         ),
       ),
-      actions: <Widget>[
-        CircleAvatar(
-          radius: 25,
-          backgroundImage: AssetImage(AppImages.companylogo),
+      actions: [
+        Center(
+          child: Container(
+            width: 58,
+            height: 58,
+            decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.circular(10.0),
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: AssetImage(imagepath),
+              ),
+            ),
+          ),
         ),
         SizedBox(
           width: 20,

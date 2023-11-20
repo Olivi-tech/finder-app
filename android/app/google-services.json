@@ -1,32 +1,13 @@
 {
   "project_info": {
-    "project_number": "951250663677",
-    "project_id": "finder-13fb7",
-    "storage_bucket": "finder-13fb7.appspot.com"
+    "project_number": "5032981378",
+    "project_id": "finder-app-dbcb8",
+    "storage_bucket": "finder-app-dbcb8.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:951250663677:android:bd1d6e960f228014196694",
-        "android_client_info": {
-          "package_name": "com.dax.dax_finder"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAT8ucHoTEkiLgZsewTgJ-Vv4657fPrqww"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:951250663677:android:5c167e523dd1c92e196694",
+        "mobilesdk_app_id": "1:5032981378:android:e17b34af7f79730029959b",
         "android_client_info": {
           "package_name": "com.finder.finder_app"
         }
@@ -34,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAT8ucHoTEkiLgZsewTgJ-Vv4657fPrqww"
+          "current_key": "AIzaSyC02p8bxVUy_3r63zKYcMP4fBAtH-3EBsA"
         }
       ],
       "services": {
