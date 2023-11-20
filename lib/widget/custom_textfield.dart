@@ -88,3 +88,22 @@ bool isValidEmail(String input) {
   final emailRegex = RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
   return emailRegex.hasMatch(input);
 }
+
+bool isValidPhoneNumber(String phoneNumber) {
+  final RegExp regex = RegExp(r'^\+?[0-9]+$');
+  return regex.hasMatch(phoneNumber);
+}
+
+bool isValidName(String name) {
+  final RegExp regex = RegExp(r'^[a-zA-Z ]+$');
+  final bool hasValidLength = name.length >= 2 && name.length <= 50;
+  return regex.hasMatch(name) && hasValidLength;
+}
+
+bool isValidAddress(String address) {
+  final RegExp regex = RegExp(
+    r'^[a-zA-Z0-9@#/*&.()"\s-]+$',
+  );
+  final bool hasValidLength = address.length <= 250;
+  return regex.hasMatch(address) && hasValidLength;
+}

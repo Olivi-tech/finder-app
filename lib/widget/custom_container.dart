@@ -66,13 +66,14 @@ class CustomViewContainerState extends State<CustomViewContainer> {
 
 class CustomContainer extends StatefulWidget {
   final String labelText;
- final IconData iconData;
- final Color color ;
+  final IconData iconData;
+  final Color color;
 
   const CustomContainer({
     Key? key,
     required this.labelText,
-    required this.iconData, required this.color,
+    required this.iconData,
+    required this.color,
   }) : super(key: key);
 
   @override
@@ -86,7 +87,7 @@ class CustomContainerState extends State<CustomContainer> {
       child: Padding(
         padding: const EdgeInsets.only(left: 5, right: 5),
         child: Container(
-          width: 70,
+          width: 130,
           height: 50,
           padding: const EdgeInsets.symmetric(vertical: 6),
           decoration: BoxDecoration(
@@ -107,11 +108,11 @@ class CustomContainerState extends State<CustomContainer> {
               SizedBox(
                 width: 10,
               ),
-             Icon(
-               widget.iconData,
-              color:widget.color,
-              size: 28,
-            ),
+              Icon(
+                widget.iconData,
+                color: widget.color,
+                size: 28,
+              ),
               SizedBox(
                 width: 10,
               ),

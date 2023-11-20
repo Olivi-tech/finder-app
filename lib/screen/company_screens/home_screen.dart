@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finder_app/constant/constant.dart';
 import 'package:finder_app/provider/bottom_navigation_provider.dart';
 import 'package:finder_app/screen/company_screens/company_screens.dart';
-import 'package:finder_app/screen/company_screens/item_details_screen.dart';
-import 'package:finder_app/screen/company_screens/settings_screen.dart';
 import 'package:finder_app/widget/widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -111,6 +109,33 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  Future<void> _deleteItem(String documentId, BuildContext context) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('companies')
+          .doc('items')
+          .collection('item_data')
+          .doc(documentId)
+          .delete();
+      setState(() {
+        items.removeWhere((item) => item.documentId == documentId);
+
+        filteredItems = items;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: CustomText(
+            text: 'Item deleted successfully.',
+            color: Colors.white,
+          ),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (error) {
+      print('Error deleting item: $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -178,29 +203,87 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     return Padding(
                       padding: const EdgeInsets.all(5),
-                      child: ImageContainer(
-                        imagePath: item.imageUrl,
-                        containerText: item.name,
-                        locationText: companyAddress,
-                        timeText: item.time,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            PageTransition(
-                              type: PageTransitionType.rightToLeft,
-                              child: ItemDetailsPage(
-                                itemId: item.itemId,
-                                image_Url: item.imageUrl,
-                                name: item.name,
-                                description: item.description,
-                                color: item.color,
-                                quantity: item.quantity,
-                                time: item.time,
-                                documentId: item.documentId,
-                              ),
-                            ),
+                      child: GestureDetector(
+                        onLongPress: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Row(
+                                  children: [
+                                    CustomText(
+                                      letterSpacing: 1,
+                                      weight: FontWeight.w600,
+                                      color: Colors.red,
+                                      text: 'Delete',
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Icon(
+                                      Icons.warning_amber,
+                                      color: Colors.red,
+                                      size: 24,
+                                    ),
+                                  ],
+                                ),
+                                content: const Text(
+                                    'Are you sure you want to delete this item?'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: CustomText(
+                                      letterSpacing: 1,
+                                      text: 'Cancel',
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      _deleteItem(item.documentId, context);
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: CustomText(
+                                      letterSpacing: 1,
+                                      color: Colors.red,
+                                      text: 'Delete',
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
                           );
                         },
+                        child: ImageContainer(
+                          imagePath: item.imageUrl,
+                          containerText: item.name,
+                          locationText: companyName,
+                          timeText: item.time,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              PageTransition(
+                                type: PageTransitionType.rightToLeft,
+                                child: ItemDetailsPage(
+                                  itemId: item.itemId,
+                                  image_Url: item.imageUrl,
+                                  name: item.name,
+                                  description: item.description,
+                                  color: item.color,
+                                  quantity: item.quantity,
+                                  time: item.time,
+                                  documentId: item.documentId,
+                                  category: item.category,
+                                  brand: item.brand,
+                                  companyName: companyName,
+                                  address: companyAddress,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     );
                   },
@@ -218,6 +301,8 @@ class ItemData {
   final String documentId;
   final String itemId;
   final String name;
+  final String category;
+  final String brand;
   final String description;
   final String color;
   final int quantity;
@@ -231,6 +316,8 @@ class ItemData {
     required this.name,
     required this.description,
     required this.color,
+    required this.category,
+    required this.brand,
     required this.quantity,
     required this.date,
     required this.time,
@@ -249,6 +336,8 @@ class ItemData {
       date: (data['date'] as Timestamp).toDate(),
       time: data['time'],
       imageUrl: data['image_url'],
+      category: data['category'],
+      brand: data['brand'],
     );
   }
 }

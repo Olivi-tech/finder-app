@@ -1,62 +1,28 @@
 import 'dart:io';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:finder_app/constant/constant.dart';
 import 'package:finder_app/utils/app_routs.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DbService {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   static Future<void> uploadDataToFirebase(
     BuildContext context,
+    File image,
+    String category,
     String name,
-    String description,
-    String color,
+    String brand,
     int quantity,
+    String color,
     DateTime date,
     String time,
-    File image,
+    String description,
+    String companyName,
+    String companyAdress,
   ) async {
     try {
-      bool _isLoading = true;
-
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            content: Container(
-              height: 150,
-              width: 150,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _isLoading
-                      ? const CupertinoActivityIndicator(
-                          color: Colors.blue,
-                          radius: 25,
-                        )
-                      : const Icon(
-                          Icons.check_circle,
-                          color: Colors.green,
-                          size: 50,
-                        ),
-                  const SizedBox(height: 20),
-                  Text(
-                    _isLoading ? 'Uploading data...' : 'Done',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      );
-
       final storageReference =
           FirebaseStorage.instance.ref().child('images/${DateTime.now()}.jpg');
 
@@ -69,13 +35,17 @@ class DbService {
 
       final Map<String, dynamic> itemData = {
         'itemId': itemId,
+        'image_url': imageUrl,
+        'category': category,
         'name': name,
-        'description': description,
-        'color': color,
+        'brand': brand,
         'quantity': quantity,
+        'color': color,
         'date': date,
         'time': time,
-        'image_url': imageUrl,
+        'description': description,
+        'companyName': companyName,
+        'companyAdress': companyAdress,
       };
       await _firestore
           .collection('companies')
@@ -83,10 +53,17 @@ class DbService {
           .collection('item_data')
           .add(itemData);
 
-      _isLoading = false;
-
-      Navigator.pop(context);
-      Navigator.pushNamed(context, AppRoutes.homePage);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: AppColors.green,
+          content: Text(
+            'Uploaded data Sucessfully',
+            style: TextStyle(color: Colors.white),
+          ),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      Navigator.of(context).pushNamed(AppRoutes.homePage);
     } catch (error) {
       print('Error: $error');
     }

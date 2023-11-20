@@ -12,11 +12,14 @@ class DbService_auth {
   static Future<void> registerCompany(
     BuildContext context,
     String name,
+    String category,
     String email,
     String password,
     String phoneNo,
     String country,
+    String city,
     String address,
+    String roleMode,
   ) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
@@ -31,11 +34,14 @@ class DbService_auth {
 
       final companyData = CompanyData(
         name: name,
+        category: category,
         email: email,
         password: password,
         phoneNo: phoneNo,
         country: country,
+        city: city,
         address: address,
+        roleMode: roleMode,
       );
 
       await FirebaseFirestore.instance
@@ -43,11 +49,14 @@ class DbService_auth {
           .doc(user?.uid)
           .set({
         'name': companyData.name,
+        'category': companyData.category,
         'email': companyData.email,
         'password': companyData.password,
         'phoneNo': companyData.phoneNo,
         'country': companyData.country,
+        'city': companyData.city,
         'address': companyData.address,
+        'roleMode': companyData.roleMode,
       });
 
       log('User registered and company data saved');
@@ -72,31 +81,6 @@ class DbService_auth {
     }
   }
 
-  static Future<User?> loginCompany(
-    BuildContext context,
-    String email,
-    String password,
-  ) async {
-    User? user;
-
-    try {
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      user = userCredential.user;
-      Navigator.of(context).pushReplacementNamed(AppRoutes.homePage);
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
-        _showAlertDialog(context, 'Invalid Credentials',
-            'No user found for that email & password.');
-      }
-    } catch (e) {
-      print(e);
-    }
-    return user;
-  }
-
   static Future<void> registerUser(
     BuildContext context,
     String name,
@@ -105,22 +89,16 @@ class DbService_auth {
     String phoneNo,
     String country,
     String address,
+    String roleMode,
   ) async {
     try {
-      if (await isEmailUsedForCompany(email)) {
-        _showAlertDialog(
-          context,
-          'Email Already Used',
-          'The email is already registered as a company. Please use a different email.',
-        );
-        ;
-      }
       User? user;
       UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+
       user = userCredential.user;
       await userCredential.user?.updateDisplayName(name);
       final userData = UserData(
@@ -130,6 +108,7 @@ class DbService_auth {
         phoneNo: phoneNo,
         country: country,
         address: address,
+        roleMode: roleMode,
       );
 
       await FirebaseFirestore.instance
@@ -142,6 +121,7 @@ class DbService_auth {
         'country': userData.country,
         'address': userData.address,
         'phoneNo': userData.phoneNo,
+        'roleMode': userData.roleMode,
       });
 
       log('User registered');
@@ -165,7 +145,7 @@ class DbService_auth {
     }
   }
 
-  static Future<User?> loginUser(
+  static Future<void> login(
     BuildContext context,
     String email,
     String password,
@@ -173,22 +153,26 @@ class DbService_auth {
     User? user;
 
     try {
-      if (await isEmailUsedForCompany(email)) {
-        _showAlertDialog(
-          context,
-          'Email Already Used',
-          'The email is already registered as a company. Please use a different email.',
-        );
-        ;
-      }
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
+      user = userCredential.user;
 
-      log('User logged in');
-      Navigator.of(context).pushReplacementNamed(AppRoutes.guesthome);
-      return userCredential.user;
+      DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance
+          .collection('userData')
+          .doc(user?.uid)
+          .get();
+
+      if (userDataSnapshot.exists) {
+        String roleMode = userDataSnapshot.get('roleMode');
+
+        if (roleMode == 'User') {
+          Navigator.of(context).pushReplacementNamed(AppRoutes.guesthome);
+        }
+      } else {
+        Navigator.of(context).pushReplacementNamed(AppRoutes.homePage);
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
         _showAlertDialog(context, 'Invalid Credentials',
@@ -196,20 +180,6 @@ class DbService_auth {
       }
     } catch (e) {
       print(e);
-    }
-    return user;
-  }
-
-  static Future<bool> isEmailUsedForCompany(String email) async {
-    try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('companies')
-          .where('email', isEqualTo: email)
-          .get();
-
-      return querySnapshot.docs.isNotEmpty;
-    } catch (error) {
-      return false;
     }
   }
 

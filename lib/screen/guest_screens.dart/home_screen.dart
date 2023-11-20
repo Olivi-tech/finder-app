@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finder_app/constant/constant.dart';
 import 'package:finder_app/model/item_model.dart';
 import 'package:finder_app/screen/guest_screens.dart/guest_screens.dart';
+import 'package:finder_app/screen/guest_screens.dart/profile_screen.dart';
 import 'package:finder_app/utils/app_routs.dart';
 import 'package:finder_app/widget/widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -64,6 +65,7 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
   void initState() {
     super.initState();
     fetchItemData();
+    fetchUserData();
   }
 
   void showAllItems() {
@@ -79,19 +81,28 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0.0,
-        leading: Padding(
-          padding: const EdgeInsets.all(7),
-          child: Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColors.green,
-            ),
-            child: Center(
-              child: Icon(
-                Icons.person,
-                color: Colors.white,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.push(
+                context,
+                PageTransition(
+                    type: PageTransitionType.rightToLeft,
+                    child: ProfileScreen()));
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(7),
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.green,
+              ),
+              child: Center(
+                child: Icon(
+                  Icons.person,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
@@ -213,12 +224,12 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
                   itemCount: 6,
                   itemBuilder: (context, index) {
                     final images = [
-                      AppImages.phoneicon,
-                      AppImages.keyicon,
-                      AppImages.walleticon,
-                      AppImages.laptopicon,
-                      AppImages.bagicon,
-                      AppImages.camicon
+                      AppImages.phoneIcon,
+                      AppImages.keyIcon,
+                      AppImages.walletIcon,
+                      AppImages.laptopIcon,
+                      AppImages.bagIcon,
+                      AppImages.camIcon
                     ];
                     final labels = [
                       'Phone',
@@ -290,6 +301,7 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
                             child: PostContainer(
                               imagePath: item.imageUrl,
                               containerText: item.name,
+                              describtionText: item.description,
                               timeText: item.time,
                               onTap: () {
                                 Navigator.push(
@@ -304,11 +316,14 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
                                       color: item.color,
                                       quantity: item.quantity,
                                       time: item.time,
+                                      companyName: item.companyName,
+                                      address: item.companyAddress,
+                                      category: item.category,
+                                      brand: item.brand,
                                     ),
                                   ),
                                 );
                               },
-                              describtionText: item.description,
                               ontapcontact: () {
                                 Navigator.pushNamed(
                                     context, AppRoutes.guestContact);
@@ -346,6 +361,10 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
                                           color: item.color,
                                           quantity: item.quantity,
                                           time: item.time,
+                                          companyName: item.companyName,
+                                          address: item.companyAddress,
+                                          category: item.category,
+                                          brand: item.brand,
                                         ),
                                       ),
                                     );

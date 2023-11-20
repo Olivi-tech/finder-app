@@ -1,13 +1,13 @@
 import 'package:finder_app/constant/app_colors.dart';
-import 'package:finder_app/constant/app_images.dart';
 import 'package:finder_app/db_servies/db_servies.dart';
 import 'package:finder_app/provider/provider.dart';
-import 'package:finder_app/utils/app_routs.dart';
 import 'package:finder_app/widget/custom_button.dart';
+import 'package:finder_app/widget/custom_dropdown.dart';
 import 'package:finder_app/widget/custom_text.dart';
 import 'package:finder_app/widget/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:intl_phone_field/phone_number.dart';
 import 'package:provider/provider.dart';
 
 class RegisterCompanyScreen extends StatefulWidget {
@@ -54,15 +54,15 @@ class _RegisterCompanyScreenState extends State<RegisterCompanyScreen> {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(height: 100, child: Image.asset(AppImages.logo)),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: CustomText(
-                      text: 'Register your Company',
-                      size: 18,
-                      letterSpacing: 0.50,
-                      weight: FontWeight.w400,
-                    ),
+                  CustomText(
+                    text:
+                        'Enter essential details below to register and amplify your presence on Finder.',
+                    size: 14,
+                    weight: FontWeight.w300,
+                    letterSpacing: 0.50,
+                  ),
+                  SizedBox(
+                    height: 10,
                   ),
                   CustomTextField(
                     obscureText: false,
@@ -71,6 +71,27 @@ class _RegisterCompanyScreenState extends State<RegisterCompanyScreen> {
                     validator: (input) {
                       if (input == null || input.isEmpty) {
                         return 'Please enter Company Name';
+                      } else if (!isValidName(input)) {
+                        return 'Invalid Name';
+                      }
+                      return null;
+                    },
+                  ),
+                  CustomTextField(
+                    hintText: 'Category',
+                    readOnly: true,
+                    obscureText: false,
+                    controller: categoryController,
+                    suffixIcon: DropDownsWidget(
+                      itemList: ['Mall', 'Park'],
+                      controller: categoryController,
+                      onChanged: (String? selectedOption) {
+                        categoryController.text = selectedOption ?? '';
+                      },
+                    ),
+                    validator: (input) {
+                      if (input == null || input.isEmpty) {
+                        return 'Please enter Category';
                       }
                       return null;
                     },
@@ -148,6 +169,14 @@ class _RegisterCompanyScreenState extends State<RegisterCompanyScreen> {
                     onCountryChanged: (country) {
                       countryController.text = country.name;
                     },
+                    validator: (PhoneNumber? input) {
+                      if (input == null || input.number.isEmpty) {
+                        return 'Please enter a phone number';
+                      } else if (!isValidPhoneNumber(input.completeNumber)) {
+                        return 'Invalid phone number';
+                      }
+                      return null;
+                    },
                   ),
                   CustomTextField(
                     obscureText: false,
@@ -163,12 +192,27 @@ class _RegisterCompanyScreenState extends State<RegisterCompanyScreen> {
                   ),
                   CustomTextField(
                     obscureText: false,
+                    hintText: 'City',
+                    controller: cityController,
+                    validator: (input) {
+                      if (input == null || input.isEmpty) {
+                        return 'Please enter City';
+                      } else if (!isValidName(input)) {
+                        return 'Invalid city';
+                      }
+                      return null;
+                    },
+                  ),
+                  CustomTextField(
+                    obscureText: false,
                     hintText: 'Address',
                     maxLines: 4,
                     controller: addressController,
                     validator: (input) {
                       if (input == null || input.isEmpty) {
                         return 'Please enter Company Address';
+                      } else if (!isValidAddress(input)) {
+                        return 'Invalid address';
                       }
                       return null;
                     },
@@ -181,15 +225,19 @@ class _RegisterCompanyScreenState extends State<RegisterCompanyScreen> {
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         FocusScope.of(context).unfocus();
+                        String roleMode = 'Company';
                         try {
                           await DbService_auth.registerCompany(
                             context,
                             nameController.text,
+                            categoryController.text,
                             emailController.text,
                             passwordController.text,
                             phoneNoController.text,
                             countryController.text,
+                            cityController.text,
                             addressController.text,
+                            roleMode,
                           );
                         } catch (e) {
                           print('Registration failed: $e');
@@ -199,11 +247,10 @@ class _RegisterCompanyScreenState extends State<RegisterCompanyScreen> {
                     width: MediaQuery.sizeOf(context).width,
                   ),
                   Padding(
-                    padding: EdgeInsets.all(20),
+                    padding: EdgeInsets.all(10),
                     child: GestureDetector(
                         onTap: () {
-                          Navigator.pushReplacementNamed(
-                              context, AppRoutes.login);
+                          Navigator.pop(context);
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -233,66 +280,3 @@ class _RegisterCompanyScreenState extends State<RegisterCompanyScreen> {
     );
   }
 }
-
-/*
-Padding(
-                    padding: const EdgeInsets.only(top: 10, bottom: 10),
-                    child: InternationalPhoneNumberInput(
-                      onInputChanged: (PhoneNumber number) {
-                        print(number.phoneNumber);
-                      },
-                      inputDecoration: InputDecoration(
-                      
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 10),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            width: 0.2,
-                            color: Colors.black,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        hintText: 'Phone No',
-                      ),
-                    ),
-                  ),
-
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/** CustomTextField(
-                    hintText: 'Category',
-                    readOnly: true,
-                  
-                    validator: (input) {
-                      if (input == null || input.isEmpty) {
-                        return 'Please enter Company Category';
-                      }
-                      return null;
-                    },
-                    controller: categoryController,
-                    suffixIcon: DropDownsWidget(
-                      itemList: List<String>.generate(
-                          5, (index) => (index + 1).toString()),
-                      controller: categoryController,
-                      onChanged: (String? selectedOption) {
-                        categoryController.text = selectedOption ?? '';
-                      },
-                    ),
-                  ), */

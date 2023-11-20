@@ -1,7 +1,9 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finder_app/constant/app_colors.dart';
 import 'package:finder_app/db_servies/post_data.dart';
 import 'package:finder_app/widget/widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
@@ -18,12 +20,26 @@ class _AddItemScreenState extends State<AddItemScreen> {
   TextEditingController itemcountController = TextEditingController();
   TextEditingController colorController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+
+  TextEditingController categoryController = TextEditingController();
+  TextEditingController brandController = TextEditingController();
   DateTime? selectedDate;
   TimeOfDay? selectedTime;
   File? image;
   bool loading = false;
   late String formattedTime;
   final picker = ImagePicker();
+  String companyName = '';
+  String companyAddress = '';
+  @override
+  void dispose() {
+    nameController.dispose();
+    itemcountController.dispose();
+    colorController.dispose();
+    descriptionController.dispose();
+    super.dispose();
+  }
+
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = (await showDatePicker(
       context: context,
@@ -74,6 +90,23 @@ class _AddItemScreenState extends State<AddItemScreen> {
     }
   }
 
+  Future<void> fetchCompanyData() async {
+    try {
+      String? uid = FirebaseAuth.instance.currentUser?.uid;
+      DocumentSnapshot companySnapshot = await FirebaseFirestore.instance
+          .collection('companies')
+          .doc(uid)
+          .get();
+
+      if (companySnapshot.exists) {
+        setState(() {
+          companyName = companySnapshot['name'];
+          companyAddress = companySnapshot['address'];
+        });
+      }
+    } catch (error) {}
+  }
+
   Future getImageGallery() async {
     final pickedFile =
         await picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
@@ -84,15 +117,6 @@ class _AddItemScreenState extends State<AddItemScreen> {
         print('No Image  picked !');
       }
     });
-  }
-
-  @override
-  void dispose() {
-    nameController.dispose();
-    itemcountController.dispose();
-    colorController.dispose();
-    descriptionController.dispose();
-    super.dispose();
   }
 
   @override
@@ -167,13 +191,60 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   height: 10,
                 ),
                 const CustomText(
+                  text: 'Category',
+                  letterSpacing: 1,
+                  size: 16,
+                  weight: FontWeight.w600,
+                ),
+                CustomTextField(
+                  readOnly: true,
+                  hintText: 'Item category',
+                  obscureText: false,
+                  controller: categoryController,
+                  validator: (input) {
+                    if (input == null || input.isEmpty) {
+                      return 'Please enter Category';
+                    }
+                    return null;
+                  },
+                  suffixIcon: DropDownsWidget(
+                    itemList: [
+                      'Electronics',
+                      'Clothing',
+                      'bag',
+                      'Sports & Outdoors',
+                      'Home & Kitchen',
+                      'Beauty & Personal Care',
+                      'Automotive',
+                      'Toys & Games',
+                      'Books',
+                      'Medicine',
+                      'Furniture',
+                      'Jewelry',
+                      'Pet Supplies',
+                      'Office Supplies',
+                      'Food & Grocery',
+                      'Shoes',
+                      'Accessories',
+                      'other',
+                    ],
+                    controller: categoryController,
+                    onChanged: (String? selectedOption) {
+                      categoryController.text = selectedOption ?? '';
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                const CustomText(
                   text: 'Name',
                   letterSpacing: 1,
                   size: 16,
                   weight: FontWeight.w600,
                 ),
                 CustomTextField(
-                  hintText: 'Item Name',
+                  hintText: 'Item name',
                   obscureText: false,
                   controller: nameController,
                   validator: (input) {
@@ -187,19 +258,99 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   height: 10,
                 ),
                 const CustomText(
+                  text: 'Brand',
+                  letterSpacing: 1,
+                  size: 16,
+                  weight: FontWeight.w600,
+                ),
+                CustomTextField(
+                  readOnly: true,
+                  hintText: 'Item brand',
+                  obscureText: false,
+                  controller: brandController,
+                  validator: (input) {
+                    if (input == null || input.isEmpty) {
+                      return 'Please enter Brand name';
+                    }
+                    return null;
+                  },
+                  suffixIcon: DropDownsWidget(
+                    itemList: [
+                      'Apple',
+                      'Samsung',
+                      'Sony',
+                      'Dell',
+                      'HP',
+                      'LG',
+                      'Canon',
+                      'Panasonic',
+                      'Nike',
+                      'Adidas',
+                      'Gucci',
+                      'Zara',
+                      'H&M',
+                      'Levi\'s',
+                      'Tommy Hilfiger',
+                      'Ralph Lauren',
+                      'Calvin Klein',
+                      'Versace',
+                      'Bose',
+                      'Fitbit',
+                      'Louis Vuitton',
+                      'Coach',
+                      'Michael Kors',
+                      'Kate Spade',
+                      'Fossil',
+                      'Herschel',
+                      'Timbuk2',
+                      'Samsonite',
+                      'Tumi',
+                      'JanSport',
+                      'MAC Cosmetics',
+                      'Sephora',
+                      'NARS',
+                      'Maybelline',
+                      'Urban Decay',
+                      'Estée Lauder',
+                      'Too Faced',
+                      'Clinique',
+                      'Anastasia ',
+                      'Fenty Beauty',
+                      'Chanel',
+                      'Prada',
+                      'Dior',
+                      'Balenciaga',
+                      'Alexander',
+                      'Valentino',
+                      'Gucci',
+                      'Burberry',
+                      'Fendi',
+                      'Yves Saint',
+                      'other',
+                    ],
+                    controller: brandController,
+                    onChanged: (String? selectedOption) {
+                      brandController.text = selectedOption ?? '';
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                const CustomText(
                   text: 'Quantity',
                   letterSpacing: 1,
                   size: 16,
                   weight: FontWeight.w600,
                 ),
                 CustomTextField(
-                  hintText: '1',
+                  hintText: 'Item quantity',
                   readOnly: true,
                   obscureText: false,
                   controller: itemcountController,
                   suffixIcon: DropDownsWidget(
                     itemList: List<String>.generate(
-                        5, (index) => (index + 1).toString()),
+                        50, (index) => (index + 1).toString()),
                     controller: itemcountController,
                     onChanged: (String? selectedOption) {
                       itemcountController.text = selectedOption ?? '';
@@ -222,6 +373,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   weight: FontWeight.w600,
                 ),
                 CustomTextField(
+                  readOnly: true,
                   hintText: 'Black',
                   obscureText: false,
                   controller: colorController,
@@ -231,6 +383,40 @@ class _AddItemScreenState extends State<AddItemScreen> {
                     }
                     return null;
                   },
+                  suffixIcon: DropDownsWidget(
+                    itemList: [
+                      'Red',
+                      'Blue',
+                      'Green',
+                      'Yellow',
+                      'Orange',
+                      'Purple',
+                      'Pink',
+                      'Brown',
+                      'Black',
+                      'White',
+                      'Gray',
+                      'Sky Blue',
+                      'Beige',
+                      'Turquoise',
+                      'Lime',
+                      'Cyan',
+                      'Magenta',
+                      'Indigo',
+                      'Teal',
+                      'Lavender',
+                      'Maroon',
+                      'Olive',
+                      'Navy',
+                      'Silver',
+                      'Gold',
+                      'other',
+                    ],
+                    controller: colorController,
+                    onChanged: (String? selectedOption) {
+                      colorController.text = selectedOption ?? '';
+                    },
+                  ),
                 ),
                 const SizedBox(
                   height: 10,
@@ -357,30 +543,24 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   btnColor: AppColors.green,
                   textColor: Colors.white,
                   onPressed: () async {
+                    companyName = companyName;
+                    companyAddress = companyAddress;
                     try {
                       await DbService.uploadDataToFirebase(
                         context,
+                        image!,
+                        categoryController.text,
                         nameController.text,
-                        descriptionController.text,
-                        colorController.text,
+                        brandController.text,
                         int.parse(itemcountController.text),
+                        colorController.text,
                         selectedDate!,
                         formattedTime,
-                        image!,
-                      );
-                      Navigator.of(context).pop();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor: AppColors.green,
-                          content: Text(
-                            'Uploaded data Sucessfully',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          duration: Duration(seconds: 2),
-                        ),
+                        descriptionController.text,
+                        companyName,
+                        companyAddress,
                       );
                     } catch (e) {
-                      Navigator.of(context).pop();
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           backgroundColor: Colors.red,

@@ -1,4 +1,5 @@
 import 'package:finder_app/firebase_options.dart';
+import 'package:finder_app/screen/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -42,7 +43,7 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       initialScreen = isLoggedIn
           ? (isCompanyUser ? GuestHomeScreen() : HomePage())
-          : LoginScreen();
+          : LoginScreen ();
     });
   }
 

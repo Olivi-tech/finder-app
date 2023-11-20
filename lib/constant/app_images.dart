@@ -3,13 +3,14 @@ class AppImages {
   static const String launcherIcon = 'assets/icon/icon.jpg';
   static const String phoneImge = 'assets/image/phone.jpg';
   static const String companylogo = 'assets/image/companylogo.png';
- static const String bagicon = 'assets/icon/bagicon.png';
- static const String keyicon = 'assets/icon/keyicon.png';
- static const String laptopicon = 'assets/icon/laptopicon.png';
- static const String camicon = 'assets/icon/camicon.png';
- static const String phoneicon = 'assets/icon/phoneicon.png';
- static const String profileIcon = 'assets/svg/profile.svg';
- static const String walletpic = 'assets/image/wallet.png';
- static const String walleticon = 'assets/icon/walleticon.png';
- static const String boypic = 'assets/image/boy.jpg';
+  static const String bagIcon = 'assets/icon/bagicon.png';
+  static const String keyIcon = 'assets/icon/keyicon.png';
+  static const String laptopIcon = 'assets/icon/laptopicon.png';
+  static const String camIcon = 'assets/icon/camicon.png';
+  static const String phoneIcon = 'assets/icon/phoneicon.png';
+  static const String profileIcon = 'assets/svg/profile.svg';
+  static const String walletPic = 'assets/image/wallet.png';
+  static const String walletIcon = 'assets/icon/walleticon.png';
+  static const String boyPic = 'assets/image/boy.jpg';
+  static const String waveHey = 'assets/icon/wave.png';
 }
