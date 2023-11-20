@@ -7,6 +7,7 @@ import 'package:finder_app/utils/app_routs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+///
 class DbService_auth {
   static FirebaseAuth _auth = FirebaseAuth.instance;
   static Future<void> registerCompany(
