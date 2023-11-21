@@ -1,10 +1,8 @@
-import 'dart:developer';
-import 'package:finder_app/screen/screen.dart';
+import 'package:finder_app/screens/screens.dart';
 import 'package:finder_app/utils/app_routs.dart';
 import 'package:flutter/material.dart';
-
-import 'screen/company_screens/company_screens.dart';
-import 'screen/guest_screens.dart/guest_screens.dart';
+import 'screens/company_screens/company_screens.dart';
+import 'screens/guest_screens.dart/guest_screens.dart';
 
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -12,7 +10,6 @@ class AppRouter {
   }
 
   static Widget _getPage(RouteSettings settings) {
-    log('..My Routing : ${settings.name}');
     switch (settings.name) {
       case AppRoutes.splash:
         return const SplashScreen();
@@ -20,16 +17,19 @@ class AppRouter {
         return const LoginScreen();
       case AppRoutes.register:
         return const RegisterScreen();
-      case AppRoutes.guesthome:
+      case AppRoutes.guestHome:
         return const GuestHomeScreen();
-
       case AppRoutes.homePage:
         return HomePage();
-      case AppRoutes.settingPage:
+      case AppRoutes.settings:
         return SettingsScreen();
       case AppRoutes.itemAdd:
         return const AddItemScreen();
-    
+      case AppRoutes.subscriptions:
+        return const SubscriptionScreen();
+      case AppRoutes.addNewCard:
+        return const AddCardScreen();
+
       default:
         AppRoutes.splash;
         return const SplashScreen();

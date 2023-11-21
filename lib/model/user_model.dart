@@ -7,7 +7,6 @@ class UserData {
   final String address;
   final String roleMode;
 
-
   UserData({
     required this.name,
     required this.email,
@@ -16,6 +15,5 @@ class UserData {
     required this.address,
     required this.phoneNo,
     required this.roleMode,
- 
   });
 }

@@ -21,16 +21,14 @@ class DbService_auth {
     String address,
     String roleMode,
   ) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
     try {
-      UserCredential userCredential = await auth.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
       user = userCredential.user;
-
-      await user?.updateDisplayName(name);
 
       final companyData = CompanyData(
         name: name,
@@ -100,7 +98,6 @@ class DbService_auth {
       );
 
       user = userCredential.user;
-      await userCredential.user?.updateDisplayName(name);
       final userData = UserData(
         name: name,
         email: email,
@@ -125,7 +122,7 @@ class DbService_auth {
       });
 
       log('User registered');
-      Navigator.of(context).pushReplacementNamed(AppRoutes.guesthome);
+      Navigator.of(context).pushReplacementNamed(AppRoutes.guestHome);
     } catch (error) {
       if (error is FirebaseAuthException) {
         if (error.code == 'email-already-in-use') {
@@ -168,7 +165,7 @@ class DbService_auth {
         String roleMode = userDataSnapshot.get('roleMode');
 
         if (roleMode == 'User') {
-          Navigator.of(context).pushReplacementNamed(AppRoutes.guesthome);
+          Navigator.of(context).pushReplacementNamed(AppRoutes.guestHome);
         }
       } else {
         Navigator.of(context).pushReplacementNamed(AppRoutes.homePage);

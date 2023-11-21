@@ -1,15 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finder_app/firebase_options.dart';
-import 'package:finder_app/screen/login_screen.dart';
+import 'package:finder_app/screens/company_screens/company_screens.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:finder_app/provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:finder_app/providers/providers.dart';
 import 'package:finder_app/routs.dart';
-import 'package:finder_app/screen/company_screens/home_screen.dart';
-import 'package:finder_app/screen/guest_screens.dart/home_screen.dart';
-import 'package:finder_app/screen/screen.dart';
+import 'package:finder_app/screens/screens.dart';
+
+import 'screens/guest_screens.dart/guest_screens.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,66 +20,16 @@ void main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-   Widget initialScreen = SplashScreen();
-
-  @override
-  void initState() {
-    super.initState();
-    initializeApp();
-  }
-
-  Future<void> initializeApp() async {
-    await clearSharedPreferences();
-
-    bool isLoggedIn = await checkIfUserLoggedIn();
-    bool isCompanyUser = await determineUserType();
-
-    setState(() {
-      initialScreen = isLoggedIn
-          ? (isCompanyUser ? GuestHomeScreen() : HomePage())
-          : LoginScreen ();
-    });
-  }
-
-  Future<void> clearSharedPreferences() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
-  }
-
-  Future<bool> checkIfUserLoggedIn() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    return user != null;
-  }
-
-  Future<bool> determineUserType() async {
-    String userType = await getUserTypeFromSomeStorage();
-    return userType == 'company';
-  }
-
-  Future<String> getUserTypeFromSomeStorage() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('userType') ?? '';
-  }
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<BottomNavigationProvider>(
-          create: (context) {
-            return BottomNavigationProvider();
-          },
+          create: (context) => BottomNavigationProvider(),
         ),
         ChangeNotifierProvider<PasswordIconToggleProvider>(
-          create: (context) {
-            return PasswordIconToggleProvider();
-          },
+          create: (context) => PasswordIconToggleProvider(),
         ),
       ],
       child: MaterialApp(
@@ -90,10 +40,43 @@ class _MyAppState extends State<MyApp> {
           );
         },
         debugShowCheckedModeBanner: false,
-        home: initialScreen,
+        home: AuthenticationWrapper(),
         onGenerateRoute: AppRouter.generateRoute,
       ),
     );
+  }
+}
+
+class AuthenticationWrapper extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      return FutureBuilder<DocumentSnapshot>(
+        future: FirebaseFirestore.instance
+            .collection('userData')
+            .doc(user.uid)
+            .get(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasData && snapshot.data?.exists == true) {
+              final roleMode = snapshot.data?.get('roleMode') ?? '';
+
+              if (roleMode == 'User') {
+                return GuestHomeScreen();
+              }
+            } else {
+              return HomePage();
+            }
+          }
+
+          return SplashScreen();
+        },
+      );
+    } else {
+      return SplashScreen();
+    }
   }
 }
 

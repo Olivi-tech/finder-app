@@ -7,9 +7,9 @@ class AppRoutes {
   static const itemDetails = "/itemDetails";
   static const guestContact = '/guestContact';
   static const guestItemDetails = "/GuestItemDetails";
-  static const guesthome = '/guesthome';
+  static const guestHome = '/guestHome';
   static const guestRegister = '/guestRegister';
-  
-
-  static const settingPage = '/settingPage';
+  static const addNewCard = '/addNewCard';
+  static const subscriptions = '/subscriptions';
+  static const settings = '/settings';
 }

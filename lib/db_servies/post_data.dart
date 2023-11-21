@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:finder_app/constant/constant.dart';
+import 'package:finder_app/constants/constants.dart';
+import 'package:finder_app/db_servies/exceptions_handle.dart';
 import 'package:finder_app/utils/app_routs.dart';
+import 'package:finder_app/widgets/widgets.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
@@ -24,12 +26,9 @@ class DbService {
   ) async {
     try {
       final storageReference =
-          FirebaseStorage.instance.ref().child('images/${DateTime.now()}.jpg');
-
+          FirebaseStorage.instance.ref().child('images/${DateTime.now()}');
       await storageReference.putFile(image);
-
       final imageUrl = await storageReference.getDownloadURL();
-
       final itemId = DateTime.now().millisecondsSinceEpoch.toString() +
           Random().nextInt(999).toString();
 
@@ -53,19 +52,21 @@ class DbService {
           .collection('item_data')
           .add(itemData);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: AppColors.green,
-          content: Text(
-            'Uploaded data Sucessfully',
-            style: TextStyle(color: Colors.white),
-          ),
-          duration: Duration(seconds: 2),
-        ),
+      CustomSnackBar.show(
+        context: context,
+        text: 'Uploaded data Successfully',
+        backgroundColor: AppColors.green,
       );
+
       Navigator.of(context).pushNamed(AppRoutes.homePage);
     } catch (error) {
-      print('Error: $error');
+      if (error is HttpException ||
+          error is SocketException ||
+          error is FormatException) {
+        ErrorHandling.handleErrors(error: error);
+      } else {
+        rethrow;
+      }
     }
   }
 }
