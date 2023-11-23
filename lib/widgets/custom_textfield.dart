@@ -94,6 +94,11 @@ bool isValidPhoneNumber(String phoneNumber) {
   return regex.hasMatch(phoneNumber);
 }
 
+bool isValidCRNumber(String input) {
+  final RegExp regex = RegExp(r'^\+?[0-9]+$');
+  return regex.hasMatch(input);
+}
+
 bool isValidName(String name) {
   final RegExp regex = RegExp(r'^[a-zA-Z ]+$');
   final bool hasValidLength = name.length >= 2 && name.length <= 50;
@@ -102,8 +107,18 @@ bool isValidName(String name) {
 
 bool isValidAddress(String address) {
   final RegExp regex = RegExp(
-    r'^[a-zA-Z0-9@#/*&.()"\s-]+$',
+    r'^[a-zA-Z0-9@#/*&.,()"\s-]+$',
   );
   final bool hasValidLength = address.length <= 250;
   return regex.hasMatch(address) && hasValidLength;
+}
+
+bool isValidCreditCard(String creditCardNumber) {
+  final RegExp regex = RegExp(r'^[0-9]{16}$');
+  return regex.hasMatch(creditCardNumber);
+}
+
+bool isValidZipCode(String zipCode) {
+  final RegExp regex = RegExp(r'^[0-9]{4}$');
+  return regex.hasMatch(zipCode);
 }

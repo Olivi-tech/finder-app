@@ -23,6 +23,7 @@ class _RegisterCompanyScreenState extends State<RegisterCompanyScreen> {
   TextEditingController phoneNoController = TextEditingController();
   TextEditingController cityController = TextEditingController();
   TextEditingController addressController = TextEditingController();
+  TextEditingController crNoController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   FocusNode focusNode = FocusNode();
@@ -64,6 +65,7 @@ class _RegisterCompanyScreenState extends State<RegisterCompanyScreen> {
                     obscureText: false,
                     hintText: 'Company Name',
                     controller: nameController,
+                    keyboardType: TextInputType.name,
                     validator: (input) {
                       if (input == null || input.isEmpty) {
                         return 'Please enter Company Name';
@@ -88,6 +90,20 @@ class _RegisterCompanyScreenState extends State<RegisterCompanyScreen> {
                     validator: (input) {
                       if (input == null || input.isEmpty) {
                         return 'Please enter Category';
+                      }
+                      return null;
+                    },
+                  ),
+                  CustomTextField(
+                    obscureText: false,
+                    hintText: 'Company Registration Number',
+                    controller: crNoController,
+                    keyboardType: TextInputType.number,
+                    validator: (input) {
+                      if (input == null || input.isEmpty) {
+                        return 'Please enter CR Number';
+                      } else if (!isValidCRNumber(input)) {
+                        return 'Invalid Name';
                       }
                       return null;
                     },
@@ -227,6 +243,7 @@ class _RegisterCompanyScreenState extends State<RegisterCompanyScreen> {
                             context,
                             nameController.text,
                             categoryController.text,
+                            crNoController.text,
                             emailController.text,
                             passwordController.text,
                             phoneNoController.text,

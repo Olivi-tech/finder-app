@@ -23,7 +23,7 @@ class CustomViewContainerState extends State<CustomViewContainer> {
       child: Padding(
         padding: const EdgeInsets.only(left: 2, right: 2),
         child: Container(
-          width: 70,
+          width: 75,
           padding: const EdgeInsets.symmetric(vertical: 6),
           decoration: BoxDecoration(
             color: Colors.white,

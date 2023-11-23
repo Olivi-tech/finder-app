@@ -19,7 +19,7 @@ class VerifyScreenState extends State<VerifyScreen> {
   String companyAddress = '';
   String companPhoneNo = '';
   String companyCountry = '';
-
+  String image = '';
   Future<void> fetchUserData() async {
     try {
       String? uid = FirebaseAuth.instance.currentUser?.uid;
@@ -34,6 +34,7 @@ class VerifyScreenState extends State<VerifyScreen> {
           companyAddress = companySnapshot['address'];
           companPhoneNo = companySnapshot['phoneNo'];
           companyCountry = companySnapshot['country'];
+          image = companySnapshot['image'];
         });
       }
     } catch (error) {}
@@ -79,27 +80,11 @@ class VerifyScreenState extends State<VerifyScreen> {
                   height: 152,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: AppColors.lightwhite),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.image,
-                        size: 48,
-                        color: AppColors.grey,
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      const CustomText(
-                        text: 'Copy upload/KYC',
-                        letterSpacing: 1,
-                        size: 12,
-                        color: AppColors.blue,
-                        weight: FontWeight.w600,
-                      ),
-                    ],
+                    image: DecorationImage(
+                      image: NetworkImage(image),
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
                 SizedBox(
@@ -116,7 +101,7 @@ class VerifyScreenState extends State<VerifyScreen> {
                 Divider(
                   color: AppColors.grey,
                 ),
-                CustomUserInfoRow(label: 'Country', value: companyCountry),
+                CustomUserInfoRow(label: 'Nationality', value: companyCountry),
                 Divider(
                   color: AppColors.grey,
                 ),
@@ -212,7 +197,7 @@ class VerifyScreenState extends State<VerifyScreen> {
                   height: 10,
                 ),
                 PaymentMethodItem(
-                  title: 'Add New Payment Method',
+                  title: 'Add New Card',
                   subtitle: '',
                   leading:
                       Image.asset(AppImages.addCard, width: 40, height: 40),
@@ -223,7 +208,6 @@ class VerifyScreenState extends State<VerifyScreen> {
                 SizedBox(
                   height: 80,
                 ),
-                
                 CustomButton(
                   btnColor: AppColors.green,
                   textColor: Colors.white,
@@ -239,4 +223,3 @@ class VerifyScreenState extends State<VerifyScreen> {
     );
   }
 }
-//  Navigator.of(context).pushReplacementNamed(AppRoutes.guestHome);

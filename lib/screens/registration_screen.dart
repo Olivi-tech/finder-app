@@ -37,7 +37,7 @@ class _RegisterScreenState extends State<RegisterScreen>
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: size.height * .1,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         title: Padding(
           padding: const EdgeInsets.only(top: 20),
           child: Image.asset(

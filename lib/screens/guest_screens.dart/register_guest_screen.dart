@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:finder_app/constants/constants.dart';
 import 'package:finder_app/db_servies/db_servies.dart';
 import 'package:finder_app/providers/providers.dart';
@@ -7,6 +9,8 @@ import 'package:flutter/services.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:intl_phone_field/phone_number.dart';
 import 'package:provider/provider.dart';
+
+import 'package:image_picker/image_picker.dart';
 
 class RegisterAsGuestScreen extends StatefulWidget {
   const RegisterAsGuestScreen({super.key});
@@ -23,7 +27,20 @@ class _RegisterAsGuestScreenState extends State<RegisterAsGuestScreen> {
   TextEditingController phoneController = TextEditingController();
   TextEditingController idController = TextEditingController();
 
+  File? image;
+  final picker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
+  Future getImageGallery() async {
+    final pickedFile =
+        await picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
+    setState(() {
+      if (pickedFile != null) {
+        image = File(pickedFile.path);
+      } else {
+        print('No Image  picked !');
+      }
+    });
+  }
 
   FocusNode focusNode = FocusNode();
   @override
@@ -186,6 +203,40 @@ class _RegisterAsGuestScreenState extends State<RegisterAsGuestScreen> {
                     },
                   ),
                   const SizedBox(height: 15),
+                  GestureDetector(
+                    onTap: () async {
+                      getImageGallery();
+                    },
+                    child: image != null
+                        ? Image.file(image!.absolute)
+                        : Container(
+                            height: 152,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: AppColors.lightwhite),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.image,
+                                  size: 48,
+                                  color: AppColors.grey,
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                const CustomText(
+                                  text: 'Copy upload/KYC',
+                                  letterSpacing: 1,
+                                  size: 12,
+                                  color: AppColors.blue,
+                                  weight: FontWeight.w600,
+                                ),
+                              ],
+                            ),
+                          ),
+                  ),
                   const SizedBox(height: 30),
                   CustomButton(
                     btnColor: AppColors.green,
@@ -198,6 +249,7 @@ class _RegisterAsGuestScreenState extends State<RegisterAsGuestScreen> {
                         try {
                           await DbService_auth.registerUser(
                             context,
+                             image!,
                             nameController.text,
                             emailController.text,
                             passwordController.text,

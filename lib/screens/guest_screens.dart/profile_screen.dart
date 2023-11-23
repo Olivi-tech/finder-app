@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finder_app/constants/app_colors.dart';
-import 'package:finder_app/utils/app_routs.dart';
 import 'package:finder_app/widgets/custom_profile_details_row.dart';
 import 'package:finder_app/widgets/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -20,7 +20,7 @@ class ProfileScreenState extends State<ProfileScreen> {
   String country = '';
   String nationality = '';
   String email = '';
-
+  String image = '';
   Future<void> fetchUserData() async {
     try {
       String? uid = FirebaseAuth.instance.currentUser?.uid;
@@ -37,6 +37,7 @@ class ProfileScreenState extends State<ProfileScreen> {
           country = dataSnapshot['country'];
           email = dataSnapshot['email'];
           nationality = dataSnapshot['nationality'];
+          image = dataSnapshot['image'];
         });
       }
     } catch (error) {}
@@ -45,10 +46,8 @@ class ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    fetchUserData();
   }
 
-  bool isLoggingOut = false;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -64,90 +63,74 @@ class ProfileScreenState extends State<ProfileScreen> {
               Navigator.pop(context);
             },
           ),
-          title: const CustomText(
-            text: 'Profile',
-            letterSpacing: 1,
-            color: AppColors.black,
-            size: 18,
-            weight: FontWeight.w500,
-          ),
         ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  height: 152,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: AppColors.lightwhite),
+        body: FutureBuilder(
+          future: fetchUserData(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                  child: CupertinoActivityIndicator(
+                color: AppColors.blue,
+                radius: 20,
+              ));
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else {
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(
-                        Icons.image,
-                        size: 48,
-                        color: Colors.grey,
+                      SizedBox(
+                        height: 20,
                       ),
-                      const SizedBox(
-                        height: 5,
+                      Container(
+                        height: 152,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(image),
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
                       ),
                       const CustomText(
-                        text: 'Copy upload/KYC',
+                        text: 'Profile Details',
                         letterSpacing: 1,
-                        size: 12,
-                        color: AppColors.blue,
-                        weight: FontWeight.w600,
+                        color: AppColors.black,
+                        size: 20,
+                        weight: FontWeight.w500,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      CustomUserInfoRow(
+                        label: 'Company Name',
+                        value: name,
+                      ),
+                      Divider(color: Colors.grey),
+                      CustomUserInfoRow(label: 'Phone no', value: phoneNo),
+                      Divider(color: Colors.grey),
+                      CustomUserInfoRow(label: 'Email', value: email),
+                      Divider(color: Colors.grey),
+                      CustomUserInfoRow(label: 'Nationality', value: country),
+                      Divider(color: Colors.grey),
+                      CustomUserInfoRow(
+                          label: 'ID/ Passport # ', value: address),
+                      SizedBox(
+                        height: 40,
                       ),
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
-                CustomUserInfoRow(
-                  label: 'Company Name',
-                  value: name,
-                ),
-                Divider(color: Colors.grey),
-                CustomUserInfoRow(label: 'Phone no', value: phoneNo),
-                Divider(color: Colors.grey),
-                CustomUserInfoRow(label: 'Email', value: email),
-                Divider(color: Colors.grey),
-                CustomUserInfoRow(label: 'Nationality', value: country),
-                Divider(color: Colors.grey),
-                CustomUserInfoRow(label: 'ID/ Passport # ', value: address),
-                SizedBox(
-                  height: 40,
-                ),
-                CustomButton(
-                  btnColor: AppColors.green,
-                  textColor: Colors.white,
-                  text: 'See Subscription Plan',
-                  onPressed: () async {
-                    Navigator.of(context).pushNamed(AppRoutes.subscriptions);
-                  },
-                  width: MediaQuery.sizeOf(context).width,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                CustomButton(
-                  btnColor: AppColors.green,
-                  textColor: Colors.white,
-                  text: 'Save',
-                  onPressed: () async {},
-                  width: MediaQuery.sizeOf(context).width,
-                ),
-              ],
-            ),
-          ),
+              );
+            }
+          },
         ),
       ),
     );

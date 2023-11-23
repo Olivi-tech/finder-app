@@ -1,6 +1,7 @@
 class CompanyData {
   final String name;
   final String category;
+  final String crNumber;
   final String email;
   final String password;
   final String phoneNo;
@@ -12,6 +13,7 @@ class CompanyData {
   CompanyData({
     required this.name,
     required this.category,
+    required this.crNumber,
     required this.email,
     required this.password,
     required this.phoneNo,

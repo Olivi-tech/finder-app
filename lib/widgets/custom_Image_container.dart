@@ -1,4 +1,3 @@
-
 import 'package:finder_app/constants/constants.dart';
 import 'package:finder_app/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +7,7 @@ class ImageContainer extends StatelessWidget {
   final String containerText;
   final String locationText;
   final String timeText;
+  final String dateText;
   final VoidCallback onTap;
   const ImageContainer({
     Key? key,
@@ -16,6 +16,7 @@ class ImageContainer extends StatelessWidget {
     required this.locationText,
     required this.timeText,
     required this.onTap,
+    required this.dateText,
   });
   @override
   Widget build(BuildContext context) {
@@ -98,9 +99,9 @@ class ImageContainer extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 5),
+                    const SizedBox(height: 10),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.only(bottom: 5),
                       child: Row(
                         children: [
                           const Icon(
@@ -111,6 +112,29 @@ class ImageContainer extends StatelessWidget {
                           const SizedBox(width: 8),
                           Text(
                             timeText,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w300,
+                              letterSpacing: 0.50,
+                              color: AppColors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.calendar_month,
+                            color: AppColors.blue,
+                            size: 14,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            dateText,
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w300,
@@ -136,7 +160,10 @@ class PostContainer extends StatelessWidget {
   final String imagePath;
   final String containerText;
   final String describtionText;
+
+  final String locationText;
   final String timeText;
+  final String dateText;
   final VoidCallback onTap;
   final VoidCallback ontapcontact;
   const PostContainer({
@@ -147,13 +174,15 @@ class PostContainer extends StatelessWidget {
     required this.onTap,
     required this.describtionText,
     required this.ontapcontact,
+    required this.locationText,
+    required this.dateText,
   });
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 160,
+        height: 130,
         width: MediaQuery.sizeOf(context).width,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -176,7 +205,7 @@ class PostContainer extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Image.network(imagePath,
-                      fit: BoxFit.cover, width: 190, height: 150),
+                      fit: BoxFit.cover, width: 190, height: 120),
                 ),
               ),
             ),
@@ -196,7 +225,7 @@ class PostContainer extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   Container(
-                    height: 50,
+                    height: 30,
                     width: 200,
                     child: Text(
                       describtionText,
@@ -206,56 +235,71 @@ class PostContainer extends StatelessWidget {
                         letterSpacing: 0.50,
                         color: AppColors.black,
                       ),
-                      maxLines: 3,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   const SizedBox(height: 5),
                   Row(
                     children: [
-                      const Icon(
-                        Icons.access_time,
-                        size: 14,
+                      Icon(
+                        Icons.location_on,
+                        color: AppColors.red,
+                        size: 16,
                       ),
-                      const SizedBox(width: 2),
-                      CustomText(
-                        text: timeText,
-                        size: 14,
-                        weight: FontWeight.w300,
-                        letterSpacing: 0.50,
-                        color: AppColors.black,
+                      const SizedBox(width: 5),
+                      Text(
+                        locationText,
+                        maxLines: 1,
+                        style: TextStyle(
+                          fontSize: 14,
+                          overflow: TextOverflow.ellipsis,
+                          fontWeight: FontWeight.w300,
+                          letterSpacing: 0.50,
+                          color: AppColors.black,
+                        ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
-                  /*GestureDetector(
-                    onTap: ontapcontact,
-                    child: Container(
-                      height: 30,
-                      width: 100,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: AppColors.green,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  const SizedBox(height: 5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
                         children: [
                           const Icon(
-                            Icons.call,
+                            Icons.access_time,
                             size: 14,
-                            color: Colors.white,
                           ),
+                          const SizedBox(width: 5),
                           CustomText(
-                            text: 'Contact',
+                            text: timeText,
                             size: 14,
-                            weight: FontWeight.w500,
+                            weight: FontWeight.w300,
                             letterSpacing: 0.50,
-                            color: Colors.white,
+                            color: AppColors.black,
                           ),
                         ],
                       ),
-                    ),
-                  ),*/
+                      const SizedBox(width: 10),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.calendar_month,
+                            size: 14,
+                          ),
+                          const SizedBox(width: 5),
+                          CustomText(
+                            text: dateText,
+                            size: 14,
+                            weight: FontWeight.w300,
+                            letterSpacing: 0.50,
+                            color: AppColors.black,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),

@@ -6,6 +6,7 @@ class UserData {
   final String country;
   final String address;
   final String roleMode;
+  var image;
 
   UserData({
     required this.name,
@@ -15,5 +16,6 @@ class UserData {
     required this.address,
     required this.phoneNo,
     required this.roleMode,
+    required this.image,
   });
 }

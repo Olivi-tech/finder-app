@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finder_app/constants/constants.dart';
 import 'package:finder_app/model/item_model.dart';
-import 'package:finder_app/screens/guest_screens.dart/guest_screens.dart';
+import 'package:finder_app/screens/guest_screens.dart/item_details_screen.dart';
 import 'package:finder_app/utils/app_routs.dart';
 import 'package:finder_app/widgets/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 
 class GuestHomeScreen extends StatefulWidget {
@@ -85,46 +86,26 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
     });
   }
 
-  bool isLoggingOut = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.push(
-                context,
-                PageTransition(
-                    type: PageTransitionType.rightToLeft,
-                    child: ProfileScreen()));
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(7),
-            child: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.green,
-              ),
-              child: Center(
-                child: Icon(
-                  Icons.person,
-                  color: Colors.white,
-                ),
-              ),
-            ),
+        leading: Padding(
+          padding: const EdgeInsets.all(7),
+          child: Icon(
+            Icons.person,
+            color: AppColors.grey,
           ),
         ),
-        leadingWidth: 50,
+        leadingWidth: 30,
         title: Row(
           children: [
             CustomText(
               text: 'Hi,',
               letterSpacing: 1,
-              color: AppColors.green,
+              color: AppColors.blue,
               size: 16,
               weight: FontWeight.w500,
             ),
@@ -141,32 +122,17 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
           ],
         ),
         actions: [
+          SizedBox(
+            width: 10,
+          ),
           GestureDetector(
-            onTap: () async {
-              try {
-                setState(() {
-                  isLoggingOut = true;
-                });
-
-                await FirebaseAuth.instance.signOut();
-
-                Navigator.pushReplacementNamed(context, AppRoutes.login);
-              } catch (e) {
-                print("Error during logout: $e");
-              } finally {
-                setState(() {
-                  isLoggingOut = false;
-                });
-              }
+            onTap: () {
+              Navigator.of(context).pushNamed(AppRoutes.guestSettingScreen);
             },
-            child: isLoggingOut
-                ? CupertinoActivityIndicator(
-                    color: AppColors.red,
-                  )
-                : Icon(
-                    Icons.logout,
-                    color: AppColors.green,
-                  ),
+            child: Icon(
+              Icons.settings,
+              color: AppColors.grey,
+            ),
           ),
           SizedBox(
             width: 10,
@@ -180,23 +146,55 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(
-                    left: 5, top: 10, bottom: 10, right: 5),
-                child: CustomText(
-                  text:
-                      'We would like to inform you about some lost items that have been found. You can check them out here.',
-                  color: AppColors.black,
-                  size: 16,
-                  weight: FontWeight.w300,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 5, top: 10, bottom: 10),
-                child: CustomText(
-                  text: 'Search items',
-                  letterSpacing: 1,
-                  size: 20,
-                  weight: FontWeight.w500,
+                padding: const EdgeInsets.only(left: 8, bottom: 5),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 8,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomText(
+                            text: 'Find your items here',
+                            color: AppColors.black,
+                            letterSpacing: 1,
+                            size: 22,
+                            weight: FontWeight.w600,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          CustomText(
+                            text:
+                                'We would like to inform you about\nsome lost items that have been \nfound. You can check them out below.',
+                            color: AppColors.black,
+                            size: 12,
+                            weight: FontWeight.w300,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(10.0),
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: AssetImage(AppImages.companylogo),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
                 ),
               ),
               Padding(
@@ -219,7 +217,7 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
                       text: 'Categories',
                       letterSpacing: 1,
                       size: 20,
-                      weight: FontWeight.w500,
+                      weight: FontWeight.w600,
                     ),
                     GestureDetector(
                       onTap: showAllItems,
@@ -259,43 +257,29 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
                 height: 90,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: 6,
+                  itemCount: 9,
                   itemBuilder: (context, index) {
                     final images = [
-                      AppImages.phoneIcon,
+                      AppImages.electronic,
+                      AppImages.accessories,
+                      AppImages.bag,
+                      AppImages.sports,
                       AppImages.keyIcon,
-                      AppImages.walletIcon,
-                      AppImages.laptopIcon,
-                      AppImages.bagIcon,
-                      AppImages.camIcon,
-                      AppImages.phoneIcon,
-                      AppImages.keyIcon,
-                      AppImages.walletIcon,
-                      AppImages.laptopIcon,
-                      AppImages.bagIcon,
-                      AppImages.camIcon,
-                      AppImages.phoneIcon,
-                      AppImages.keyIcon,
-                      AppImages.walletIcon,
-                      AppImages.laptopIcon,
+                      AppImages.toy,
+                      AppImages.books,
+                      AppImages.clothes,
+                      AppImages.medicine,
                     ];
                     final labels = [
-                      'Electronics',
-                      'Clothing',
-                      'Bag',
-                      'Sports',
-                      'keys',
-                      'Kitchen',
-                      'Toys',
-                      'Games',
-                      'Books',
-                      'Medicine',
-                      'Jewelry',
-                      'Stationary',
-                      'Grocery',
-                      'Shoes',
+                      'Electronic',
                       'Accessories',
-                      'Other',
+                      'Bag',
+                      'Sport',
+                      'key',
+                      'Toy',
+                      'Book',
+                      'Cloth',
+                      'Medicine',
                     ];
 
                     return Padding(
@@ -327,7 +311,7 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
                   color: AppColors.black,
                   letterSpacing: 1,
                   size: 20,
-                  weight: FontWeight.w500,
+                  weight: FontWeight.w600,
                 ),
               ),
               SizedBox(
@@ -351,6 +335,9 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
                                       containerText: item.name,
                                       describtionText: item.description,
                                       timeText: item.time,
+                                      locationText: item.companyAddress,
+                                      dateText:
+                                          formatDateWithoutTime(item.date),
                                       onTap: () {
                                         Navigator.push(
                                           context,
@@ -369,6 +356,10 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
                                               address: item.companyAddress,
                                               category: item.category,
                                               brand: item.brand,
+                                              companyCountry:
+                                                  item.companyCountry,
+                                              phoneNo: item.companyPhone,
+                                              date: item.date,
                                             ),
                                           ),
                                         );
@@ -396,6 +387,9 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
                                       containerText: item.name,
                                       describtionText: item.description,
                                       timeText: item.time,
+                                      locationText: item.companyAddress,
+                                      dateText:
+                                          formatDateWithoutTime(item.date),
                                       onTap: () {
                                         Navigator.push(
                                           context,
@@ -414,6 +408,10 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
                                               address: item.companyAddress,
                                               category: item.category,
                                               brand: item.brand,
+                                              companyCountry:
+                                                  item.companyCountry,
+                                              phoneNo: item.companyPhone,
+                                              date: item.date,
                                             ),
                                           ),
                                         );
@@ -443,6 +441,8 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
                                   imagePath: item.imageUrl,
                                   containerText: item.name,
                                   timeText: item.time,
+                                  locationText: item.companyAddress,
+                                  dateText: formatDateWithoutTime(item.date),
                                   onTap: () {
                                     Navigator.push(
                                       context,
@@ -460,6 +460,9 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
                                           address: item.companyAddress,
                                           category: item.category,
                                           brand: item.brand,
+                                          companyCountry: item.companyCountry,
+                                          phoneNo: item.companyPhone,
+                                          date: item.date,
                                         ),
                                       ),
                                     );
@@ -480,4 +483,9 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
       ),
     );
   }
+}
+
+String formatDateWithoutTime(DateTime dateTime) {
+  final formatter = DateFormat('yyyy-MM-dd');
+  return formatter.format(dateTime);
 }

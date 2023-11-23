@@ -5,6 +5,7 @@ import 'package:finder_app/db_servies/exceptions_handle.dart';
 import 'package:finder_app/model/model.dart';
 import 'package:finder_app/utils/app_routs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class DbService_auth {
@@ -13,6 +14,7 @@ class DbService_auth {
     BuildContext context,
     String name,
     String category,
+    String crNumber,
     String email,
     String password,
     String phoneNo,
@@ -40,6 +42,7 @@ class DbService_auth {
         city: city,
         address: address,
         roleMode: roleMode,
+        crNumber: crNumber,
       );
 
       await FirebaseFirestore.instance
@@ -55,11 +58,12 @@ class DbService_auth {
         'city': companyData.city,
         'address': companyData.address,
         'roleMode': companyData.roleMode,
+        'crNumber': companyData.crNumber,
       });
 
       log('User registered and company data saved');
 
-      Navigator.of(context).pushReplacementNamed(AppRoutes.homePage);
+      Navigator.of(context).pushReplacementNamed(AppRoutes.companyHome);
     } catch (error) {
       if (error is FirebaseAuthException) {
         if (error.code == 'email-already-in-use') {
@@ -81,6 +85,7 @@ class DbService_auth {
 
   static Future<void> registerUser(
     BuildContext context,
+    File image,
     String name,
     String email,
     String password,
@@ -96,7 +101,11 @@ class DbService_auth {
         email: email,
         password: password,
       );
-
+      final storageReference = FirebaseStorage.instance
+          .ref()
+          .child('profile_images/${DateTime.now()}');
+      await storageReference.putFile(image);
+      final imageUrl = await storageReference.getDownloadURL();
       user = userCredential.user;
       final userData = UserData(
         name: name,
@@ -106,6 +115,7 @@ class DbService_auth {
         country: country,
         address: address,
         roleMode: roleMode,
+        image: imageUrl,
       );
 
       await FirebaseFirestore.instance
@@ -119,6 +129,7 @@ class DbService_auth {
         'address': userData.address,
         'phoneNo': userData.phoneNo,
         'roleMode': userData.roleMode,
+        'image': userData.image
       });
 
       log('User registered');
@@ -168,7 +179,7 @@ class DbService_auth {
           Navigator.of(context).pushReplacementNamed(AppRoutes.guestHome);
         }
       } else {
-        Navigator.of(context).pushReplacementNamed(AppRoutes.homePage);
+        Navigator.of(context).pushReplacementNamed(AppRoutes.companyHome);
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'INVALID_LOGIN_CREDENTIALS') {

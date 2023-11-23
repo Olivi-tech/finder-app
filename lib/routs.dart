@@ -1,3 +1,4 @@
+import 'package:finder_app/screens/company_screens/home_screen.dart';
 import 'package:finder_app/screens/screens.dart';
 import 'package:finder_app/utils/app_routs.dart';
 import 'package:flutter/material.dart';
@@ -19,12 +20,18 @@ class AppRouter {
         return const RegisterScreen();
       case AppRoutes.guestHome:
         return const GuestHomeScreen();
-      case AppRoutes.homePage:
-        return HomePage();
+      case AppRoutes.searchScreen:
+        return SearchPostScreen();
+         case AppRoutes. companyHome:
+         return const CompanyHomeScreen();
       case AppRoutes.settings:
         return SettingsScreen();
+      case AppRoutes.guestSettingScreen:
+        return GuestSettingScreen();
       case AppRoutes.itemAdd:
         return const AddItemScreen();
+      case AppRoutes.guestProfile:
+        return const ProfileScreen();
       case AppRoutes.subscriptions:
         return const SubscriptionScreen();
       case AppRoutes.addNewCard:

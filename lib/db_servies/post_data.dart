@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 
 class DbService {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   static Future<void> uploadDataToFirebase(
     BuildContext context,
     File image,
@@ -23,8 +24,28 @@ class DbService {
     String description,
     String companyName,
     String companyAdress,
+    String companyCountry,
+    String companPhoneNo,
   ) async {
     try {
+      final querySnapshot = await _firestore
+          .collection('companies')
+          .doc('items')
+          .collection('item_data')
+          .where('name', isEqualTo: name)
+          .where('brand', isEqualTo: brand)
+          .where('color', isEqualTo: color)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        CustomSnackBar.show(
+          context: context,
+          text: 'Item with the same attributes already exists!',
+          backgroundColor: AppColors.red,
+        );
+        return;
+      }
+
       final storageReference =
           FirebaseStorage.instance.ref().child('images/${DateTime.now()}');
       await storageReference.putFile(image);
@@ -45,6 +66,8 @@ class DbService {
         'description': description,
         'companyName': companyName,
         'companyAdress': companyAdress,
+        'companyCountry': companyCountry,
+        'companPhoneNo': companPhoneNo,
       };
       await _firestore
           .collection('companies')
@@ -58,7 +81,7 @@ class DbService {
         backgroundColor: AppColors.green,
       );
 
-      Navigator.of(context).pushNamed(AppRoutes.homePage);
+      Navigator.of(context).pushReplacementNamed(AppRoutes.companyHome);
     } catch (error) {
       if (error is HttpException ||
           error is SocketException ||

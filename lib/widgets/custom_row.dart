@@ -22,8 +22,8 @@ class CustomRow extends StatelessWidget {
           children: [
             CustomText(
               letterSpacing: 1,
-              size: 18,
-              weight: FontWeight.w500,
+              size: 16,
+              weight: FontWeight.w600,
               color: AppColors.black,
               text: label,
             ),
@@ -31,7 +31,7 @@ class CustomRow extends StatelessWidget {
             CustomText(
               letterSpacing: 1,
               size: 16,
-              weight: FontWeight.w400,
+              weight: FontWeight.w300,
               color: AppColors.black,
               text: value,
             ),

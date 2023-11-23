@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finder_app/firebase_options.dart';
-import 'package:finder_app/screens/company_screens/company_screens.dart';
+import 'package:finder_app/screens/company_screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -67,7 +67,7 @@ class AuthenticationWrapper extends StatelessWidget {
                 return GuestHomeScreen();
               }
             } else {
-              return HomePage();
+              return CompanyHomeScreen();
             }
           }
 

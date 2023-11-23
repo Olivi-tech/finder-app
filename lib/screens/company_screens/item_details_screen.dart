@@ -1,6 +1,7 @@
 import 'package:finder_app/constants/constants.dart';
 import 'package:finder_app/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ItemDetailsPage extends StatelessWidget {
   final String itemId;
@@ -12,9 +13,12 @@ class ItemDetailsPage extends StatelessWidget {
   final String color;
   final int quantity;
   final String time;
+
+  final DateTime date;
   final String description;
   final String companyName;
   final String address;
+  final String phoneNo;
 
   ItemDetailsPage({
     required this.itemId,
@@ -29,6 +33,8 @@ class ItemDetailsPage extends StatelessWidget {
     required this.description,
     required this.companyName,
     required this.address,
+    required this.phoneNo,
+    required this.date,
   });
 
   @override
@@ -63,8 +69,8 @@ class ItemDetailsPage extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 10, bottom: 10),
                 child: const CustomText(
                   letterSpacing: 1,
-                  size: 20,
-                  weight: FontWeight.w500,
+                  size: 16,
+                  weight: FontWeight.w600,
                   color: AppColors.black,
                   text: 'Picture',
                 ),
@@ -88,8 +94,8 @@ class ItemDetailsPage extends StatelessWidget {
                     children: [
                       const CustomText(
                         letterSpacing: 1,
-                        size: 20,
-                        weight: FontWeight.w500,
+                        size: 16,
+                        weight: FontWeight.w600,
                         color: AppColors.black,
                         text: 'Description',
                       ),
@@ -101,33 +107,49 @@ class ItemDetailsPage extends StatelessWidget {
                       CustomRow(label: 'Quantity', value: quantity.toString()),
                       CustomRow(label: 'Company Name', value: companyName),
                       CustomRow(label: 'Address', value: address),
+                      CustomRow(label: 'Phone no', value: phoneNo),
                       const CustomText(
                         letterSpacing: 1,
-                        size: 18,
-                        weight: FontWeight.w500,
+                        size: 16,
+                        weight: FontWeight.w600,
                         color: AppColors.black,
                         text: 'Date & Time',
                       ),
                       SizedBox(height: 10),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomText(
+                       Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomText(
+                          letterSpacing: 1,
+                          size: 16,
+                          weight: FontWeight.w300,
+                          color: AppColors.black,
+                          text: formatDateWithoutTime(date),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 5, right: 5),
+                          child: CustomText(
                               letterSpacing: 1,
                               size: 16,
-                              weight: FontWeight.w400,
+                              weight: FontWeight.w600,
                               color: AppColors.black,
-                              text: time),
-                        ],
-                      ),
+                              text: '|'),
+                        ),
+                        CustomText(
+                            letterSpacing: 1,
+                            size: 16,
+                            weight: FontWeight.w300,
+                            color: AppColors.black,
+                            text: time),
+                      ],
+                    ),
                       SizedBox(height: 10),
                       Divider(color: Colors.grey),
                       SizedBox(height: 10),
                       const CustomText(
                         letterSpacing: 1,
-                        size: 18,
-                        weight: FontWeight.w500,
-                        color: AppColors.black,
+                        size: 16,
+                        weight: FontWeight.w600,
                         text: 'Comments',
                       ),
                       SizedBox(height: 10),
@@ -135,7 +157,7 @@ class ItemDetailsPage extends StatelessWidget {
                           letterSpacing: 1,
                           size: 16,
                           maxLine: 20,
-                          weight: FontWeight.w400,
+                          weight: FontWeight.w300,
                           color: AppColors.black,
                           text: description),
                       SizedBox(height: 150),
@@ -147,4 +169,9 @@ class ItemDetailsPage extends StatelessWidget {
       ),
     );
   }
+}
+
+String formatDateWithoutTime(DateTime dateTime) {
+  final formatter = DateFormat('yyyy-MM-dd');
+  return formatter.format(dateTime);
 }

@@ -2,6 +2,7 @@ import 'package:finder_app/constants/constants.dart';
 import 'package:finder_app/screens/guest_screens.dart/verify_screen.dart';
 import 'package:finder_app/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 
 class GuestItemDetailsPage extends StatelessWidget {
@@ -12,9 +13,10 @@ class GuestItemDetailsPage extends StatelessWidget {
   final String color;
   final int quantity;
   final String category;
-
+  final String companyCountry;
+  final String phoneNo;
   final String brand;
-  // final String date;
+  final DateTime date;
   final String time;
   final String companyName;
   final String address;
@@ -31,6 +33,9 @@ class GuestItemDetailsPage extends StatelessWidget {
     required this.address,
     required this.category,
     required this.brand,
+    required this.companyCountry,
+    required this.phoneNo,
+    required this.date,
   }) : super(key: key);
 
   @override
@@ -66,7 +71,7 @@ class GuestItemDetailsPage extends StatelessWidget {
               child: const CustomText(
                 letterSpacing: 1,
                 size: 18,
-                weight: FontWeight.w500,
+                weight: FontWeight.w600,
                 color: AppColors.black,
                 text: 'Picture',
               ),
@@ -91,7 +96,7 @@ class GuestItemDetailsPage extends StatelessWidget {
                     const CustomText(
                       letterSpacing: 1,
                       size: 18,
-                      weight: FontWeight.w500,
+                      weight: FontWeight.w600,
                       color: AppColors.black,
                       text: 'Description',
                     ),
@@ -103,10 +108,12 @@ class GuestItemDetailsPage extends StatelessWidget {
                     CustomRow(label: 'Quantity', value: quantity.toString()),
                     CustomRow(label: 'Company Name', value: companyName),
                     CustomRow(label: 'Address', value: address),
+                    CustomRow(label: 'Phone No', value: phoneNo),
+                    CustomRow(label: 'Country', value: companyCountry),
                     const CustomText(
                       letterSpacing: 1,
-                      size: 18,
-                      weight: FontWeight.w500,
+                      size: 16,
+                      weight: FontWeight.w600,
                       color: AppColors.black,
                       text: 'Date & Time',
                     ),
@@ -115,9 +122,25 @@ class GuestItemDetailsPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CustomText(
+                          letterSpacing: 1,
+                          size: 16,
+                          weight: FontWeight.w300,
+                          color: AppColors.black,
+                          text: formatDateWithoutTime(date),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 5, right: 5),
+                          child: CustomText(
+                              letterSpacing: 1,
+                              size: 16,
+                              weight: FontWeight.w600,
+                              color: AppColors.black,
+                              text: '|'),
+                        ),
+                        CustomText(
                             letterSpacing: 1,
                             size: 16,
-                            weight: FontWeight.w400,
+                            weight: FontWeight.w300,
                             color: AppColors.black,
                             text: time),
                       ],
@@ -127,8 +150,8 @@ class GuestItemDetailsPage extends StatelessWidget {
                     SizedBox(height: 10),
                     const CustomText(
                       letterSpacing: 1,
-                      size: 18,
-                      weight: FontWeight.w500,
+                      size: 16,
+                      weight: FontWeight.w600,
                       color: AppColors.black,
                       text: 'Comments',
                     ),
@@ -137,7 +160,7 @@ class GuestItemDetailsPage extends StatelessWidget {
                         letterSpacing: 1,
                         size: 16,
                         maxLine: 20,
-                        weight: FontWeight.w400,
+                        weight: FontWeight.w300,
                         color: AppColors.black,
                         text: description),
                   ]),
@@ -152,14 +175,31 @@ class GuestItemDetailsPage extends StatelessWidget {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: CustomText(
-                        letterSpacing: 1,
-                        weight: FontWeight.w600,
-                        color: AppColors.black,
-                        text: 'Verify',
+                      title: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10, bottom: 10),
+                            child: Image.asset(
+                              AppImages.verified,
+                              width: 40,
+                              height: 40,
+                              color: AppColors.green,
+                            ),
+                          ),
+                          CustomText(
+                            letterSpacing: 1,
+                            weight: FontWeight.w600,
+                            color: AppColors.black,
+                            text: 'Are you sure?',
+                          ),
+                        ],
                       ),
-                      content: const Text(
-                        'Is it your lost items? If yes please go to chat box. If not then do another search.',
+                      content: CustomText(
+                        letterSpacing: 1,
+                        weight: FontWeight.w300,
+                        color: AppColors.black,
+                        text:
+                            'Is it your lost items? If yes please go to chat box. If not then do another search.',
                       ),
                       actions: [
                         TextButton(
@@ -202,4 +242,9 @@ class GuestItemDetailsPage extends StatelessWidget {
       ),
     );
   }
+}
+
+String formatDateWithoutTime(DateTime dateTime) {
+  final formatter = DateFormat('yyyy-MM-dd');
+  return formatter.format(dateTime);
 }

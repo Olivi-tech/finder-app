@@ -22,7 +22,7 @@ class CustomSearchField extends StatelessWidget {
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.transparent,
-        suffixIcon: Icon(Icons.search, color: Colors.grey),
+        suffixIcon: Icon(Icons.search, color: AppColors.grey),
         hintText: hintText,
         hintStyle: TextStyle(
           color: Colors.grey,
