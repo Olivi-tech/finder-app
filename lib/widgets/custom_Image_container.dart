@@ -165,7 +165,7 @@ class PostContainer extends StatelessWidget {
   final String timeText;
   final String dateText;
   final VoidCallback onTap;
-  final VoidCallback ontapcontact;
+  final VoidCallback onTapContact;
   const PostContainer({
     Key? key,
     required this.imagePath,
@@ -173,7 +173,7 @@ class PostContainer extends StatelessWidget {
     required this.timeText,
     required this.onTap,
     required this.describtionText,
-    required this.ontapcontact,
+    required this.onTapContact,
     required this.locationText,
     required this.dateText,
   });
@@ -182,7 +182,6 @@ class PostContainer extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 130,
         width: MediaQuery.sizeOf(context).width,
         decoration: BoxDecoration(
           color: Colors.white,

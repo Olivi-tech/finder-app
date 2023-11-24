@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../constants/constants.dart';
+
 class ItemData {
   final String itemId;
   final String imageUrl;
@@ -36,23 +38,42 @@ class ItemData {
   factory ItemData.fromDocument(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
 
-    DateTime date = (data['date'] as Timestamp).toDate();
+    DateTime date = (data[AppText.date] as Timestamp).toDate();
 
     return ItemData(
-      itemId: data['itemId'] ?? '',
-      name: data['name'] ?? '',
-      imageUrl: data['image_url'] ?? '',
-      time: data['time'] ?? '',
+      itemId: data[AppText.itemID] ?? '',
+      name: data[AppText.name] ?? '',
+      imageUrl: data[AppText.image] ?? '',
+      time: data[AppText.time] ?? '',
       date: date,
-      quantity: data['quantity'] ?? 0,
-      description: data['description'] ?? '',
-      color: data['color'] ?? '',
-      brand: data['brand'] ?? '',
-      category: data['category'] ?? '',
-      companyName: data['companyName'] ?? '',
-      companyAddress: data['companyAdress'] ?? '',
-      companyCountry: data['companyCountry'] ?? '',
-      companyPhone: data['companPhoneNo'] ?? '',
+      quantity: data[AppText.quantity] ?? 0,
+      description: data[AppText.description] ?? '',
+      color: data[AppText.color] ?? '',
+      brand: data[AppText.brand] ?? '',
+      category: data[AppText.category] ?? '',
+      companyName: data[AppText.companyName] ?? '',
+      companyAddress: data[AppText.companyAddress] ?? '',
+      companyCountry: data[AppText.companyCountry] ?? '',
+      companyPhone: data[AppText.companyPhoneNumber] ?? '',
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      AppText.itemID: itemId,
+      AppText.image: imageUrl,
+      AppText.category: category,
+      AppText.name: name,
+      AppText.brand: brand,
+      AppText.quantity: quantity,
+      AppText.color: color,
+      AppText.date: date,
+      AppText.time: time,
+      AppText.description: description,
+      AppText.companyName: companyName,
+      AppText.companyAddress: companyAddress,
+      AppText.companyCountry: companyCountry,
+      AppText.companyPhoneNumber: companyPhone,
+    };
   }
 }

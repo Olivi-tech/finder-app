@@ -39,19 +39,17 @@ class _SubscriptionPackageState extends State<SubscriptionPackage> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 2,
-      child: GestureDetector(
-        onTap: widget.onTap,
+    return GestureDetector(
+      onTap: widget.onTap,
+      child: Expanded(
+        flex: 2,
         child: AnimatedContainer(
           duration: Duration(milliseconds: 300),
-          height: 280,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(7),
             border: Border.all(
               color: widget.isSelected ? Colors.red : Colors.transparent,
-              width: 0.9,
             ),
             boxShadow: [
               BoxShadow(
@@ -63,6 +61,7 @@ class _SubscriptionPackageState extends State<SubscriptionPackage> {
             ],
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: const EdgeInsets.only(
@@ -72,6 +71,8 @@ class _SubscriptionPackageState extends State<SubscriptionPackage> {
                   bottom: 10,
                 ),
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Image.asset(widget.imageAsset, width: 40, height: 30),
                     CustomText(
@@ -133,6 +134,7 @@ class _SubscriptionPackageState extends State<SubscriptionPackage> {
         bottom: 10,
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Image.asset(imageAsset, width: 16, height: 16),
           CustomText(

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finder_app/constants/constants.dart';
 import 'package:finder_app/screens/guest_screens.dart/verify_screen.dart';
 import 'package:finder_app/widgets/widgets.dart';
@@ -6,36 +7,11 @@ import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 
 class GuestItemDetailsPage extends StatelessWidget {
-  final String itemId;
-  final String image_Url;
-  final String name;
-  final String description;
-  final String color;
-  final int quantity;
-  final String category;
-  final String companyCountry;
-  final String phoneNo;
-  final String brand;
-  final DateTime date;
-  final String time;
-  final String companyName;
-  final String address;
+  final data;
+
   const GuestItemDetailsPage({
+    required this.data,
     Key? key,
-    required this.itemId,
-    required this.image_Url,
-    required this.name,
-    required this.description,
-    required this.color,
-    required this.quantity,
-    required this.time,
-    required this.companyName,
-    required this.address,
-    required this.category,
-    required this.brand,
-    required this.companyCountry,
-    required this.phoneNo,
-    required this.date,
   }) : super(key: key);
 
   @override
@@ -81,7 +57,7 @@ class GuestItemDetailsPage extends StatelessWidget {
               height: 250,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: NetworkImage(image_Url),
+                  image: NetworkImage(data[AppText.image]),
                   fit: BoxFit.cover,
                 ),
                 borderRadius: BorderRadius.circular(10),
@@ -101,15 +77,23 @@ class GuestItemDetailsPage extends StatelessWidget {
                       text: 'Description',
                     ),
                     SizedBox(height: 20),
-                    CustomRow(label: 'Category', value: category),
-                    CustomRow(label: 'Name', value: name),
-                    CustomRow(label: 'Brand', value: brand),
-                    CustomRow(label: 'Color', value: color),
-                    CustomRow(label: 'Quantity', value: quantity.toString()),
-                    CustomRow(label: 'Company Name', value: companyName),
-                    CustomRow(label: 'Address', value: address),
-                    CustomRow(label: 'Phone No', value: phoneNo),
-                    CustomRow(label: 'Country', value: companyCountry),
+                    CustomRow(label: 'Category', value: data[AppText.category]),
+                    CustomRow(label: 'Name', value: data[AppText.name]),
+                    CustomRow(label: 'Brand', value: data[AppText.brand]),
+                    CustomRow(label: 'Color', value: data[AppText.color]),
+                    CustomRow(
+                        label: 'Quantity',
+                        value: data[AppText.quantity].toString()),
+                    CustomRow(
+                        label: 'Company Name',
+                        value: data[AppText.companyName].toString()),
+                    CustomRow(
+                        label: 'Address', value: data[AppText.companyAddress]),
+                    CustomRow(
+                        label: 'Phone No',
+                        value: data[AppText.companyPhoneNumber]),
+                    CustomRow(
+                        label: 'Country', value: data[AppText.companyCountry]),
                     const CustomText(
                       letterSpacing: 1,
                       size: 16,
@@ -126,7 +110,8 @@ class GuestItemDetailsPage extends StatelessWidget {
                           size: 16,
                           weight: FontWeight.w300,
                           color: AppColors.black,
-                          text: formatDateWithoutTime(date),
+                          text: formatDateWithoutTime(
+                              (data[AppText.date] as Timestamp).toDate()),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 5, right: 5),
@@ -142,7 +127,7 @@ class GuestItemDetailsPage extends StatelessWidget {
                             size: 16,
                             weight: FontWeight.w300,
                             color: AppColors.black,
-                            text: time),
+                            text: data[AppText.time]),
                       ],
                     ),
                     SizedBox(height: 10),
@@ -162,7 +147,7 @@ class GuestItemDetailsPage extends StatelessWidget {
                         maxLine: 20,
                         weight: FontWeight.w300,
                         color: AppColors.black,
-                        text: description),
+                        text: data[AppText.description]),
                   ]),
             ),
             const SizedBox(height: 30),

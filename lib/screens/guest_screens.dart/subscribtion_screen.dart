@@ -93,7 +93,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 100),
+            const  Spacer(),
             CustomButton(
               btnColor: AppColors.green,
               textColor: Colors.white,
@@ -101,6 +101,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
               onPressed: () async {},
               width: MediaQuery.sizeOf(context).width,
             ),
+            SizedBox(height: 20),
           ],
         ),
       ),

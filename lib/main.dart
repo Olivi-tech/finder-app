@@ -8,7 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:finder_app/providers/providers.dart';
 import 'package:finder_app/routs.dart';
 import 'package:finder_app/screens/screens.dart';
-
+import 'constants/constants.dart';
 import 'screens/guest_screens.dart/guest_screens.dart';
 
 void main() async {
@@ -16,7 +16,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
   runApp(MyApp());
 }
 
@@ -55,13 +54,13 @@ class AuthenticationWrapper extends StatelessWidget {
     if (user != null) {
       return FutureBuilder<DocumentSnapshot>(
         future: FirebaseFirestore.instance
-            .collection('userData')
+            .collection(AppText.userDataCollection)
             .doc(user.uid)
             .get(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData && snapshot.data?.exists == true) {
-              final roleMode = snapshot.data?.get('roleMode') ?? '';
+              final roleMode = snapshot.data?.get(AppText.roleModel) ?? '';
 
               if (roleMode == 'User') {
                 return GuestHomeScreen();
