@@ -46,7 +46,6 @@ class VerifyScreenState extends State<VerifyScreen> {
     fetchUserData();
   }
 
-  bool isLoggingOut = false;
   @override
   Widget build(BuildContext context) {
     return SafeArea(

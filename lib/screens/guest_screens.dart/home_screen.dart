@@ -184,7 +184,7 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
                             height: 80,
                             decoration: BoxDecoration(
                               shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.circular(10.0),
+                              borderRadius: BorderRadius.circular(100),
                               image: DecorationImage(
                                 fit: BoxFit.cover,
                                 image: AssetImage(AppImages.companylogo),
@@ -372,7 +372,12 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
                                   );
                                 },
                               )
-                            : Center(child: Text('No result found')))
+                            : Align(
+                                alignment: Alignment.topCenter,
+                                child: Padding(
+                                padding: const EdgeInsets.only(top: 100),
+                                  child: Text('No result found'),
+                                )))
                         : (filteredItems.isNotEmpty
                             ? ListView.builder(
                                 shrinkWrap: true,
@@ -424,9 +429,19 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
                                   );
                                 },
                               )
-                            : Center(child: Text('No result found'))))
+                            : Align(
+                                alignment: Alignment.topCenter,
+                                child: Padding(
+                                 padding: const EdgeInsets.only(top: 100),
+                                  child: Text('No result found'),
+                                ))))
                     : getFilteredItems(selectedCategory).isEmpty
-                        ? Center(child: Text('No result found'))
+                        ? Align(
+                            alignment: Alignment.topCenter,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 100),
+                              child: Text('No result found'),
+                            ))
                         : ListView.builder(
                             shrinkWrap: true,
                             scrollDirection: Axis.vertical,

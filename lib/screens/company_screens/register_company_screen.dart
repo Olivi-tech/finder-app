@@ -174,6 +174,7 @@ class _RegisterCompanyScreenState extends State<RegisterCompanyScreen> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
+                    initialCountryCode: 'SA',
                     languageCode: "en",
                     onChanged: (phone) {
                       print(phone.completeNumber);
@@ -235,7 +236,8 @@ class _RegisterCompanyScreenState extends State<RegisterCompanyScreen> {
                     textColor: Colors.white,
                     text: 'Register',
                     onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
+                      if (_formKey.currentState!.validate() &&
+                          phoneNoController.text.isNotEmpty) {
                         FocusScope.of(context).unfocus();
                         String roleMode = 'Company';
                         try {
@@ -255,6 +257,12 @@ class _RegisterCompanyScreenState extends State<RegisterCompanyScreen> {
                         } catch (e) {
                           print('Registration failed: $e');
                         }
+                      } else {
+                        CustomSnackBar.show(
+                          context: context,
+                          text: 'Please fill all fields.',
+                          backgroundColor: AppColors.red,
+                        );
                       }
                     },
                     width: MediaQuery.sizeOf(context).width,

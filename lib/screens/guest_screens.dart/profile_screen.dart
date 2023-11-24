@@ -24,20 +24,19 @@ class ProfileScreenState extends State<ProfileScreen> {
   Future<void> fetchUserData() async {
     try {
       String? uid = FirebaseAuth.instance.currentUser?.uid;
-      DocumentSnapshot dataSnapshot = await FirebaseFirestore.instance
+      DocumentSnapshot companySnapshot = await FirebaseFirestore.instance
           .collection('userData')
           .doc(uid)
           .get();
 
-      if (dataSnapshot.exists) {
+      if (companySnapshot.exists) {
         setState(() {
-          name = dataSnapshot['name'];
-          address = dataSnapshot['address'];
-          phoneNo = dataSnapshot['phoneNo'];
-          country = dataSnapshot['country'];
-          email = dataSnapshot['email'];
-          nationality = dataSnapshot['nationality'];
-          image = dataSnapshot['image'];
+          name = companySnapshot['name'];
+          address = companySnapshot['address'];
+          phoneNo = companySnapshot['phoneNo'];
+          email = companySnapshot['email'];
+          country = companySnapshot['country'];
+          image = companySnapshot['image'];
         });
       }
     } catch (error) {}
@@ -46,6 +45,7 @@ class ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
+    fetchUserData();
   }
 
   @override
@@ -64,73 +64,54 @@ class ProfileScreenState extends State<ProfileScreen> {
             },
           ),
         ),
-        body: FutureBuilder(
-          future: fetchUserData(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                  child: CupertinoActivityIndicator(
-                color: AppColors.blue,
-                radius: 20,
-              ));
-            } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            } else {
-              return SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                        height: 152,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage(image),
-                            fit: BoxFit.cover,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      const CustomText(
-                        text: 'Profile Details',
-                        letterSpacing: 1,
-                        color: AppColors.black,
-                        size: 20,
-                        weight: FontWeight.w500,
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      CustomUserInfoRow(
-                        label: 'Company Name',
-                        value: name,
-                      ),
-                      Divider(color: Colors.grey),
-                      CustomUserInfoRow(label: 'Phone no', value: phoneNo),
-                      Divider(color: Colors.grey),
-                      CustomUserInfoRow(label: 'Email', value: email),
-                      Divider(color: Colors.grey),
-                      CustomUserInfoRow(label: 'Nationality', value: country),
-                      Divider(color: Colors.grey),
-                      CustomUserInfoRow(
-                          label: 'ID/ Passport # ', value: address),
-                      SizedBox(
-                        height: 40,
-                      ),
-                    ],
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const CustomText(
+                  text: 'Profile Details',
+                  letterSpacing: 1,
+                  color: AppColors.black,
+                  size: 20,
+                  weight: FontWeight.w600,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  height: 152,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(image),
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-              );
-            }
-          },
+                SizedBox(
+                  height: 20,
+                ),
+                CustomUserInfoRow(
+                  label: 'Company Name',
+                  value: name,
+                ),
+                Divider(color: Colors.grey),
+                CustomUserInfoRow(label: 'Phone no', value: phoneNo),
+                Divider(color: Colors.grey),
+                CustomUserInfoRow(label: 'Email', value: email),
+                Divider(color: Colors.grey),
+                CustomUserInfoRow(label: 'Nationality', value: country),
+                Divider(color: Colors.grey),
+                CustomUserInfoRow(label: 'ID/ Passport # ', value: address),
+                SizedBox(
+                  height: 40,
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

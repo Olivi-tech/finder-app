@@ -48,7 +48,7 @@ class _GuestSettingScreenState extends State<GuestSettingScreen> {
           ListTile(
             leading: Icon(
               Icons.person,
-              color: AppColors.blue,
+              color: AppColors.green,
             ),
             title: CustomText(
               text: 'Profile',
@@ -69,7 +69,7 @@ class _GuestSettingScreenState extends State<GuestSettingScreen> {
           ListTile(
             leading: Icon(
               Icons.credit_card,
-              color: AppColors.black,
+              color: AppColors.green,
             ),
             title: CustomText(
               text: 'Subscription',

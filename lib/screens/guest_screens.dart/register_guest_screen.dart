@@ -243,13 +243,15 @@ class _RegisterAsGuestScreenState extends State<RegisterAsGuestScreen> {
                     textColor: Colors.white,
                     text: 'Register',
                     onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
+                      if (_formKey.currentState!.validate() &&
+                          image != null &&
+                          phoneController.text.isNotEmpty) {
                         FocusScope.of(context).unfocus();
                         String roleMode = 'User';
                         try {
                           await DbService_auth.registerUser(
                             context,
-                             image!,
+                            image!,
                             nameController.text,
                             emailController.text,
                             passwordController.text,
@@ -261,6 +263,12 @@ class _RegisterAsGuestScreenState extends State<RegisterAsGuestScreen> {
                         } catch (e) {
                           print('Registration failed: $e');
                         }
+                      } else {
+                        CustomSnackBar.show(
+                          context: context,
+                          text: 'Please fill all fields.',
+                          backgroundColor: AppColors.red,
+                        );
                       }
                     },
                     width: MediaQuery.sizeOf(context).width,
