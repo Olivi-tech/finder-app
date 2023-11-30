@@ -1,14 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finder_app/constants/constants.dart';
+import 'package:finder_app/db_servies/cloud_services.dart';
 import 'package:finder_app/model/item_model.dart';
 import 'package:finder_app/utils/app_routs.dart';
+import 'package:finder_app/utils/app_utils.dart';
 import 'package:finder_app/widgets/widgets.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
-
 import 'item_details_screen.dart';
 
 class GuestHomeScreen extends StatefulWidget {
@@ -19,43 +18,13 @@ class GuestHomeScreen extends StatefulWidget {
 }
 
 class GuestHomeScreenState extends State<GuestHomeScreen> {
+
+  TextEditingController searchController = TextEditingController();
+
   List<ItemData> items = [];
   String name = '';
   String selectedCategory = '';
 
-  TextEditingController searchController = TextEditingController();
-  late CollectionReference collection;
-
-  Future<void> fetchItemData() async {
-    final QuerySnapshot itemDataSnapshot = await FirebaseFirestore.instance
-        .collection('companies')
-        .doc('items')
-        .collection('item_data')
-        .get();
-
-    final List<ItemData> fetchedItems =
-        itemDataSnapshot.docs.map((doc) => ItemData.fromDocument(doc)).toList();
-
-    setState(() {
-      items = fetchedItems;
-    });
-  }
-
-  Future<void> fetchUserData() async {
-    try {
-      String? uid = FirebaseAuth.instance.currentUser?.uid;
-      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
-          .collection('userData')
-          .doc(uid)
-          .get();
-
-      if (userSnapshot.exists) {
-        setState(() {
-          name = userSnapshot['name'];
-        });
-      }
-    } catch (error) {}
-  }
 
 
 
@@ -77,16 +46,17 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-   collection = FirebaseFirestore.instance.collection(AppText.itemCollection);
-  }
 
   void showAllItems() {
     setState(() {
       selectedCategory = '';
     });
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -142,7 +112,6 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
           ),
         ],
       ),
-
       body: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
         child: ListView(
@@ -319,9 +288,9 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
               height: 10,
             ),
             StreamBuilder(
-              stream: collection.snapshots(),
+              stream: CloudServices.getItemCollection().snapshots(),
               builder: (context, snapshot) {
-                if(snapshot.hasData) {
+                if (snapshot.hasData) {
                   var data = snapshot.data!.docs;
                   return ListView.builder(
                     shrinkWrap: true,
@@ -335,9 +304,10 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
                           imagePath: data[index][AppText.image],
                           containerText: data[index][AppText.name],
                           timeText: data[index][AppText.time],
-                          locationText:data[index][AppText.companyAddress],
-                          dateText: formatDateWithoutTime((data[index][AppText.date] as Timestamp)
-                              .toDate()),
+                          locationText: data[index][AppText.companyAddress],
+                          dateText: AppUtils.formatDateWithoutTime(
+                              (data[index][AppText.date] as Timestamp)
+                                  .toDate()),
                           describtionText: data[index][AppText.description],
                           onTap: () {
                             Navigator.push(
@@ -345,7 +315,7 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
                               PageTransition(
                                 type: PageTransitionType.rightToLeft,
                                 child: GuestItemDetailsPage(
-                                 data:  data[index],
+                                  data: data[index],
                                 ),
                               ),
                             );
@@ -358,7 +328,7 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
                       );
                     },
                   );
-                }else{
+                } else {
                   return const CupertinoActivityIndicator();
                 }
               },
@@ -370,7 +340,3 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
   }
 }
 
-String formatDateWithoutTime(DateTime dateTime) {
-  final formatter = DateFormat('yyyy-MM-dd');
-  return formatter.format(dateTime);
-}

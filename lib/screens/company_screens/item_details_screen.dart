@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finder_app/constants/constants.dart';
+import 'package:finder_app/utils/app_utils.dart';
 import 'package:finder_app/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class ItemDetailsPage extends StatelessWidget {
   final data;
@@ -83,9 +83,12 @@ class ItemDetailsPage extends StatelessWidget {
                       CustomRow(
                           label: 'Company Name',
                           value: data[AppText.companyName]),
-                      CustomRow(label: 'Address', value: data[AppText.companyAddress]),
                       CustomRow(
-                          label: 'Phone no', value: data[AppText.companyPhoneNumber]),
+                          label: 'Address',
+                          value: data[AppText.companyAddress]),
+                      CustomRow(
+                          label: 'Phone no',
+                          value: data[AppText.companyPhoneNumber]),
                       const CustomText(
                         letterSpacing: 1,
                         size: 16,
@@ -102,7 +105,7 @@ class ItemDetailsPage extends StatelessWidget {
                               size: 16,
                               weight: FontWeight.w300,
                               color: AppColors.black,
-                              text: formatDateWithoutTime(
+                              text: AppUtils.formatDateWithoutTime(
                                   (data[AppText.date] as Timestamp).toDate())),
                           Padding(
                             padding: const EdgeInsets.only(left: 5, right: 5),
@@ -147,9 +150,4 @@ class ItemDetailsPage extends StatelessWidget {
       ),
     );
   }
-}
-
-String formatDateWithoutTime(DateTime dateTime) {
-  final formatter = DateFormat('yyyy-MM-dd');
-  return formatter.format(dateTime);
 }

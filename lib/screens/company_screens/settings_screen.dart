@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:finder_app/screens/company_screens/company_screens.dart';
 import 'package:finder_app/widgets/custom_profile_details_row.dart';
 import 'package:finder_app/widgets/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../constants/constants.dart';
+import '../screens.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -15,24 +15,17 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-
   String? uid = FirebaseAuth.instance.currentUser?.uid;
 
   late CollectionReference collection;
 
-
   @override
   void initState() {
     super.initState();
-    //fetchCompanyData();
 
-    collection =  FirebaseFirestore.instance
-        .collection(AppText.userDataCollection);
-
+    collection =
+        FirebaseFirestore.instance.collection(AppText.userDataCollection);
   }
-
-
-  bool isLoggingOut = false;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +49,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: StreamBuilder(
                 stream: collection.doc(uid!).snapshots(),
                 builder: (context, snapshot) {
-                  if(snapshot.hasData) {
+                  if (snapshot.hasData) {
                     return Column(
                       children: [
                         Center(
@@ -81,16 +74,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                         Divider(color: Colors.grey),
                         CustomUserInfoRow(
-                            label: 'CR Number', value: snapshot.data![AppText.crNumber],),
+                          label: 'CR Number',
+                          value: snapshot.data![AppText.crNumber],
+                        ),
                         Divider(color: Colors.grey),
                         CustomUserInfoRow(
-                            label: 'Phone Number', value: snapshot.data![AppText.phoneNumber],),
+                          label: 'Phone Number',
+                          value: snapshot.data![AppText.phoneNumber],
+                        ),
                         Divider(color: Colors.grey),
                         CustomUserInfoRow(
-                            label: 'Country', value: snapshot.data![AppText.country],),
+                          label: 'Country',
+                          value: snapshot.data![AppText.country],
+                        ),
                         Divider(color: Colors.grey),
                         CustomUserInfoRow(
-                            label: 'Address', value: snapshot.data![AppText.address],),
+                          label: 'Address',
+                          value: snapshot.data![AppText.address],
+                        ),
                         SizedBox(
                           height: 40,
                         ),
@@ -98,33 +99,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           padding: const EdgeInsets.all(30),
                           child: GestureDetector(
                             onTap: () async {
-                              try {
-                                setState(() {
-                                  isLoggingOut = true;
-                                });
-                                await FirebaseAuth.instance.signOut();
-                                SnackBar(
-                                  backgroundColor: AppColors.red,
-                                  content: Text(
-                                    'logout Sucessfully',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  duration: Duration(seconds: 2),
-                                );
+                              await FirebaseAuth.instance.signOut();
+                              SnackBar(
+                                backgroundColor: AppColors.red,
+                                content: Text(
+                                  'logout Successfully',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                duration: Duration(seconds: 2),
+                              );
 
-                                Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => LoginScreen()),
-                                      (Route<dynamic> route) => false,
-                                );
-                              } catch (e) {
-                                print("Error during logout: $e");
-                              } finally {
-                                setState(() {
-                                  isLoggingOut = false;
-                                });
-                              }
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LoginScreen()),
+                                (Route<dynamic> route) => false,
+                              );
                             },
                             child: Container(
                               height: 40,
@@ -134,14 +124,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 color: AppColors.green,
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  isLoggingOut
-                                      ? CupertinoActivityIndicator(
-                                    color: AppColors.red,
-                                  )
-                                      : Icon(
+                                  Icon(
                                     Icons.logout,
                                     size: 16,
                                     color: AppColors.red,
@@ -160,7 +146,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         )
                       ],
                     );
-                  }else{
+                  } else {
                     return CupertinoActivityIndicator();
                   }
                 },

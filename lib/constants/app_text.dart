@@ -97,24 +97,22 @@ class AppText {
   static const String registerText =
       'Enter essential details below to register and amplify your presence on Finder.';
 
-
   ///  firebase collection
-  static const String userDataCollection =  'user_data';
-  static const String itemCollection =  'item';
-
+  static const String userDataCollection = 'user_data';
+  static const String itemCollection = 'item';
 
   ///  data const
-  static const String  name = 'name';
-  static const String  category = 'category';
-  static const String  email = 'email';
-  static const String  password = 'password';
-  static const String  phoneNumber = 'phone_number';
-  static const String  country = 'country';
-  static const String  city = 'city';
-  static const String  address = 'address';
-  static const String  roleModel = 'role_model';
-  static const String  crNumber = 'cr_number';
-  static const String  image = 'image';
+  static const String name = 'name';
+  static const String category = 'category';
+  static const String email = 'email';
+  static const String password = 'password';
+  static const String phoneNumber = 'phone_number';
+  static const String country = 'country';
+  static const String city = 'city';
+  static const String address = 'address';
+  static const String roleModel = 'role_model';
+  static const String crNumber = 'cr_number';
+  static const String image = 'image';
   static const String itemID = 'item_id';
   static const String brand = 'brand';
   static const String quantity = 'quantity';
@@ -126,6 +124,4 @@ class AppText {
   static const String companyAddress = 'company_address';
   static const String companyCountry = 'company_country';
   static const String companyPhoneNumber = 'company_phone_number';
-
-
 }

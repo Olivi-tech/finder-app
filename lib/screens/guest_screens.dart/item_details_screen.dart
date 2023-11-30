@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finder_app/constants/constants.dart';
 import 'package:finder_app/screens/guest_screens.dart/verify_screen.dart';
+import 'package:finder_app/utils/app_utils.dart';
 import 'package:finder_app/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 
 class GuestItemDetailsPage extends StatelessWidget {
@@ -110,7 +110,7 @@ class GuestItemDetailsPage extends StatelessWidget {
                           size: 16,
                           weight: FontWeight.w300,
                           color: AppColors.black,
-                          text: formatDateWithoutTime(
+                          text: AppUtils.formatDateWithoutTime(
                               (data[AppText.date] as Timestamp).toDate()),
                         ),
                         Padding(
@@ -229,7 +229,3 @@ class GuestItemDetailsPage extends StatelessWidget {
   }
 }
 
-String formatDateWithoutTime(DateTime dateTime) {
-  final formatter = DateFormat('yyyy-MM-dd');
-  return formatter.format(dateTime);
-}

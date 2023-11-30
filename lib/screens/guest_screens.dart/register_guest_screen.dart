@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:finder_app/constants/constants.dart';
 import 'package:finder_app/db_servies/db_servies.dart';
 import 'package:finder_app/providers/providers.dart';
@@ -9,7 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:intl_phone_field/phone_number.dart';
 import 'package:provider/provider.dart';
-
 import 'package:image_picker/image_picker.dart';
 
 class RegisterAsGuestScreen extends StatefulWidget {

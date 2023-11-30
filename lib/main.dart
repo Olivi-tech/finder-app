@@ -1,5 +1,7 @@
+import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finder_app/firebase_options.dart';
+import 'package:finder_app/providers/image_picker_provider.dart';
 import 'package:finder_app/screens/company_screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +31,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<PasswordIconToggleProvider>(
           create: (context) => PasswordIconToggleProvider(),
+        ),
+        ChangeNotifierProvider<ImagePickerProvider>(
+          create: (context) => ImagePickerProvider(),
         ),
       ],
       child: MaterialApp(
@@ -61,19 +66,19 @@ class AuthenticationWrapper extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData && snapshot.data?.exists == true) {
               final roleMode = snapshot.data?.get(AppText.roleModel) ?? '';
-
               if (roleMode == 'User') {
                 return GuestHomeScreen();
+              } else {
+                return CompanyHomeScreen();
               }
-            } else {
-              return CompanyHomeScreen();
             }
           }
-
           return SplashScreen();
         },
       );
     } else {
+
+      log('splash screen ===   call ///////');
       return SplashScreen();
     }
   }
