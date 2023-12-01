@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 
 class CustomSearchField extends StatelessWidget {
   final String hintText;
+  final Widget? filterIcon;
   final ValueChanged<String>? onChanged;
   final TextEditingController controller;
   const CustomSearchField({
     Key? key,
     required this.hintText,
     this.onChanged,
+    this.filterIcon,
     required this.controller,
   }) : super(key: key);
 
@@ -23,6 +25,7 @@ class CustomSearchField extends StatelessWidget {
         filled: true,
         fillColor: Colors.transparent,
         suffixIcon: Icon(Icons.search, color: AppColors.grey),
+        prefixIcon: filterIcon,
         hintText: hintText,
         hintStyle: TextStyle(
           color: Colors.grey,

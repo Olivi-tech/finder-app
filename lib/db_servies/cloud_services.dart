@@ -19,7 +19,7 @@ class CloudServices {
     return collection;
   }
 
-  static Future<DocumentSnapshot> fetchCompanyData() async {
+  static Future<DocumentSnapshot> fetchUserData() async {
     String? uid = FirebaseAuth.instance.currentUser?.uid;
     DocumentSnapshot companySnapshot =
         await _fireStore.collection(AppText.userDataCollection).doc(uid).get();
@@ -32,6 +32,7 @@ class CloudServices {
     required String category,
     required String name,
     required String brand,
+    required String series,
     required int quantity,
     required String color,
     required String date,
@@ -47,19 +48,21 @@ class CloudServices {
       final imageUrl = await storageReference.getDownloadURL();
       final itemId = DateTime.now().millisecondsSinceEpoch.toString() +
           Random().nextInt(999).toString();
-      var data = await fetchCompanyData();
+      var data = await fetchUserData();
 
       var itemModel = ItemData(
         itemId: itemId,
         time: time,
         name: name,
+        series: series,
         color: color,
         brand: brand,
         category: category,
-        companyAddress: data[AppText.address],
+        companyCity: data[AppText.city],
         companyCountry: data[AppText.country],
         companyName: data[AppText.name],
         companyPhone: data[AppText.phoneNumber],
+        companyCategory:  data[AppText.category],
         date: DateTime.parse(date),
         description: description,
         imageUrl: imageUrl,

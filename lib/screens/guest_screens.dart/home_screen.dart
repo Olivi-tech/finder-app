@@ -2,12 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finder_app/constants/constants.dart';
 import 'package:finder_app/db_servies/cloud_services.dart';
 import 'package:finder_app/model/item_model.dart';
+import 'package:finder_app/screens/guest_screens.dart/filter_screen.dart';
 import 'package:finder_app/utils/app_routs.dart';
 import 'package:finder_app/utils/app_utils.dart';
 import 'package:finder_app/widgets/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
+import '../../providers/check_list_filter_provider.dart';
 import 'item_details_screen.dart';
 
 class GuestHomeScreen extends StatefulWidget {
@@ -18,15 +21,10 @@ class GuestHomeScreen extends StatefulWidget {
 }
 
 class GuestHomeScreenState extends State<GuestHomeScreen> {
-
   TextEditingController searchController = TextEditingController();
 
   List<ItemData> items = [];
-  String name = '';
   String selectedCategory = '';
-
-
-
 
   List<ItemData> getFilteredItems(String category) {
     return items
@@ -34,8 +32,6 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
             item.category.toLowerCase().startsWith(category.toLowerCase()))
         .toList();
   }
-
-  late List<ItemData> filteredItems = [];
 
   void _filterItems(String query) {
     setState(() {
@@ -46,6 +42,7 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
     });
   }
 
+  late List<ItemData> filteredItems = [];
 
   void showAllItems() {
     setState(() {
@@ -85,12 +82,21 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
             SizedBox(
               width: 10,
             ),
-            CustomText(
-              text: name,
-              letterSpacing: 1,
-              color: AppColors.black,
-              size: 16,
-              weight: FontWeight.w400,
+            FutureBuilder(
+              future: CloudServices.fetchUserData(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return CustomText(
+                    text: snapshot.data![AppText.name],
+                    letterSpacing: 1,
+                    color: AppColors.black,
+                    size: 16,
+                    weight: FontWeight.w400,
+                  );
+                } else {
+                  return const SizedBox();
+                }
+              },
             ),
           ],
         ),
@@ -171,6 +177,19 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
             Padding(
               padding: EdgeInsets.only(left: 5, top: 10, bottom: 20, right: 5),
               child: CustomSearchField(
+                filterIcon: InkWell(
+                    onTap: () {
+                      Provider.of<CheckListFilterProvider>(context,
+                              listen: false)
+                          .clear();
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                            type: PageTransitionType.rightToLeft,
+                            child: FilterItemScreen()),
+                      );
+                    },
+                    child: Icon(Icons.filter_alt, color: AppColors.grey)),
                 controller: searchController,
                 hintText: 'Search',
                 onChanged: (query) {
@@ -190,7 +209,7 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
                     weight: FontWeight.w600,
                   ),
                   GestureDetector(
-                    onTap: showAllItems,
+                    onTap: () {},
                     child: Container(
                       height: 30,
                       width: 100,
@@ -304,11 +323,11 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
                           imagePath: data[index][AppText.image],
                           containerText: data[index][AppText.name],
                           timeText: data[index][AppText.time],
-                          locationText: data[index][AppText.companyAddress],
+                          locationText: data[index][AppText.companyCountry],
                           dateText: AppUtils.formatDateWithoutTime(
                               (data[index][AppText.date] as Timestamp)
                                   .toDate()),
-                          describtionText: data[index][AppText.description],
+                          descriptionText: data[index][AppText.description],
                           onTap: () {
                             Navigator.push(
                               context,
@@ -319,10 +338,6 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
                                 ),
                               ),
                             );
-                          },
-                          onTapContact: () {
-                            Navigator.pushNamed(
-                                context, AppRoutes.guestContact);
                           },
                         ),
                       );
@@ -339,4 +354,3 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
     );
   }
 }
-

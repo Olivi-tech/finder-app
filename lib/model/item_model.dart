@@ -8,13 +8,15 @@ class ItemData {
   final String category;
   final String name;
   final String brand;
+  final String series;
   final int quantity;
   final String color;
   final DateTime date;
   final String time;
   final String description;
   final String companyName;
-  final String companyAddress;
+  final String companyCity;
+  final String companyCategory;
   final String companyCountry;
   final String companyPhone;
 
@@ -23,6 +25,7 @@ class ItemData {
     required this.date,
     required this.category,
     required this.brand,
+    required this.series,
     required this.description,
     required this.itemId,
     required this.name,
@@ -30,7 +33,8 @@ class ItemData {
     required this.time,
     required this.color,
     required this.companyName,
-    required this.companyAddress,
+    required this.companyCity,
+    required this.companyCategory,
     required this.companyCountry,
     required this.companyPhone,
   });
@@ -41,6 +45,8 @@ class ItemData {
     DateTime date = (data[AppText.date] as Timestamp).toDate();
 
     return ItemData(
+      companyCategory: data[AppText.companyCategory] ?? '',
+      series: data[AppText.series] ?? '',
       itemId: data[AppText.itemID] ?? '',
       name: data[AppText.name] ?? '',
       imageUrl: data[AppText.image] ?? '',
@@ -52,7 +58,7 @@ class ItemData {
       brand: data[AppText.brand] ?? '',
       category: data[AppText.category] ?? '',
       companyName: data[AppText.companyName] ?? '',
-      companyAddress: data[AppText.companyAddress] ?? '',
+      companyCity: data[AppText.companyCity] ?? '',
       companyCountry: data[AppText.companyCountry] ?? '',
       companyPhone: data[AppText.companyPhoneNumber] ?? '',
     );
@@ -60,6 +66,8 @@ class ItemData {
 
   Map<String, dynamic> toJson() {
     return {
+      AppText.companyCategory :  companyCategory,
+      AppText.series :  series,
       AppText.itemID: itemId,
       AppText.image: imageUrl,
       AppText.category: category,
@@ -71,7 +79,7 @@ class ItemData {
       AppText.time: time,
       AppText.description: description,
       AppText.companyName: companyName,
-      AppText.companyAddress: companyAddress,
+      AppText.companyCity: companyCity,
       AppText.companyCountry: companyCountry,
       AppText.companyPhoneNumber: companyPhone,
     };

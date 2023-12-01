@@ -9,6 +9,7 @@ class ImageContainer extends StatelessWidget {
   final String timeText;
   final String dateText;
   final VoidCallback onTap;
+
   const ImageContainer({
     Key? key,
     required this.imagePath,
@@ -18,6 +19,7 @@ class ImageContainer extends StatelessWidget {
     required this.onTap,
     required this.dateText,
   });
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -69,6 +71,8 @@ class ImageContainer extends StatelessWidget {
                           top: 8, left: 5, bottom: 10, right: 18),
                       child: Text(
                         containerText,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -159,24 +163,23 @@ class ImageContainer extends StatelessWidget {
 class PostContainer extends StatelessWidget {
   final String imagePath;
   final String containerText;
-  final String describtionText;
-
+  final String descriptionText;
   final String locationText;
   final String timeText;
   final String dateText;
   final VoidCallback onTap;
-  final VoidCallback onTapContact;
+
   const PostContainer({
     Key? key,
     required this.imagePath,
     required this.containerText,
     required this.timeText,
     required this.onTap,
-    required this.describtionText,
-    required this.onTapContact,
+    required this.descriptionText,
     required this.locationText,
     required this.dateText,
   });
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -227,7 +230,7 @@ class PostContainer extends StatelessWidget {
                     height: 30,
                     width: 200,
                     child: Text(
-                      describtionText,
+                      descriptionText,
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w300,

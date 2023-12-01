@@ -48,6 +48,7 @@ dependencies:
   flutter_svg: ^2.0.9
   page_transition: ^2.0.9
   shared_preferences: ^2.2.2
+  country_picker: ^2.0.22
 
 
 dev_dependencies:

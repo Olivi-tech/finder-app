@@ -114,6 +114,7 @@ class AppText {
   static const String crNumber = 'cr_number';
   static const String image = 'image';
   static const String itemID = 'item_id';
+  static const String series = 'series';
   static const String brand = 'brand';
   static const String quantity = 'quantity';
   static const String color = 'color';
@@ -122,6 +123,24 @@ class AppText {
   static const String description = 'description';
   static const String companyName = 'company_name';
   static const String companyAddress = 'company_address';
+  static const String companyCategory = 'company_category';
+  static const String companyCity = 'company_city';
   static const String companyCountry = 'company_country';
   static const String companyPhoneNumber = 'company_phone_number';
+
+
+
+  /// filter check ////
+
+  static const String checkItemCat = 'check_item_cat';
+  static const String checkItemSubCat = 'check_item_sub_cat';
+  static const String checkDate =  'date';
+  static const String checkBrand =  'brand';
+  static const String checkSeries =  'series';
+  static const String checkColor =  'color';
+  static const String checkCountry =  'country';
+  static const String checkCity =  'city';
+  static const String checkComCat =  'com_cat';
+  static const String checkComName =  'com_name';
+
 }

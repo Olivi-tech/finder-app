@@ -26,7 +26,7 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: CloudServices.fetchCompanyData(),
+      future: CloudServices.fetchUserData(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           var companyData = snapshot.data!;
@@ -93,7 +93,7 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
                                 child: ImageContainer(
                                   imagePath: data[index][AppText.image],
                                   containerText: data[index][AppText.name],
-                                  locationText: companyData[AppText.address],
+                                  locationText: companyData[AppText.country],
                                   timeText: data[index][AppText.time],
                                   dateText: AppUtils.formatDateWithoutTime(
                                       (data[index][AppText.date] as Timestamp)

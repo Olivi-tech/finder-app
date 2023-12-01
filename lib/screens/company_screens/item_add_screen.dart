@@ -17,6 +17,7 @@ class AddItemScreen extends StatefulWidget {
 
 class _AddItemScreenState extends State<AddItemScreen> {
   TextEditingController nameController = TextEditingController();
+  TextEditingController seriesController = TextEditingController();
   TextEditingController itemCountController = TextEditingController();
   TextEditingController colorController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
@@ -45,6 +46,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
     itemCountController.dispose();
     colorController.dispose();
     descriptionController.dispose();
+    seriesController.dispose();
     super.dispose();
   }
 
@@ -231,6 +233,26 @@ class _AddItemScreenState extends State<AddItemScreen> {
                       height: 10,
                     ),
                     const CustomText(
+                      text: 'Series',
+                      letterSpacing: 1,
+                      size: 16,
+                      weight: FontWeight.w600,
+                    ),
+                    CustomTextField(
+                      hintText: 'Series',
+                      obscureText: false,
+                      controller: seriesController,
+                      validator: (input) {
+                        if (input == null || input.isEmpty) {
+                          return 'Please enter series';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const CustomText(
                       text: 'Color',
                       letterSpacing: 1,
                       size: 16,
@@ -391,6 +413,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                               timeNotifier.value != '') {
                             await CloudServices.uploadDataToFirebase(
                                 context: context,
+                                series: seriesController.text,
                                 image: File(imagePickerProvider.path),
                                 category: categoryController.text,
                                 name: nameController.text,

@@ -81,13 +81,22 @@ class ItemDetailsPage extends StatelessWidget {
                           label: 'Quantity',
                           value: data[AppText.quantity].toString()),
                       CustomRow(
+                          label: 'Series',
+                          value: data[AppText.series].toString()),
+                      CustomRow(
                           label: 'Company Name',
                           value: data[AppText.companyName]),
                       CustomRow(
-                          label: 'Address',
-                          value: data[AppText.companyAddress]),
+                          label: 'Company Category',
+                          value: data[AppText.companyCategory]),
                       CustomRow(
-                          label: 'Phone no',
+                          label: 'Company Country',
+                          value: data[AppText.companyCountry]),
+                      CustomRow(
+                          label: 'Company City',
+                          value: data[AppText.companyCity]),
+                      CustomRow(
+                          label: 'Company Phone no',
                           value: data[AppText.companyPhoneNumber]),
                       const CustomText(
                         letterSpacing: 1,
