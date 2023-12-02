@@ -23,7 +23,8 @@ class _RegisterAsGuestScreenState extends State<RegisterAsGuestScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  TextEditingController nationalityController = TextEditingController();
+  TextEditingController nationalityController =
+      TextEditingController(text: 'Saudi Arabia');
   TextEditingController phoneController = TextEditingController();
   TextEditingController idController = TextEditingController();
 
@@ -156,6 +157,7 @@ class _RegisterAsGuestScreenState extends State<RegisterAsGuestScreen> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
+                    initialCountryCode: 'SA',
                     languageCode: "en",
                     onChanged: (phone) {
                       print(phone.completeNumber);

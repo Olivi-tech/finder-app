@@ -19,7 +19,8 @@ class _RegisterCompanyScreenState extends State<RegisterCompanyScreen> {
   TextEditingController categoryController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  TextEditingController countryController = TextEditingController();
+  TextEditingController countryController =
+      TextEditingController(text: 'Saudi Arabia');
   TextEditingController phoneNoController = TextEditingController();
   TextEditingController cityController = TextEditingController();
   TextEditingController addressController = TextEditingController();
@@ -198,7 +199,7 @@ class _RegisterCompanyScreenState extends State<RegisterCompanyScreen> {
                     controller: countryController,
                     validator: (input) {
                       if (input == null || input.isEmpty) {
-                        return 'Please enter Country';
+                        return 'Enter country';
                       }
                       return null;
                     },
