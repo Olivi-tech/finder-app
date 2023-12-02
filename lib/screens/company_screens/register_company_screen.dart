@@ -27,6 +27,13 @@ class _RegisterCompanyScreenState extends State<RegisterCompanyScreen> {
   final _formKey = GlobalKey<FormState>();
 
   FocusNode focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    countryController.text = 'Saudi Arabia';
+  }
+
   @override
   void dispose() {
     nameController.dispose();

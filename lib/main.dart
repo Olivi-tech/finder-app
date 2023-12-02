@@ -1,8 +1,6 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finder_app/firebase_options.dart';
-import 'package:finder_app/providers/check_list_filter_provider.dart';
-import 'package:finder_app/providers/image_picker_provider.dart';
 import 'package:finder_app/screens/company_screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
