@@ -96,4 +96,51 @@ class AppText {
       'Welcome to Finder App, your trusted companion in locating lost items.';
   static const String registerText =
       'Enter essential details below to register and amplify your presence on Finder.';
+
+  ///  firebase collection
+  static const String userDataCollection = 'user_data';
+  static const String itemCollection = 'item';
+
+  ///  data const
+  static const String name = 'name';
+  static const String category = 'category';
+  static const String email = 'email';
+  static const String password = 'password';
+  static const String phoneNumber = 'phone_number';
+  static const String country = 'country';
+  static const String city = 'city';
+  static const String address = 'address';
+  static const String roleModel = 'role_model';
+  static const String crNumber = 'cr_number';
+  static const String image = 'image';
+  static const String itemID = 'item_id';
+  static const String series = 'series';
+  static const String brand = 'brand';
+  static const String quantity = 'quantity';
+  static const String color = 'color';
+  static const String date = 'date';
+  static const String time = 'time';
+  static const String description = 'description';
+  static const String companyName = 'company_name';
+  static const String companyAddress = 'company_address';
+  static const String companyCategory = 'company_category';
+  static const String companyCity = 'company_city';
+  static const String companyCountry = 'company_country';
+  static const String companyPhoneNumber = 'company_phone_number';
+
+
+
+  /// filter check ////
+
+  static const String checkItemCat = 'check_item_cat';
+  static const String checkItemSubCat = 'check_item_sub_cat';
+  static const String checkDate =  'date';
+  static const String checkBrand =  'brand';
+  static const String checkSeries =  'series';
+  static const String checkColor =  'color';
+  static const String checkCountry =  'country';
+  static const String checkCity =  'city';
+  static const String checkComCat =  'com_cat';
+  static const String checkComName =  'com_name';
+
 }

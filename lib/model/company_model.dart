@@ -1,3 +1,5 @@
+import 'package:finder_app/constants/constants.dart';
+
 class CompanyData {
   final String name;
   final String category;
@@ -22,4 +24,19 @@ class CompanyData {
     required this.city,
     required this.roleMode,
   });
+
+  Map<String, dynamic> toJson() {
+    return {
+      AppText.name: name,
+      AppText.category: category,
+      AppText.crNumber: crNumber,
+      AppText.email: email,
+      AppText.password: password,
+      AppText.phoneNumber: phoneNo,
+      AppText.address: address,
+      AppText.country: country,
+      AppText.city: city,
+      AppText.roleModel: roleMode,
+    };
+  }
 }

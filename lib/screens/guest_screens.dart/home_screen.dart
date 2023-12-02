@@ -1,14 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finder_app/constants/constants.dart';
+import 'package:finder_app/db_servies/cloud_services.dart';
 import 'package:finder_app/model/item_model.dart';
-import 'package:finder_app/screens/guest_screens.dart/item_details_screen.dart';
+import 'package:finder_app/screens/guest_screens.dart/filter_screen.dart';
 import 'package:finder_app/utils/app_routs.dart';
+import 'package:finder_app/utils/app_utils.dart';
 import 'package:finder_app/widgets/widgets.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
+import '../../providers/check_list_filter_provider.dart';
+import 'item_details_screen.dart';
 
 class GuestHomeScreen extends StatefulWidget {
   const GuestHomeScreen({super.key});
@@ -18,41 +21,9 @@ class GuestHomeScreen extends StatefulWidget {
 }
 
 class GuestHomeScreenState extends State<GuestHomeScreen> {
-  List<ItemData> items = [];
-  String name = '';
-
   TextEditingController searchController = TextEditingController();
-  Future<void> fetchItemData() async {
-    final QuerySnapshot itemDataSnapshot = await FirebaseFirestore.instance
-        .collection('companies')
-        .doc('items')
-        .collection('item_data')
-        .get();
 
-    final List<ItemData> fetchedItems =
-        itemDataSnapshot.docs.map((doc) => ItemData.fromDocument(doc)).toList();
-
-    setState(() {
-      items = fetchedItems;
-    });
-  }
-
-  Future<void> fetchUserData() async {
-    try {
-      String? uid = FirebaseAuth.instance.currentUser?.uid;
-      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
-          .collection('userData')
-          .doc(uid)
-          .get();
-
-      if (userSnapshot.exists) {
-        setState(() {
-          name = userSnapshot['name'];
-        });
-      }
-    } catch (error) {}
-  }
-
+  List<ItemData> items = [];
   String selectedCategory = '';
 
   List<ItemData> getFilteredItems(String category) {
@@ -62,7 +33,6 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
         .toList();
   }
 
-  late List<ItemData> filteredItems = [];
   void _filterItems(String query) {
     setState(() {
       filteredItems = items
@@ -72,18 +42,18 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    fetchItemData();
-    fetchUserData();
-    filteredItems = items;
-  }
+  late List<ItemData> filteredItems = [];
 
   void showAllItems() {
     setState(() {
       selectedCategory = '';
     });
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -112,12 +82,21 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
             SizedBox(
               width: 10,
             ),
-            CustomText(
-              text: name,
-              letterSpacing: 1,
-              color: AppColors.black,
-              size: 16,
-              weight: FontWeight.w400,
+            FutureBuilder(
+              future: CloudServices.fetchUserData(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return CustomText(
+                    text: snapshot.data![AppText.name],
+                    letterSpacing: 1,
+                    color: AppColors.black,
+                    size: 16,
+                    weight: FontWeight.w400,
+                  );
+                } else {
+                  return const SizedBox();
+                }
+              },
             ),
           ],
         ),
@@ -139,368 +118,239 @@ class GuestHomeScreenState extends State<GuestHomeScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 8, bottom: 5),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 8,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+      body: Padding(
+        padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+        child: ListView(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 8, bottom: 5),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 8,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomText(
+                          text: 'Find your items here',
+                          color: AppColors.black,
+                          letterSpacing: 1,
+                          size: 22,
+                          weight: FontWeight.w600,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        CustomText(
+                          text:
+                              'We would like to inform you about\nsome lost items that have been \nfound. You can check them out below.',
+                          color: AppColors.black,
+                          size: 12,
+                          weight: FontWeight.w300,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 80,
+                          height: 80,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.circular(100),
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: AssetImage(AppImages.companylogo),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 5, top: 10, bottom: 20, right: 5),
+              child: CustomSearchField(
+                filterIcon: InkWell(
+                    onTap: () {
+                      Provider.of<CheckListFilterProvider>(context,
+                              listen: false)
+                          .clear();
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                            type: PageTransitionType.rightToLeft,
+                            child: FilterItemScreen()),
+                      );
+                    },
+                    child: Icon(Icons.filter_alt, color: AppColors.grey)),
+                controller: searchController,
+                hintText: 'Search',
+                onChanged: (query) {
+                  _filterItems(query);
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10, bottom: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CustomText(
+                    text: 'Categories',
+                    letterSpacing: 1,
+                    size: 20,
+                    weight: FontWeight.w600,
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      height: 30,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: AppColors.blue,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          CustomText(
-                            text: 'Find your items here',
-                            color: AppColors.black,
-                            letterSpacing: 1,
-                            size: 22,
-                            weight: FontWeight.w600,
-                          ),
-                          SizedBox(
-                            height: 10,
+                          const Icon(
+                            Icons.filter,
+                            size: 14,
+                            color: Colors.white,
                           ),
                           CustomText(
-                            text:
-                                'We would like to inform you about\nsome lost items that have been \nfound. You can check them out below.',
-                            color: AppColors.black,
-                            size: 12,
-                            weight: FontWeight.w300,
+                            text: 'Show All',
+                            size: 14,
+                            weight: FontWeight.w500,
+                            letterSpacing: 0.50,
+                            color: Colors.white,
                           ),
                         ],
                       ),
                     ),
-                    Expanded(
-                      flex: 3,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 80,
-                            height: 80,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.circular(100),
-                              image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: AssetImage(AppImages.companylogo),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+                  ),
+                ],
               ),
-              Padding(
-                padding:
-                    EdgeInsets.only(left: 5, top: 10, bottom: 20, right: 5),
-                child: CustomSearchField(
-                  controller: searchController,
-                  hintText: 'Search',
-                  onChanged: (query) {
-                    _filterItems(query);
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10, bottom: 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomText(
-                      text: 'Categories',
-                      letterSpacing: 1,
-                      size: 20,
-                      weight: FontWeight.w600,
-                    ),
-                    GestureDetector(
-                      onTap: showAllItems,
-                      child: Container(
-                        height: 30,
-                        width: 100,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: AppColors.blue,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            const Icon(
-                              Icons.filter,
-                              size: 14,
-                              color: Colors.white,
-                            ),
-                            CustomText(
-                              text: 'Show All',
-                              size: 14,
-                              weight: FontWeight.w500,
-                              letterSpacing: 0.50,
-                              color: Colors.white,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              SizedBox(
-                height: 90,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 9,
-                  itemBuilder: (context, index) {
-                    final images = [
-                      AppImages.electronic,
-                      AppImages.accessories,
-                      AppImages.bag,
-                      AppImages.sports,
-                      AppImages.keyIcon,
-                      AppImages.toy,
-                      AppImages.books,
-                      AppImages.clothes,
-                      AppImages.medicine,
-                    ];
-                    final labels = [
-                      'Electronic',
-                      'Accessories',
-                      'Bag',
-                      'Sport',
-                      'key',
-                      'Toy',
-                      'Book',
-                      'Cloth',
-                      'Medicine',
-                    ];
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            SizedBox(
+              height: 90,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: 9,
+                itemBuilder: (context, index) {
+                  final images = [
+                    AppImages.electronic,
+                    AppImages.accessories,
+                    AppImages.bag,
+                    AppImages.sports,
+                    AppImages.keyIcon,
+                    AppImages.toy,
+                    AppImages.books,
+                    AppImages.clothes,
+                    AppImages.medicine,
+                  ];
+                  final labels = [
+                    'Electronic',
+                    'Accessories',
+                    'Bag',
+                    'Sport',
+                    'key',
+                    'Toy',
+                    'Book',
+                    'Cloth',
+                    'Medicine',
+                  ];
 
-                    return Padding(
-                      padding: EdgeInsets.only(right: 8, bottom: 8, left: 4),
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            selectedCategory = labels[index];
-                          });
-                        },
-                        child: CustomViewContainer(
-                          labelText: labels[index],
-                          imagePath: images[index],
-                        ),
+                  return Padding(
+                    padding: EdgeInsets.only(right: 8, bottom: 8, left: 4),
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedCategory = labels[index];
+                        });
+                      },
+                      child: CustomViewContainer(
+                        labelText: labels[index],
+                        imagePath: images[index],
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
-              SizedBox(
-                height: 10,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 10,
               ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 10,
-                ),
-                child: CustomText(
-                  text: 'Recent Posts',
-                  color: AppColors.black,
-                  letterSpacing: 1,
-                  size: 20,
-                  weight: FontWeight.w600,
-                ),
+              child: CustomText(
+                text: 'Recent Posts',
+                color: AppColors.black,
+                letterSpacing: 1,
+                size: 20,
+                weight: FontWeight.w600,
               ),
-              SizedBox(
-                height: 10,
-              ),
-              SizedBox(
-                height: 550,
-                child: selectedCategory.isEmpty
-                    ? (searchController.text.isEmpty
-                        ? (items.isNotEmpty
-                            ? ListView.builder(
-                                shrinkWrap: true,
-                                scrollDirection: Axis.vertical,
-                                itemCount: items.length,
-                                itemBuilder: (context, index) {
-                                  final item = items[index];
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: PostContainer(
-                                      imagePath: item.imageUrl,
-                                      containerText: item.name,
-                                      describtionText: item.description,
-                                      timeText: item.time,
-                                      locationText: item.companyAddress,
-                                      dateText:
-                                          formatDateWithoutTime(item.date),
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          PageTransition(
-                                            type:
-                                                PageTransitionType.rightToLeft,
-                                            child: GuestItemDetailsPage(
-                                              itemId: item.itemId,
-                                              image_Url: item.imageUrl,
-                                              name: item.name,
-                                              description: item.description,
-                                              color: item.color,
-                                              quantity: item.quantity,
-                                              time: item.time,
-                                              companyName: item.companyName,
-                                              address: item.companyAddress,
-                                              category: item.category,
-                                              brand: item.brand,
-                                              companyCountry:
-                                                  item.companyCountry,
-                                              phoneNo: item.companyPhone,
-                                              date: item.date,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      ontapcontact: () {
-                                        Navigator.pushNamed(
-                                            context, AppRoutes.guestContact);
-                                      },
-                                    ),
-                                  );
-                                },
-                              )
-                            : Align(
-                                alignment: Alignment.topCenter,
-                                child: Padding(
-                                padding: const EdgeInsets.only(top: 100),
-                                  child: Text('No result found'),
-                                )))
-                        : (filteredItems.isNotEmpty
-                            ? ListView.builder(
-                                shrinkWrap: true,
-                                scrollDirection: Axis.vertical,
-                                itemCount: filteredItems.length,
-                                itemBuilder: (context, index) {
-                                  final item = filteredItems[index];
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: PostContainer(
-                                      imagePath: item.imageUrl,
-                                      containerText: item.name,
-                                      describtionText: item.description,
-                                      timeText: item.time,
-                                      locationText: item.companyAddress,
-                                      dateText:
-                                          formatDateWithoutTime(item.date),
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          PageTransition(
-                                            type:
-                                                PageTransitionType.rightToLeft,
-                                            child: GuestItemDetailsPage(
-                                              itemId: item.itemId,
-                                              image_Url: item.imageUrl,
-                                              name: item.name,
-                                              description: item.description,
-                                              color: item.color,
-                                              quantity: item.quantity,
-                                              time: item.time,
-                                              companyName: item.companyName,
-                                              address: item.companyAddress,
-                                              category: item.category,
-                                              brand: item.brand,
-                                              companyCountry:
-                                                  item.companyCountry,
-                                              phoneNo: item.companyPhone,
-                                              date: item.date,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      ontapcontact: () {
-                                        Navigator.pushNamed(
-                                            context, AppRoutes.guestContact);
-                                      },
-                                    ),
-                                  );
-                                },
-                              )
-                            : Align(
-                                alignment: Alignment.topCenter,
-                                child: Padding(
-                                 padding: const EdgeInsets.only(top: 100),
-                                  child: Text('No result found'),
-                                ))))
-                    : getFilteredItems(selectedCategory).isEmpty
-                        ? Align(
-                            alignment: Alignment.topCenter,
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 100),
-                              child: Text('No result found'),
-                            ))
-                        : ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            itemCount:
-                                getFilteredItems(selectedCategory).length,
-                            itemBuilder: (context, index) {
-                              final item =
-                                  getFilteredItems(selectedCategory)[index];
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: PostContainer(
-                                  imagePath: item.imageUrl,
-                                  containerText: item.name,
-                                  timeText: item.time,
-                                  locationText: item.companyAddress,
-                                  dateText: formatDateWithoutTime(item.date),
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      PageTransition(
-                                        type: PageTransitionType.rightToLeft,
-                                        child: GuestItemDetailsPage(
-                                          itemId: item.itemId,
-                                          image_Url: item.imageUrl,
-                                          name: item.name,
-                                          description: item.description,
-                                          color: item.color,
-                                          quantity: item.quantity,
-                                          time: item.time,
-                                          companyName: item.companyName,
-                                          address: item.companyAddress,
-                                          category: item.category,
-                                          brand: item.brand,
-                                          companyCountry: item.companyCountry,
-                                          phoneNo: item.companyPhone,
-                                          date: item.date,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  describtionText: item.description,
-                                  ontapcontact: () {
-                                    Navigator.pushNamed(
-                                        context, AppRoutes.guestContact);
-                                  },
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            StreamBuilder(
+              stream: CloudServices.getItemCollection().snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  var data = snapshot.data!.docs;
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: data.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: PostContainer(
+                          imagePath: data[index][AppText.image],
+                          containerText: data[index][AppText.name],
+                          timeText: data[index][AppText.time],
+                          locationText: data[index][AppText.companyCountry],
+                          dateText: AppUtils.formatDateWithoutTime(
+                              (data[index][AppText.date] as Timestamp)
+                                  .toDate()),
+                          descriptionText: data[index][AppText.description],
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              PageTransition(
+                                type: PageTransitionType.rightToLeft,
+                                child: GuestItemDetailsPage(
+                                  data: data[index],
                                 ),
-                              );
-                            },
-                          ),
-              ),
-            ],
-          ),
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  );
+                } else {
+                  return const CupertinoActivityIndicator();
+                }
+              },
+            ),
+          ],
         ),
       ),
     );
   }
-}
-
-String formatDateWithoutTime(DateTime dateTime) {
-  final formatter = DateFormat('yyyy-MM-dd');
-  return formatter.format(dateTime);
 }

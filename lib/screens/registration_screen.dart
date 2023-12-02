@@ -15,7 +15,6 @@ class _RegisterScreenState extends State<RegisterScreen>
     with TickerProviderStateMixin {
   TextEditingController userNameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
   late final TabController _tabController;
 
   @override

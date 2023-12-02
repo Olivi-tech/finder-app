@@ -1,4 +1,3 @@
-
 import 'package:finder_app/constants/constants.dart';
 import 'package:flutter/material.dart';
 

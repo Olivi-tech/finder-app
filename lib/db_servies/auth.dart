@@ -8,8 +8,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
+import '../constants/constants.dart';
+
 class DbService_auth {
   static FirebaseAuth _auth = FirebaseAuth.instance;
+
   static Future<void> registerCompany(
     BuildContext context,
     String name,
@@ -46,20 +49,9 @@ class DbService_auth {
       );
 
       await FirebaseFirestore.instance
-          .collection('companies')
+          .collection(AppText.userDataCollection)
           .doc(user?.uid)
-          .set({
-        'name': companyData.name,
-        'category': companyData.category,
-        'email': companyData.email,
-        'password': companyData.password,
-        'phoneNo': companyData.phoneNo,
-        'country': companyData.country,
-        'city': companyData.city,
-        'address': companyData.address,
-        'roleMode': companyData.roleMode,
-        'crNumber': companyData.crNumber,
-      });
+          .set(companyData.toJson());
 
       log('User registered and company data saved');
 
@@ -104,6 +96,7 @@ class DbService_auth {
       final storageReference = FirebaseStorage.instance
           .ref()
           .child('profile_images/${DateTime.now()}');
+
       await storageReference.putFile(image);
       final imageUrl = await storageReference.getDownloadURL();
       user = userCredential.user;
@@ -119,18 +112,9 @@ class DbService_auth {
       );
 
       await FirebaseFirestore.instance
-          .collection('userData')
+          .collection(AppText.userDataCollection)
           .doc(user?.uid)
-          .set({
-        'name': userData.name,
-        'email': userData.email,
-        'password': userData.password,
-        'country': userData.country,
-        'address': userData.address,
-        'phoneNo': userData.phoneNo,
-        'roleMode': userData.roleMode,
-        'image': userData.image
-      });
+          .set(userData.toJson());
 
       log('User registered');
       Navigator.of(context).pushReplacementNamed(AppRoutes.guestHome);
@@ -168,16 +152,14 @@ class DbService_auth {
       user = userCredential.user;
 
       DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance
-          .collection('userData')
+          .collection(AppText.userDataCollection)
           .doc(user?.uid)
           .get();
 
-      if (userDataSnapshot.exists) {
-        String roleMode = userDataSnapshot.get('roleMode');
+      String roleMode = userDataSnapshot.get(AppText.roleModel);
 
-        if (roleMode == 'User') {
-          Navigator.of(context).pushReplacementNamed(AppRoutes.guestHome);
-        }
+      if (roleMode == 'User') {
+        Navigator.of(context).pushReplacementNamed(AppRoutes.guestHome);
       } else {
         Navigator.of(context).pushReplacementNamed(AppRoutes.companyHome);
       }

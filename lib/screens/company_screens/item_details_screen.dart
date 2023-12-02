@@ -1,41 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finder_app/constants/constants.dart';
+import 'package:finder_app/utils/app_utils.dart';
 import 'package:finder_app/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class ItemDetailsPage extends StatelessWidget {
-  final String itemId;
-  final String documentId;
-  final String image_Url;
-  final String category;
-  final String brand;
-  final String name;
-  final String color;
-  final int quantity;
-  final String time;
+  final data;
 
-  final DateTime date;
-  final String description;
-  final String companyName;
-  final String address;
-  final String phoneNo;
-
-  ItemDetailsPage({
-    required this.itemId,
-    required this.documentId,
-    required this.image_Url,
-    required this.category,
-    required this.name,
-    required this.brand,
-    required this.color,
-    required this.quantity,
-    required this.time,
-    required this.description,
-    required this.companyName,
-    required this.address,
-    required this.phoneNo,
-    required this.date,
-  });
+  ItemDetailsPage({required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +52,7 @@ class ItemDetailsPage extends StatelessWidget {
                 height: 250,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: NetworkImage(image_Url),
+                    image: NetworkImage(data[AppText.image]),
                     fit: BoxFit.cover,
                   ),
                   borderRadius: BorderRadius.circular(10),
@@ -100,14 +72,32 @@ class ItemDetailsPage extends StatelessWidget {
                         text: 'Description',
                       ),
                       SizedBox(height: 20),
-                      CustomRow(label: 'Category', value: category),
-                      CustomRow(label: 'Name', value: name),
-                      CustomRow(label: 'Brand', value: brand),
-                      CustomRow(label: 'Color', value: color),
-                      CustomRow(label: 'Quantity', value: quantity.toString()),
-                      CustomRow(label: 'Company Name', value: companyName),
-                      CustomRow(label: 'Address', value: address),
-                      CustomRow(label: 'Phone no', value: phoneNo),
+                      CustomRow(
+                          label: 'Category', value: data[AppText.category]),
+                      CustomRow(label: 'Name', value: data[AppText.name]),
+                      CustomRow(label: 'Brand', value: data[AppText.brand]),
+                      CustomRow(label: 'Color', value: data[AppText.color]),
+                      CustomRow(
+                          label: 'Quantity',
+                          value: data[AppText.quantity].toString()),
+                      CustomRow(
+                          label: 'Series',
+                          value: data[AppText.series].toString()),
+                      CustomRow(
+                          label: 'Company Name',
+                          value: data[AppText.companyName]),
+                      CustomRow(
+                          label: 'Company Category',
+                          value: data[AppText.companyCategory]),
+                      CustomRow(
+                          label: 'Company Country',
+                          value: data[AppText.companyCountry]),
+                      CustomRow(
+                          label: 'Company City',
+                          value: data[AppText.companyCity]),
+                      CustomRow(
+                          label: 'Company Phone no',
+                          value: data[AppText.companyPhoneNumber]),
                       const CustomText(
                         letterSpacing: 1,
                         size: 16,
@@ -116,33 +106,33 @@ class ItemDetailsPage extends StatelessWidget {
                         text: 'Date & Time',
                       ),
                       SizedBox(height: 10),
-                       Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomText(
-                          letterSpacing: 1,
-                          size: 16,
-                          weight: FontWeight.w300,
-                          color: AppColors.black,
-                          text: formatDateWithoutTime(date),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 5, right: 5),
-                          child: CustomText(
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomText(
                               letterSpacing: 1,
                               size: 16,
-                              weight: FontWeight.w600,
+                              weight: FontWeight.w300,
                               color: AppColors.black,
-                              text: '|'),
-                        ),
-                        CustomText(
-                            letterSpacing: 1,
-                            size: 16,
-                            weight: FontWeight.w300,
-                            color: AppColors.black,
-                            text: time),
-                      ],
-                    ),
+                              text: AppUtils.formatDateWithoutTime(
+                                  (data[AppText.date] as Timestamp).toDate())),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 5, right: 5),
+                            child: CustomText(
+                                letterSpacing: 1,
+                                size: 16,
+                                weight: FontWeight.w600,
+                                color: AppColors.black,
+                                text: '|'),
+                          ),
+                          CustomText(
+                              letterSpacing: 1,
+                              size: 16,
+                              weight: FontWeight.w300,
+                              color: AppColors.black,
+                              text: data[AppText.time]),
+                        ],
+                      ),
                       SizedBox(height: 10),
                       Divider(color: Colors.grey),
                       SizedBox(height: 10),
@@ -159,7 +149,7 @@ class ItemDetailsPage extends StatelessWidget {
                           maxLine: 20,
                           weight: FontWeight.w300,
                           color: AppColors.black,
-                          text: description),
+                          text: AppText.description),
                       SizedBox(height: 150),
                     ]),
               ),
@@ -169,9 +159,4 @@ class ItemDetailsPage extends StatelessWidget {
       ),
     );
   }
-}
-
-String formatDateWithoutTime(DateTime dateTime) {
-  final formatter = DateFormat('yyyy-MM-dd');
-  return formatter.format(dateTime);
 }
