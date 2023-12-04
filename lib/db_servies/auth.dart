@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finder_app/db_servies/exceptions_handle.dart';
 import 'package:finder_app/model/model.dart';
 import 'package:finder_app/utils/app_routs.dart';
+import 'package:finder_app/widgets/custom_snackbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -54,6 +55,10 @@ class DbService_auth {
           .set(companyData.toJson());
 
       log('User registered and company data saved');
+      CustomSnackBar.show(
+          context: context,
+          text: 'Signed Up Successfully',
+          backgroundColor: Colors.green);
 
       Navigator.of(context).pushReplacementNamed(AppRoutes.companyHome);
     } catch (error) {
@@ -117,6 +122,10 @@ class DbService_auth {
           .set(userData.toJson());
 
       log('User registered');
+      CustomSnackBar.show(
+          context: context,
+          text: 'Signed Up Successfully',
+          backgroundColor: Colors.green);
       Navigator.of(context).pushReplacementNamed(AppRoutes.guestHome);
     } catch (error) {
       if (error is FirebaseAuthException) {
@@ -158,6 +167,10 @@ class DbService_auth {
 
       String roleMode = userDataSnapshot.get(AppText.roleModel);
 
+      CustomSnackBar.show(
+          context: context,
+          text: 'Signed In Successfully',
+          backgroundColor: Colors.green);
       if (roleMode == 'User') {
         Navigator.of(context).pushReplacementNamed(AppRoutes.guestHome);
       } else {
