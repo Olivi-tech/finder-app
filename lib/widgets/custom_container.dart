@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 class CustomViewContainer extends StatefulWidget {
   final String labelText;
   final String imagePath;
+  final Color borderColor;
 
   const CustomViewContainer({
     Key? key,
+    required this.borderColor,
     required this.labelText,
     required this.imagePath,
   }) : super(key: key);
@@ -28,6 +30,7 @@ class CustomViewContainerState extends State<CustomViewContainer> {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(7),
+            border: Border.all(color: widget.borderColor ),
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.5),

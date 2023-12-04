@@ -55,13 +55,7 @@ class GuestItemDetailsPage extends StatelessWidget {
             Container(
               width: 350,
               height: 250,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(data[AppText.image]),
-                  fit: BoxFit.cover,
-                ),
-                borderRadius: BorderRadius.circular(10),
-              ),
+             child: CustomDisplayNetworkImage(imageUrl: data[AppText.image]),
             ),
             SizedBox(height: 20),
             Padding(

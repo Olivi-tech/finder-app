@@ -11,6 +11,7 @@ class AppText {
     'Accessories',
     'Other',
   ];
+
   static const List<String> brandList = [
     'Apple',
     'Samsung',
@@ -128,19 +129,16 @@ class AppText {
   static const String companyCountry = 'company_country';
   static const String companyPhoneNumber = 'company_phone_number';
 
-
-
   /// filter check ////
 
-  static const String checkItemCat = 'check_item_cat';
-  static const String checkItemSubCat = 'check_item_sub_cat';
-  static const String checkDate =  'date';
-  static const String checkBrand =  'brand';
-  static const String checkSeries =  'series';
-  static const String checkColor =  'color';
-  static const String checkCountry =  'country';
-  static const String checkCity =  'city';
-  static const String checkComCat =  'com_cat';
-  static const String checkComName =  'com_name';
-
+  static const String checkFilterItemCat = 'check_item_cat';
+  static const String checkFilterItemSubCat = 'check_item_sub_cat';
+  static const String checkFilterDate = 'date';
+  static const String checkFilterBrand = 'brand';
+  static const String checkFilterSeries = 'series';
+  static const String checkFilterColor = 'color';
+  static const String checkFilterCountry = 'country';
+  static const String checkFilterCity = 'city';
+  static const String checkFilterComCat = 'com_cat';
+  static const String checkFilterComName = 'com_name';
 }

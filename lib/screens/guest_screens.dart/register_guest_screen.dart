@@ -212,7 +212,7 @@ class _RegisterAsGuestScreenState extends State<RegisterAsGuestScreen> {
                             width: double.infinity,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                color: AppColors.lightwhite),
+                                color: AppColors.lightWhite),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [

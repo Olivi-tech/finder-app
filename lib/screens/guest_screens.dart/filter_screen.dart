@@ -1,5 +1,6 @@
 import 'package:country_picker/country_picker.dart';
 import 'package:finder_app/providers/check_list_filter_provider.dart';
+import 'package:finder_app/providers/item_filter_provider.dart';
 import 'package:finder_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -24,14 +25,17 @@ class _FilterItemScreenState extends State<FilterItemScreen> {
   TextEditingController colorController = TextEditingController();
   TextEditingController countryController = TextEditingController();
   TextEditingController cityController = TextEditingController();
-  ValueNotifier<String> DateNotifier = ValueNotifier('');
+  ValueNotifier<String> dateNotifier = ValueNotifier('');
   late CheckListFilterProvider checkListFilterProvider;
+  late ItemFilterProvider itemFilterProvider;
 
   @override
   void initState() {
     super.initState();
     checkListFilterProvider =
         Provider.of<CheckListFilterProvider>(context, listen: false);
+    itemFilterProvider =
+        Provider.of<ItemFilterProvider>(context, listen: false);
   }
 
   @override
@@ -72,69 +76,69 @@ class _FilterItemScreenState extends State<FilterItemScreen> {
                 children: [
                   _CustomCheckBox(
                       checkValue: checkListFilter.getCheckListFilter
-                              .contains(AppText.checkItemCat)
+                              .contains(AppText.checkFilterItemCat)
                           ? true
                           : false,
                       onTap: (value) {
                         if (checkListFilter.getCheckListFilter
-                            .contains(AppText.checkItemCat)) {
+                            .contains(AppText.checkFilterItemCat)) {
                           itemCategoryController.clear();
                           checkListFilterProvider.removeCheckListFilter =
-                              AppText.checkItemCat;
+                              AppText.checkFilterItemCat;
                         } else {
                           checkListFilterProvider.setCheckListFilter =
-                              AppText.checkItemCat;
+                              AppText.checkFilterItemCat;
                         }
                       },
                       title: 'Item Category'),
                   _CustomCheckBox(
                       checkValue: checkListFilter.getCheckListFilter
-                              .contains(AppText.checkItemSubCat)
+                              .contains(AppText.checkFilterItemSubCat)
                           ? true
                           : false,
                       onTap: (value) {
                         if (checkListFilter.getCheckListFilter
-                            .contains(AppText.checkItemSubCat)) {
+                            .contains(AppText.checkFilterItemSubCat)) {
                           itemSubCategoryController.clear();
                           checkListFilterProvider.removeCheckListFilter =
-                              AppText.checkItemSubCat;
+                              AppText.checkFilterItemSubCat;
                         } else {
                           checkListFilterProvider.setCheckListFilter =
-                              AppText.checkItemSubCat;
+                              AppText.checkFilterItemSubCat;
                         }
                       },
                       title: 'Item Sub Category'),
                   _CustomCheckBox(
                       checkValue: checkListFilter.getCheckListFilter
-                              .contains(AppText.checkComCat)
+                              .contains(AppText.checkFilterComCat)
                           ? true
                           : false,
                       onTap: (value) {
                         if (checkListFilter.getCheckListFilter
-                            .contains(AppText.checkComCat)) {
+                            .contains(AppText.checkFilterComCat)) {
                           companyCategoryController.clear();
                           checkListFilterProvider.removeCheckListFilter =
-                              AppText.checkComCat;
+                              AppText.checkFilterComCat;
                         } else {
                           checkListFilterProvider.setCheckListFilter =
-                              AppText.checkComCat;
+                              AppText.checkFilterComCat;
                         }
                       },
                       title: 'Company Category'),
                   _CustomCheckBox(
                       checkValue: checkListFilter.getCheckListFilter
-                              .contains(AppText.checkComName)
+                              .contains(AppText.checkFilterComName)
                           ? true
                           : false,
                       onTap: (value) {
                         if (checkListFilter.getCheckListFilter
-                            .contains(AppText.checkComName)) {
+                            .contains(AppText.checkFilterComName)) {
                           companyNameController.clear();
                           checkListFilterProvider.removeCheckListFilter =
-                              AppText.checkComName;
+                              AppText.checkFilterComName;
                         } else {
                           checkListFilterProvider.setCheckListFilter =
-                              AppText.checkComName;
+                              AppText.checkFilterComName;
                         }
                       },
                       title: 'Company Name'),
@@ -143,18 +147,18 @@ class _FilterItemScreenState extends State<FilterItemScreen> {
                       Expanded(
                         child: _CustomCheckBox(
                             checkValue: checkListFilter.getCheckListFilter
-                                    .contains(AppText.checkBrand)
+                                    .contains(AppText.checkFilterBrand)
                                 ? true
                                 : false,
                             onTap: (value) {
                               if (checkListFilter.getCheckListFilter
-                                  .contains(AppText.checkBrand)) {
+                                  .contains(AppText.checkFilterBrand)) {
                                 brandController.clear();
                                 checkListFilterProvider.removeCheckListFilter =
-                                    AppText.checkBrand;
+                                    AppText.checkFilterBrand;
                               } else {
                                 checkListFilterProvider.setCheckListFilter =
-                                    AppText.checkBrand;
+                                    AppText.checkFilterBrand;
                               }
                             },
                             title: 'Brand'),
@@ -162,18 +166,18 @@ class _FilterItemScreenState extends State<FilterItemScreen> {
                       Expanded(
                         child: _CustomCheckBox(
                             checkValue: checkListFilter.getCheckListFilter
-                                    .contains(AppText.checkSeries)
+                                    .contains(AppText.checkFilterSeries)
                                 ? true
                                 : false,
                             onTap: (value) {
                               if (checkListFilter.getCheckListFilter
-                                  .contains(AppText.checkSeries)) {
+                                  .contains(AppText.checkFilterSeries)) {
                                 seriesController.clear();
                                 checkListFilterProvider.removeCheckListFilter =
-                                    AppText.checkSeries;
+                                    AppText.checkFilterSeries;
                               } else {
                                 checkListFilterProvider.setCheckListFilter =
-                                    AppText.checkSeries;
+                                    AppText.checkFilterSeries;
                               }
                             },
                             title: 'Series'),
@@ -185,17 +189,18 @@ class _FilterItemScreenState extends State<FilterItemScreen> {
                       Expanded(
                         child: _CustomCheckBox(
                             checkValue: checkListFilter.getCheckListFilter
-                                    .contains(AppText.checkDate)
+                                    .contains(AppText.checkFilterDate)
                                 ? true
                                 : false,
                             onTap: (value) {
+                              dateNotifier.value = DateTime.now().toString();
                               if (checkListFilter.getCheckListFilter
-                                  .contains(AppText.checkDate)) {
+                                  .contains(AppText.checkFilterDate)) {
                                 checkListFilterProvider.removeCheckListFilter =
-                                    AppText.checkDate;
+                                    AppText.checkFilterDate;
                               } else {
                                 checkListFilterProvider.setCheckListFilter =
-                                    AppText.checkDate;
+                                    AppText.checkFilterDate;
                               }
                             },
                             title: 'Date'),
@@ -203,18 +208,18 @@ class _FilterItemScreenState extends State<FilterItemScreen> {
                       Expanded(
                         child: _CustomCheckBox(
                             checkValue: checkListFilter.getCheckListFilter
-                                    .contains(AppText.checkColor)
+                                    .contains(AppText.checkFilterColor)
                                 ? true
                                 : false,
                             onTap: (value) {
                               if (checkListFilter.getCheckListFilter
-                                  .contains(AppText.checkColor)) {
+                                  .contains(AppText.checkFilterColor)) {
                                 colorController.clear();
                                 checkListFilterProvider.removeCheckListFilter =
-                                    AppText.checkColor;
+                                    AppText.checkFilterColor;
                               } else {
                                 checkListFilterProvider.setCheckListFilter =
-                                    AppText.checkColor;
+                                    AppText.checkFilterColor;
                               }
                             },
                             title: 'Color'),
@@ -226,18 +231,18 @@ class _FilterItemScreenState extends State<FilterItemScreen> {
                       Expanded(
                         child: _CustomCheckBox(
                             checkValue: checkListFilter.getCheckListFilter
-                                    .contains(AppText.checkCountry)
+                                    .contains(AppText.checkFilterCountry)
                                 ? true
                                 : false,
                             onTap: (value) {
                               if (checkListFilter.getCheckListFilter
-                                  .contains(AppText.checkCountry)) {
+                                  .contains(AppText.checkFilterCountry)) {
                                 countryController.clear();
                                 checkListFilterProvider.removeCheckListFilter =
-                                    AppText.checkCountry;
+                                    AppText.checkFilterCountry;
                               } else {
                                 checkListFilterProvider.setCheckListFilter =
-                                    AppText.checkCountry;
+                                    AppText.checkFilterCountry;
                               }
                             },
                             title: 'Country'),
@@ -245,18 +250,18 @@ class _FilterItemScreenState extends State<FilterItemScreen> {
                       Expanded(
                         child: _CustomCheckBox(
                             checkValue: checkListFilter.getCheckListFilter
-                                    .contains(AppText.checkCity)
+                                    .contains(AppText.checkFilterCity)
                                 ? true
                                 : false,
                             onTap: (value) {
                               if (checkListFilter.getCheckListFilter
-                                  .contains(AppText.checkCity)) {
+                                  .contains(AppText.checkFilterCity)) {
                                 cityController.clear();
                                 checkListFilterProvider.removeCheckListFilter =
-                                    AppText.checkCity;
+                                    AppText.checkFilterCity;
                               } else {
                                 checkListFilterProvider.setCheckListFilter =
-                                    AppText.checkCity;
+                                    AppText.checkFilterCity;
                               }
                             },
                             title: 'City'),
@@ -264,7 +269,7 @@ class _FilterItemScreenState extends State<FilterItemScreen> {
                     ],
                   ),
                   if (checkListFilter.getCheckListFilter
-                      .contains(AppText.checkItemCat))
+                      .contains(AppText.checkFilterItemCat))
                     CustomTextField(
                       readOnly: true,
                       hintText: 'Item category',
@@ -285,7 +290,7 @@ class _FilterItemScreenState extends State<FilterItemScreen> {
                       ),
                     ),
                   if (checkListFilter.getCheckListFilter
-                      .contains(AppText.checkItemSubCat))
+                      .contains(AppText.checkFilterItemSubCat))
                     CustomTextField(
                       hintText: 'Item Sub Category',
                       obscureText: false,
@@ -298,7 +303,7 @@ class _FilterItemScreenState extends State<FilterItemScreen> {
                       },
                     ),
                   if (checkListFilter.getCheckListFilter
-                      .contains(AppText.checkBrand))
+                      .contains(AppText.checkFilterBrand))
                     CustomTextField(
                       readOnly: true,
                       hintText: 'Item brand',
@@ -319,7 +324,7 @@ class _FilterItemScreenState extends State<FilterItemScreen> {
                       ),
                     ),
                   if (checkListFilter.getCheckListFilter
-                      .contains(AppText.checkSeries))
+                      .contains(AppText.checkFilterSeries))
                     CustomTextField(
                       hintText: 'Series',
                       obscureText: false,
@@ -332,7 +337,7 @@ class _FilterItemScreenState extends State<FilterItemScreen> {
                       },
                     ),
                   if (checkListFilter.getCheckListFilter
-                      .contains(AppText.checkDate))
+                      .contains(AppText.checkFilterDate))
                     InkWell(
                       onTap: () {
                         _selectDate(context);
@@ -340,7 +345,7 @@ class _FilterItemScreenState extends State<FilterItemScreen> {
                       child: Padding(
                         padding: const EdgeInsets.only(top: 8.0),
                         child: ValueListenableBuilder(
-                          valueListenable: DateNotifier,
+                          valueListenable: dateNotifier,
                           builder: (context, date, child) => Container(
                             height: 40,
                             decoration: BoxDecoration(
@@ -377,7 +382,7 @@ class _FilterItemScreenState extends State<FilterItemScreen> {
                       ),
                     ),
                   if (checkListFilter.getCheckListFilter
-                      .contains(AppText.checkColor))
+                      .contains(AppText.checkFilterColor))
                     CustomTextField(
                       readOnly: true,
                       hintText: 'Black',
@@ -398,7 +403,7 @@ class _FilterItemScreenState extends State<FilterItemScreen> {
                       ),
                     ),
                   if (checkListFilter.getCheckListFilter
-                      .contains(AppText.checkCountry))
+                      .contains(AppText.checkFilterCountry))
                     CustomTextField(
                       readOnly: true,
                       hintText: 'Country',
@@ -428,7 +433,7 @@ class _FilterItemScreenState extends State<FilterItemScreen> {
                       ),
                     ),
                   if (checkListFilter.getCheckListFilter
-                      .contains(AppText.checkCity))
+                      .contains(AppText.checkFilterCity))
                     CustomTextField(
                       obscureText: false,
                       hintText: 'City',
@@ -443,7 +448,7 @@ class _FilterItemScreenState extends State<FilterItemScreen> {
                       },
                     ),
                   if (checkListFilter.getCheckListFilter
-                      .contains(AppText.checkComCat))
+                      .contains(AppText.checkFilterComCat))
                     CustomTextField(
                       hintText: 'Company Category',
                       readOnly: true,
@@ -464,7 +469,7 @@ class _FilterItemScreenState extends State<FilterItemScreen> {
                       },
                     ),
                   if (checkListFilter.getCheckListFilter
-                      .contains(AppText.checkComName))
+                      .contains(AppText.checkFilterComName))
                     CustomTextField(
                       obscureText: false,
                       hintText: 'Company Name',
@@ -478,6 +483,116 @@ class _FilterItemScreenState extends State<FilterItemScreen> {
                         }
                         return null;
                       },
+                    ),
+                  if (checkListFilter.getCheckListFilter.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12.0),
+                      child: InkWell(
+                        onTap: () {
+                          List<Map<String, dynamic>> filterData = [
+                            {
+                              AppText.checkFilterItemCat: checkListFilter
+                                      .getCheckListFilter
+                                      .contains(AppText.checkFilterItemCat)
+                                  ? itemCategoryController.text
+                                  : ''
+                            },
+                            {
+                              AppText.checkFilterItemSubCat: checkListFilter
+                                      .getCheckListFilter
+                                      .contains(AppText.checkFilterItemSubCat)
+                                  ? itemSubCategoryController.text
+                                  : ''
+                            },
+                            {
+                              AppText.checkFilterComCat: checkListFilter
+                                      .getCheckListFilter
+                                      .contains(AppText.checkFilterComCat)
+                                  ? companyCategoryController.text
+                                  : ''
+                            },
+                            {
+                              AppText.checkFilterComName: checkListFilter
+                                      .getCheckListFilter
+                                      .contains(AppText.checkFilterComName)
+                                  ? companyNameController.text
+                                  : ''
+                            },
+                            {
+                              AppText.checkFilterBrand: checkListFilter
+                                      .getCheckListFilter
+                                      .contains(AppText.checkFilterBrand)
+                                  ? brandController.text
+                                  : ''
+                            },
+                            {
+                              AppText.checkFilterSeries: checkListFilter
+                                      .getCheckListFilter
+                                      .contains(AppText.checkFilterSeries)
+                                  ? seriesController.text
+                                  : ''
+                            },
+                            {
+                              AppText.checkFilterDate: checkListFilter
+                                      .getCheckListFilter
+                                      .contains(AppText.checkFilterDate)
+                                  ? dateNotifier.value.toString()
+                                  : ''
+                            },
+                            {
+                              AppText.checkFilterColor: checkListFilter
+                                      .getCheckListFilter
+                                      .contains(AppText.checkFilterColor)
+                                  ? colorController.text
+                                  : ''
+                            },
+                            {
+                              AppText.checkFilterCountry: checkListFilter
+                                      .getCheckListFilter
+                                      .contains(AppText.checkFilterCountry)
+                                  ? countryController.text
+                                  : ''
+                            },
+                            {
+                              AppText.checkFilterCity: checkListFilter
+                                      .getCheckListFilter
+                                      .contains(AppText.checkFilterCity)
+                                  ? cityController.text
+                                  : ''
+                            },
+                          ];
+
+                          itemFilterProvider.setFilterData = filterData;
+
+                          print(filterData.toString());
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          height: 45,
+                          width: 150,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: AppColors.blue,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              const Icon(
+                                Icons.done_all,
+                                size: 14,
+                                color: Colors.white,
+                              ),
+                              CustomText(
+                                text: 'Apply Filter',
+                                size: 14,
+                                weight: FontWeight.w500,
+                                letterSpacing: 0.50,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                 ],
               ),
@@ -518,6 +633,6 @@ class _FilterItemScreenState extends State<FilterItemScreen> {
       },
     ))!;
 
-    DateNotifier.value = picked.toString();
+    dateNotifier.value = picked.toString();
   }
 }

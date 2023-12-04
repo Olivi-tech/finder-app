@@ -98,7 +98,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                           width: double.infinity,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: AppColors.lightwhite),
+                              color: AppColors.lightWhite),
                           child: imagePick.path != ''
                               ? Image.file(File(imagePick.path))
                               : Column(

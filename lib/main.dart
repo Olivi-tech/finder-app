@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finder_app/firebase_options.dart';
+import 'package:finder_app/providers/item_filter_provider.dart';
 import 'package:finder_app/screens/company_screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -36,6 +37,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<CheckListFilterProvider>(
           create: (context) => CheckListFilterProvider(),
+        ),
+        ChangeNotifierProvider<ItemFilterProvider>(
+          create: (context) => ItemFilterProvider(),
         ),
       ],
       child: MaterialApp(
@@ -79,7 +83,6 @@ class AuthenticationWrapper extends StatelessWidget {
         },
       );
     } else {
-
       log('splash screen ===   call ///////');
       return SplashScreen();
     }

@@ -206,8 +206,7 @@ class PostContainer extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.network(imagePath,
-                      fit: BoxFit.cover, width: 190, height: 120),
+                  child: CustomDisplayNetworkImage(imageUrl: imagePath,height: 120,width: 190,)
                 ),
               ),
             ),
